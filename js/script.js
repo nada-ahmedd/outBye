@@ -2,19 +2,18 @@ document.addEventListener('DOMContentLoaded', function () {
     const stars = document.querySelectorAll('.custom-star-rating i');
     let selectedRating = 0;
 
-    // التحقق من وجود النجوم
     if (stars.length > 0) {
         stars.forEach(star => {
             star.addEventListener('click', function () {
-                selectedRating = parseInt(star.getAttribute('data-value')); 
+                selectedRating = parseInt(star.getAttribute('data-value'));
 
                 stars.forEach(s => {
                     if (parseInt(s.getAttribute('data-value')) <= selectedRating) {
-                        s.classList.remove('empty-star'); 
-                        s.classList.add('filled-star');   
+                        s.classList.remove('empty-star');
+                        s.classList.add('filled-star');
                     } else {
-                        s.classList.remove('filled-star'); 
-                        s.classList.add('empty-star');    
+                        s.classList.remove('filled-star');
+                        s.classList.add('empty-star');
                     }
                 });
 
@@ -89,4 +88,19 @@ document.addEventListener('DOMContentLoaded', function () {
             showSection(sectionId);
         });
     });
+
+     function toggleMenu() {
+        const navbarLeft = document.querySelector('.navbar-left');
+        const navbarRight = document.querySelector('.navbar-right');
+
+        // Toggle the visibility of both navbar-left and navbar-right
+        navbarLeft.classList.toggle('show');  
+        navbarRight.classList.toggle('show');  
+    }
+
+    // Attach the toggleMenu function to the button
+    const toggleButton = document.querySelector('.navbar-toggle');
+    if (toggleButton) {
+        toggleButton.addEventListener('click', toggleMenu);
+    }
 });
