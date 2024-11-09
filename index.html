@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Project</title>
+    <link rel="stylesheet" href="css/style.css"> 
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"rel="stylesheet">
+
+
+
+</head>
+
+<body >
+
+    <!-- start Navbar -->
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <a href="#" class="nav-link">Home</a>
+        <a href="#" class="nav-link">About Us</a>
+        <a href="#" class="nav-link">Best Offer</a>
+    </div>
+
+    <div class="navbar-logo">
+        Out Bye
+    </div>
+
+    <div class="navbar-right">
+        <div class="search-container">
+            <a href="#" class="nav-link search">
+                <i class="fas fa-search"></i> search
+            </a>
+        </div>
+        <div class="account-container">
+            <a href="#" class="nav-link account">
+                <i class="fas fa-user"></i> account
+            </a>
+        </div>
+        <div class="contact-container">
+            <a href="#" class="nav-link contact">
+                <i class="fas fa-phone"></i> contact
+            </a>
+        </div>
+    </div>
+
+    <!-- Toggle button -->
+    <button class="navbar-toggle" onclick="toggleMenu()">
+        <i class="fas fa-bars"></i>
+    </button>
+</nav>
+
+<!-- Banner Section -->
+<section class="banner">
+    <div class="carousel">
+
+        <div class="carousel-inner">
+            <div class="carousel-item"></div>
+            <div class="carousel-item"></div>
+            <div class="carousel-item"></div>
+        </div>
+
+        <!-- Dots Navigation -->
+        <div class="dots">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+
+        <!-- Banner Text -->
+        <div class="banner-text">
+<span>TRY NEW TASTE</span><br>
+Healthy Food is<br>
+Waiting for you
+        </div>
+    </div>
+</section>
+<!-- end banner section -->
+
+
+<!-- start categories -->
+<div class="container">
+    <h2 class="title">Categories</h2>
+    <div class="categories">
+                <span><i class="fas fa-arrow-left arrow"></i></span>
+
+        <div class="category-items-wrapper">
+            <div class="category-item">
+                <img src="images/cat11.jpeg" alt="Category 1" class="category-image">
+                <div class="category-box">
+                    <div class="category-description">
+                        <p class="category-name">Activities
+                        & Entertainment</p>
+                    </div>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="images/cat2.jpeg" alt="Category 2" class="category-image">
+                <div class="category-box">
+                    <div class="category-description">
+                        <p class="category-name">Desserts</p>
+                    </div>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="images/cat3.webp" alt="Category 3" class="category-image">
+                <div class="category-box">
+                    <div class="category-description">
+                        <p class="category-name">Food & Drinks</p>
+                    </div>
+                </div>
+            </div>
+            <div class="category-item">
+                <img src="images/cat5.jpeg" alt="Category 4" class="category-image">
+                <div class="category-box">
+                    <div class="category-description">
+                        <p class="category-name">Hotels</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+                <span><i class="fas fa-arrow-right arrow"></i></span>
+
+    </div>
+</div>
+<!-- end categories -->
+<!-- start offers -->
+<div class="container">
+    <h2 class="title">Weekend Offers</h2>
+<section class="offers">
+    <div class="offer-left">
+        <div class="offer-item offer-top">
+            <img src="images/offer1.jpeg" alt="Offer 1" class="offer-image">
+            <div class="offer-content">
+                <button class="offer-action-btn">More</button>
+            </div>
+        </div>
+        <div class="offer-bottom">
+            <div class="offer-item offer-bottom-left">
+                <img src="images/offer.webp" alt="Offer 2" class="offer-image">
+                <div class="offer-content">
+                    <button class="offer-action-btn">More</button>
+                </div>
+            </div>
+            <div class="offer-item offer-bottom-right">
+                <img src="images/offer3.jpeg" alt="Offer 3" class="offer-image">
+                <div class="offer-content">
+                    <button class="offer-action-btn">More</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="offer-item offer-right">
+        <img src="images/offers.jpeg" alt="Offer 4" class="offer-image">
+        <div class="offer-content">
+            <button class="offer-action-btn">More</button>
+        </div>
+    </div>
+</section>
+
+<section class="clients-section">
+<div class="section-tabs">
+    <button class="tab-button" data-section="best-seller">Best Seller</button>
+    <button class="tab-button" data-section="latest-offers">Newest</button>
+    <button class="tab-button" data-section="most-sold">TOP Rate</button>
+</div>
+
+
+<h2 class="title">Food & Drinks</h2>
+
+    <div id="best-seller" class="client-boxes active-section">
+    
+<div class="client-box">
+    <div class="header">
+        <img src="images/catgory.webp" alt="Client Image" class="client-image">
+        <div class="star-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>5/5</span>
+        </div>
+    </div>
+
+    <hr class="separator">
+
+    <div class="details">
+        <h5 class="category">Faiyum Restaurant 1</h5>
+        <h3>Signature Seafood Appetizers</h3>
+        <p class="description">Enjoy a variety of fresh seafood appetizers with unique sauces that cater to all tastes.</p>
+    </div>
+
+    <div class="footer">
+        <button class="more-btn">Add To Cart</button>
+
+        <div class="icons">
+            <i class="fas fa-comment"></i><span>150</span>
+            <i class="fas fa-heart"></i><span>320</span>
+        </div>
+    </div>
+</div>
+<div class="client-box">
+    <div class="header">
+        <img src="images/category 2.jpeg" alt="Client Image" class="client-image">
+        <div class="star-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>5/5</span>
+        </div>
+    </div>
+
+    <hr class="separator">
+
+<div class="details">
+    <h5 class="category">Faiyum Restaurant 2</h5>
+    <h3>Traditional Faiyum Grills</h3>
+    <p class="description">Delicious grilled dishes in the traditional Faiyum style, with special marinades that enhance
+        the flavor of meats and chicken.</p>
+</div>
+
+    <div class="footer">
+        <button class="more-btn">Add To Cart</button>
+
+        <div class="icons">
+            <i class="fas fa-comment"></i><span>150</span>
+            <i class="fas fa-heart"></i><span>320</span>
+        </div>
+    </div>
+</div>
+<div class="client-box">
+    <div class="header">
+        <img src="images/category 3.jpeg" alt="Client Image" class="client-image">
+        <div class="star-rating">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <span>5/5</span>
+        </div>
+    </div>
+
+    <hr class="separator">
+
+<div class="details">
+    <h5 class="category">Faiyum Restaurant 4</h5>
+    <h3>Fried Seafood Dishes</h3>
+    <p class="description">Fresh fried seafood dishes with a touch of local spices that add a unique and irresistible
+        flavor.</p>
+</div>
+
+    <div class="footer">
+        <button class="more-btn">Add To Cart</button>
+
+        <div class="icons">
+            <i class="fas fa-comment"></i><span>150</span>
+            <i class="fas fa-heart"></i><span>320</span>
+        </div>
+    </div>
+</div>
+</div>
+    
+    <div id="latest-offers" class="client-boxes">
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category4.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+        
+            <hr class="separator">
+        
+        <div class="details">
+            <h5 class="category">Faiyum Restaurant 5</h5>
+            <h3>Salads & Vegetable Tagine</h3>
+            <p class="description">A mix of fresh salads with a vegetable tagine made from locally sourced Faiyum vegetables,
+                offering unique flavors.</p>
+        </div>
+        
+            <div class="footer">
+                <button class="more-btn">Add To Cart</button>
+        
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category5.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+        
+            <hr class="separator">
+        
+        <div class="details">
+            <h5 class="category">Faiyum Restaurant 6</h5>
+            <h3>Traditional Faiyum Sweets</h3>
+            <p class="description">Experience the delicious Faiyum sweets, like basbousa and qatayef, with local flavors that
+                will leave you wanting more.</p>
+        </div>
+        
+            <div class="footer">
+                <button class="more-btn">Add To Cart</button>
+        
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category6.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+        
+            <hr class="separator">
+        
+        <div class="details">
+            <h5 class="category">Faiyum Restaurant 7</h5>
+            <h3>Grilled Fish Specialties</h3>
+            <p class="description">Freshly caught fish grilled to perfection, served with a variety of dips and sides that
+                complement the natural flavors.</p>
+        </div>
+        
+            <div class="footer">
+                <button class="more-btn">Add To Cart</button>
+        
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        </div>
+    
+    <div id="most-sold" class="client-boxes">
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category7.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+        
+            <hr class="separator">
+        
+        <div class="details">
+            <h5 class="category">Faiyum Restaurant 8</h5>
+            <h3>Classic Egyptian Kushari</h3>
+            <p class="description">Enjoy a hearty dish of Kushari, a perfect mix of rice, lentils, pasta, and crispy onions
+                topped with a tangy tomato sauce.</p>
+        </div>
+        
+            <div class="footer">
+                <button class="more-btn">Add To Cart</button>
+        
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/cat3.webp" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+        
+            <hr class="separator">
+        
+        <div class="details">
+            <h5 class="category">Faiyum Restaurant 9</h5>
+            <h3>Vegetarian Mediterranean Platters</h3>
+            <p class="description">A selection of Mediterranean-inspired vegetarian platters, including falafel, hummus, and
+                tabbouleh, served with warm pita bread.</p>
+        </div>
+        
+            <div class="footer">
+                <button class="more-btn">Add To Cart</button>
+        
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/cat2.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+        
+            <hr class="separator">
+        
+        <div class="details">
+            <h5 class="category">Faiyum Restaurant 10</h5>
+            <h3>Faiyum-Style Fatta</h3>
+            <p class="description">Experience the rich flavors of Faiyum's Fatta, a traditional dish made with lamb, rice, and
+                crispy bread, all served with a flavorful broth.</p>
+        </div>
+        
+            <div class="footer">
+                <button class="more-btn">Add To Cart</button>
+        
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        </div>
+    
+<div class="custom-rating">
+    <h3 class="custom-title">How was your experience<br>with our restaurant?</h3>
+    <div class="custom-star-rating">
+        <i class="fa fa-star empty-star" data-value="1"></i>
+        <i class="fa fa-star empty-star" data-value="2"></i>
+        <i class="fa fa-star empty-star" data-value="3"></i>
+        <i class="fa fa-star empty-star" data-value="4"></i>
+        <i class="fa fa-star empty-star" data-value="5"></i>
+    </div>
+</div>
+
+
+</section>
+</div>
+<!-- start footer -->
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-logo">
+            <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
+            <p>Your go-to place for restaurants, cafes, and hotels.</p>
+            <div class="footer-socials">
+                <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <h4>Important Links</h4>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">About Us</a></li>
+                <li><a href="#">Best Offers</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">FAQ</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms & Conditions</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-services">
+            <h4>Our Services</h4>
+            <ul>
+                <li><a href="#">Restaurants</a></li>
+                <li><a href="#">Cafes</a></li>
+                <li><a href="#">Hotels</a></li>
+                <li><a href="#">Delivery</a></li>
+                <li><a href="#">Visitor Ratings</a></li>
+                <li><a href="#">Bookings</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-newsletter">
+            <h4>Subscribe to Our Newsletter</h4>
+            <p>Get the latest offers and updates directly in your inbox!</p>
+            <form action="#" method="post">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+
+        <div class="footer-info">
+            <h4>Contact Information</h4>
+            <p><strong>Phone:</strong> 0123456789</p>
+            <p><strong>Email:</strong> contact@restaurant.com</p>
+            <p><strong>Address:</strong> 123 Example St., City, Country</p>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 All Rights Reserved. Designed and developed by our team.</p>
+    </div>
+</footer>
+<!-- end footer -->
+    <script src="js/script.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</body>
+
+</html>
