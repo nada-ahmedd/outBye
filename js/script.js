@@ -62,45 +62,61 @@ document.addEventListener('DOMContentLoaded', function () {
     setInterval(nextSlide, 3000);
     showSlide(currentSlide);
 
-    function showSection(sectionId) {
-        const sections = document.querySelectorAll('.client-boxes');
-        sections.forEach(section => {
-            section.classList.remove('active-section');
-        });
-        const activeSection = document.getElementById(sectionId);
-        if (activeSection) {
-            activeSection.classList.add('active-section');
-        }
-
-        const buttons = document.querySelectorAll('.tab-button');
-        buttons.forEach(button => button.classList.remove('active'));
-
-        const activeButton = document.querySelector(`.tab-button[data-section="${sectionId}"]`);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
-    }
-
-    const buttons = document.querySelectorAll('.tab-button');
-    buttons.forEach(button => {
-        button.addEventListener('click', function () {
-            const sectionId = button.getAttribute('data-section');
-            showSection(sectionId);
-        });
+function showSection(sectionId) {
+    document.querySelectorAll('.client-boxes').forEach(section => {
+        section.classList.toggle('active-section', section.id === sectionId);
     });
+
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.toggle('active', button.getAttribute('data-section') === sectionId);
+    });
+}
+
+document.querySelectorAll('.tab-button').forEach(button => {
+    button.addEventListener('click', () => {
+        showSection(button.getAttribute('data-section'));
+    });
+});
+
 
      function toggleMenu() {
         const navbarLeft = document.querySelector('.navbar-left');
         const navbarRight = document.querySelector('.navbar-right');
 
-        // Toggle the visibility of both navbar-left and navbar-right
         navbarLeft.classList.toggle('show');  
         navbarRight.classList.toggle('show');  
     }
 
-    // Attach the toggleMenu function to the button
     const toggleButton = document.querySelector('.navbar-toggle');
     if (toggleButton) {
         toggleButton.addEventListener('click', toggleMenu);
     }
 });
+ let currentIndex = 0;
+    const items = document.querySelectorAll('.offer-carousel-item');
+    const dots = document.querySelectorAll('.offer-dot');
+
+    function changeSlide(index) {
+        if (index < 0) {
+            currentIndex = items.length - 1;
+        } else if (index >= items.length) {
+            currentIndex = 0;
+        } else {
+            currentIndex = index;
+        }
+
+        document.querySelector('.offer-carousel-inner').style.transform = `translateX(-${currentIndex * 100}%)`;
+
+        dots.forEach(dot => dot.classList.remove('active'));
+        dots[currentIndex].classList.add('active');
+    }
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            changeSlide(index);
+        });
+    });
+
+    setInterval(() => {
+        changeSlide(currentIndex + 1);
+    }, 5000);
