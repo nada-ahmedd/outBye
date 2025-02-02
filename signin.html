@@ -16,45 +16,50 @@
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-dark px-4 ">
-        <div class="container-fluid">
-            <!-- Left Links -->
-            <div class="d-flex align-items-center">
+<nav class="navbar navbar-expand-lg bg-dark px-4">
+    <div class="container-fluid">
+        <!-- Logo on the left -->
+        <a class="navbar-brand" href="index.html">
+            <img src="images/out bye.png" alt="Logo" width="150" height="100">
+        </a>
+
+        <!-- Navbar toggler for small screens -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+
+        <!-- Navbar links (Home, About, etc.) -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav ms-auto">
                 <a class="nav-link mx-2" href="index.html">Home</a>
-                <a class="nav-link mx-2" href="#">Contact</a>
-                <a class="nav-link mx-2" href="#">About </a>
+                <a class="nav-link mx-2" href="contact.html">Contact</a>
+                <a class="nav-link mx-2" href="about.html">About</a>
                 <a class="nav-link mx-2" href="signup.html">Sign Up</a>
             </div>
 
-            <!-- Center Logo -->
-            <a class="navbar-brand mx-auto" href="index.html">
-                <img src="images/out bye.png" alt="Logo" width="150" height="100">
-            </a>
-
-            <!-- Right Icons -->
-            <div class="d-flex align-items-center">
-                <!-- Search -->
-                <div class="input-group mb-3">
+            <!-- Navbar right icons -->
+            <div class="d-flex align-items-center ms-4">
+                <!-- Search icon -->
+                <div class="input-group mx-2">
                     <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline" type="submit">
+                    <button class="btn btn-search" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
 
-
-
-                <!-- Favorite Icon -->
+                <!-- Favorite icon -->
                 <a class="nav-link mx-2" href="#">
                     <i class="fa-solid fa-heart"></i>
                 </a>
 
-                <!-- Cart Icon -->
-                <a class="nav-link mx-2" href="#">
+                <!-- Cart icon -->
+                <a class="nav-link mx-2" href="cart.html">
                     <i class="bi bi-cart-fill"></i>
                 </a>
 
-                <!-- User Icon with Dropdown -->
+                <!-- User icon with dropdown -->
                 <div class="dropdown">
                     <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -62,51 +67,45 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Settings</a></li>
                         <li><a class="dropdown-item" href="#">Logout</a></li>
                     </ul>
                 </div>
-
             </div>
-        </div>
-    </nav>
-
-
-    <div class="container-fluid">
-        <div class="row signup-container">
-            <!-- Right Side: Image -->
-            <div class="col-md-6 p-0">
-                <img src="images/sign.jpg" alt="Signup Image" class="w-100 m-1">
-            </div>
-            <!-- Left Side: Form -->
-            <div class="col-md-6">
-                <div class="signup-form">
-                    <h2>Log in to Exclusive</h2>
-                    <p class="text-muted">Enter your details below</p>
-                    <form>
-                       
-                        <div class="mb-3">
-                            <input type="text" class="form-control" placeholder="Email or Phone Number" required>
-                        </div>
-                       
-                        <div class="mb-3">
-                            <input type="password" class="form-control" placeholder="Password" required>
-                        </div>
-                    </form>
-                    <div class="login-btn">
-                        <button type="submit" class="btn-bass ">Log In</button>
-                        <button class="btn-forget">Forgot Password?</button>
-                    </div>
-                   
-
-                </div>
-            </div>
-
-
         </div>
     </div>
+</nav>
 
-
+<div class="container-fluid">
+    <div class="row signup-container">
+        <!-- Right Side: Image -->
+        <div class="col-md-6 p-0">
+            <img src="images/sign.jpg" alt="Login Image" class="w-100 m-1">
+        </div>
+        <!-- Left Side: Form -->
+        <div class="col-md-6">
+            <div class="signup-form">
+                <h2>Log in to Exclusive</h2>
+                <p class="text-muted">Enter your details below</p>
+                <form id="loginForm" action="https://abdulrahmanantar.com/outbye/auth/login.php" method="POST">
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                        <div class="form-error" style="color: red;"></div>
+                    </div>
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <input type="password" name="password" class="form-control" placeholder="Password" required>
+                        <div class="form-error" style="color: red;"></div>
+                    </div>
+                    <!-- Buttons -->
+                    <div class="login-btn">
+                        <button type="submit" class="btn">Log In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 
     <footer class="site-footer bg-dark text-white py-5">
@@ -180,12 +179,12 @@
     </footer>
 
 
-    <script src="js/script.js"></script>
-    <script src="js/bootstrap.js"></script>
-    <script src="js/jquery-3.7.1.min.js"></script>
-    <script src="js/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="js/script.js"></script>
+    <script src="js/signin.js"></script>
 </body>
 
 </html>

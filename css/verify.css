@@ -1,0 +1,75 @@
+/* General Reset */
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.verify-code-group {
+    display: flex;
+    justify-content: space-around;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.verify-code-field {
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+}
+
+.verify-code-field:focus {
+    border-color: #F06A0A;
+    outline: none;
+}
+
+button {
+    padding: 10px 30px;
+    background-color: #F06A0A;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+
+button:hover {
+    background-color: #F06A0A;
+}
+
+/* SweetAlert custom styles */
+.swal2-popup {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+}

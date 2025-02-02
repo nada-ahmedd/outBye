@@ -15,57 +15,62 @@
 
 <body >
 
-<!-- Navbar -->
 <nav class="navbar navbar-expand-lg bg-dark px-4">
     <div class="container-fluid">
-        <!-- Left Links -->
-        <div class="d-flex align-items-center">
-            <a class="nav-link mx-2" href="index.html">Home</a>
-            <a class="nav-link mx-2" href="#">Contact</a>
-            <a class="nav-link mx-2" href="#">About </a>
-            <a class="nav-link mx-2" href="signup.html">Sign Up</a>
-        </div>
-
-        <!-- Center Logo -->
-        <a class="navbar-brand mx-auto" href="index.html">
+        <!-- Logo on the left -->
+        <a class="navbar-brand" href="index.html">
             <img src="images/out bye.png" alt="Logo" width="150" height="100">
         </a>
 
-        <!-- Right Icons -->
-        <div class="d-flex align-items-center">
-            <!-- Search -->
-            <div class="input-group mb-3 p-5 ">
-                <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-    <button class="btn btn-outline" type="submit">
-    <i class="fas fa-search"></i> 
+        <!-- Navbar toggler for small screens -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
     </button>
+
+
+        <!-- Navbar links (Home, About, etc.) -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link mx-2" href="index.html">Home</a>
+                <a class="nav-link mx-2" href="contact.html">Contact</a>
+                <a class="nav-link mx-2" href="about.html">About</a>
+                <a class="nav-link mx-2" href="signup.html">Sign Up</a>
             </div>
 
-               
+            <!-- Navbar right icons -->
+            <div class="d-flex align-items-center ms-4">
+                <!-- Search icon -->
+                <div class="input-group mx-2">
+                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-search" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
 
-            <!-- Favorite Icon -->
-            <a class="nav-link mx-2" href="#">
-              <i class="fa-solid fa-heart"></i>    
-            </a>
+                <!-- Favorite icon -->
+                <a class="nav-link mx-2" href="#">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
 
-            <!-- Cart Icon -->
-            <a class="nav-link mx-2" href="#">
-                <i class="bi bi-cart-fill"></i>
-            </a>
+                <!-- Cart icon -->
+           <a class="nav-link mx-2" href="cart.html">
+            <i class="bi bi-cart-fill"></i>
+            <span class="cart-count">0</span>
+        </a>
 
-            <!-- User Icon with Dropdown -->
-        <div class="dropdown">
-            <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <i class="fas fa-user"></i> 
-            </a>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Logout</a></li>
-            </ul>
-        </div>
 
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -103,89 +108,25 @@ Waiting for you
 <div class="container">
     <h2 class="title">Categories</h2>
     <div class="categories">
-        <div class="category-items-wrapper">
-            <div class="category-item">
-                <img src="images/cat11.jpeg" alt="Category 1" class="category-image">
-                <div class="category-box">
-                    <div class="category-description">
-                       <a href="#" class="category-name"><p>Activities
-                        & Entertainment</p></a>
-                    </div>
-                </div>
-            </div>
-          
-            <div class="category-item">
-                <img src="images/cat3.webp" alt="Category 3" class="category-image">
-                <div class="category-box">
-                    <div class="category-description">
-                        <a href="#" class="category-name">
-                            <p>Food&Drinks</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="category-item">
-                <img src="images/cat5.jpeg" alt="Category 4" class="category-image">
-                <div class="category-box">
-                    <div class="category-description">
-                        <a href="#" class="category-name">
-                            <p>Hotels</p>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="category-items-wrapper" id="category-items"></div>
     </div>
 </div>
-<!-- end categories -->
-<div class="container">
-<section class="offer-section">
-    <div class="offer-carousel">
-        <div class="offer-carousel-inner">
-            <div class="offer-carousel-item">
-                <div class="offer-item-content">
-                    <div class="offer-item-info">
-                        <p class="offer-price">$199</p>
-                        <p class="offer-description">Up to 25% off classic & VIP<br> entry packages @Ski Egypt</p>
-                    </div>
-                    <div class="offer-discount-percentage">
-                        <span>50% OFF</span>
-                    </div>
-                </div>
-            </div>
-            <div class="offer-carousel-item">
-                <div class="offer-item-content">
-                    <div class="offer-item-info">
-                        <p class="offer-price">$149</p>
-                        <p class="offer-description">Up to 25% off classic & VIP<br> entry packages @Ski Egypt</p>
-                    </div>
-                    <div class="offer-discount-percentage">
-                        <span>30% OFF</span>
-                    </div>
-                </div>
-            </div>
-            <div class="offer-carousel-item">
-                <div class="offer-item-content">
-                    <div class="offer-item-info">
-                        <p class="offer-price">$120</p>
-                        <p class="offer-description">Up to 25% off classic & VIP <br>entry packages @Ski Egypt</p>
-                    </div>
-                    <div class="offer-discount-percentage">
-                        <span>20% OFF</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Dots Navigation -->
-        <div class="offer-dots">
-            <span class="offer-dot"></span>
-            <span class="offer-dot"></span>
-            <span class="offer-dot"></span>
+<div class="container">
+    <section class="offer-section">
+        <div class="offer-carousel">
+            <div class="offer-carousel-inner" id="offer-carousel-inner">
+                
+            </div>
+            <!-- Dots Navigation -->
+            <div class="offer-dots" id="offer-dots">
+                                <button class="offer-btn">Add To Cart</button>
+
+            </div>
         </div>
-    </div>
-</section>
+    </section>
 </div>
+
 <div class="section-tabs">
     <button class="tab-button" data-section="best-seller">Best Seller</button>
     <button class="tab-button" data-section="latest-offers">Newest</button>
@@ -215,14 +156,15 @@ Waiting for you
     <hr class="separator">
 
     <div class="details">
-        <h5 class="category">Faiyum Restaurant 1</h5>
+        <h5 class="category">Faiyum </h5>
         <h3>Signature Seafood Appetizers</h3>
         <p class="description">Enjoy a variety of fresh seafood appetizers with unique sauces that cater to all tastes.</p>
     </div>
 
     <div class="Add">
-        <button class="Add-btn">Add To Cart</button>
-
+<button class="Add-btn" data-name="Signature Seafood Appetizers" data-price="550" data-image="images/category 3.jpeg.jpeg">
+    Add To Cart
+</button>
         <div class="icons">
             <i class="fas fa-comment"></i><span>150</span>
             <i class="fas fa-heart"></i><span>320</span>
@@ -252,7 +194,10 @@ Waiting for you
 </div>
 
     <div class="Add">
-        <button class="Add-btn">Add To Cart</button>
+
+        <button class="Add-btn" data-name="Salads & Vegetable Tagine" data-price="650" data-image="images/category4.jpeg">
+            Add To Cart
+        </button>
 
         <div class="icons">
             <i class="fas fa-comment"></i><span>150</span>
@@ -487,8 +432,6 @@ Waiting for you
 </section>
 <section class="clients-section drink-section">
   
-
-
     <h2 class="title">Drinks</h2>
 
     <div id="best-seller" class="client-boxes active-section"data-group="tabs">
@@ -1174,12 +1117,14 @@ Waiting for you
 
 </footer>
 
-    <script src="js/script.js"></script>
-        <script src="js/bootstrap.js"></script>
-    <script src="js/jquery-3.7.1.min.js"></script>
-        <script src="js/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/script.js"></script>
+
 
 
 </body>

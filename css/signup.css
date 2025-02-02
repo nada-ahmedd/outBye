@@ -37,7 +37,10 @@
     color: #F26B0A;
     font-weight: 600;
 }
-
+   .form-error {
+            color: red;
+            display: none;
+        }
 .signup-form p {
     margin-bottom: 20px;
     text-align: center;

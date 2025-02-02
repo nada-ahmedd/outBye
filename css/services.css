@@ -1,0 +1,176 @@
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+      padding-top: 100px; 
+          height: 100%;
+
+}
+
+#services-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    margin-top: 100px;
+}
+
+.service-item {
+    background-color: rgba(255, 255, 255, 0.1); 
+    border: 1px solid #F26B0A;
+    border-radius: 15px;
+    padding: 20px;
+    width: 400px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 0px 10px rgba(242, 107, 10, 0.7);
+}
+
+.service-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+}
+
+h3 {
+    color: #F26B0A;
+    margin-top: 10px;
+}
+
+p {
+    margin: 5px 0;
+}
+
+.secondary {
+    color: gray; 
+    font-size: 14px;
+}
+
+a {
+    color: #F26B0A;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.favorite-btn {
+    background: none;
+    border: none;
+    color: #000;
+    font-size: 30px;
+    cursor: pointer;
+    position: absolute;
+    top: 3px; 
+    right: 5px; 
+    transition: color 0.3s ease;
+}
+
+.favorite-btn:hover {
+    color: #F26B0A;
+}
+
+.favorite-btn i {
+    margin-right: 5px;
+    color: black; /* اللون الافتراضي أسود */
+    transition: color 0.3s ease;
+}
+
+.favorite-btn.active i {
+    color: #F26B0A; /* اللون البرتقالي عند التفعيل */
+}
+
+
+.service-description {
+    font-size: 14px;
+    line-height: 1.6;
+    color: white;
+}
+
+.read-more-link, .read-less-link {
+    color: #F26B0A;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.read-more-link:hover, .read-less-link:hover {
+    text-decoration: underline;
+}
+/* 🔹 تنسيق اللودينج */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    text-align: center;
+    color: white;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 6px solid rgba(255, 255, 255, 0.3);
+    border-top-color: #F26B0A;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 10px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.service-description .service-description-full {
+    display: none;
+}
+
+.service-description .service-description-short {
+    display: inline;
+}
+
+.read-more {
+    color: #F26B0A;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.read-more:hover {
+    color: #e08c1b;
+}
+/* تنسيق الزر */
+.view-items-btn {
+   background-color: #f06a0a;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.view-items-btn:hover {
+    background-color: #000; /* تغيير اللون عند المرور */
+    transform: translateY(-3px); /* رفع الزر قليلاً عند المرور */
+}
+
+.view-items-btn:active {
+    background-color: rgb(165, 113, 76); /* لون الزر عند الضغط عليه */
+    transform: translateY(1px); /* إضافة تأثير الضغط */
+}
+
+.view-items-btn:focus {
+    outline: none; /* إزالة حدود التحديد */
+    box-shadow: 0 0 5px 2px rgb(242, 107, 10,0.7); /* إضافة تأثير الظل عند التركيز */
+}

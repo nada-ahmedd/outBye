@@ -4,113 +4,126 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
         min-height: 100vh; 
-
-
+            box-sizing: border-box;
 }
 
+/* Navbar Styles */
 .navbar {
-    width: 100%;
-    z-index: 10;
-    display: flex;
-    justify-content: space-around; 
-    padding: 20px 0;
-    margin: 0;
-    height: 90px;
-    background-color: rgba(0, 0, 0) !important;
-}
-
-.navbar-left, .navbar-right {
-    display: flex;
-    align-items: center;
-}
-.btn-outline{
-    color:#fff;
-    background-color: #F26B0A;
-
-}
-.btn-outline:hover {
-    color: #000;
-    background-color: #f06a0a;
-}
-
-.nav-link {
-    color: white;
-    margin-right: 16px;
-    text-decoration: none;
-    position: relative;
-    padding-bottom: 2px;
-    transition: color 0.3s ease;
-}
-.nav-link:hover {
-    color: #F26B0A; 
-}
-
-.dropdown-menu {
-    border-radius: 8px;
-
-        background-color: rgba(0, 0, 0, 0.8) !important;
-
-}
-
-.dropdown-item {
-   color: #fff;
-    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-    border-radius: 25px;
-}
-
-.dropdown-item:hover {
-    background-color: #F26B0A;
-    color: #fff;
+  width: 100%;
+  height: 90px; /* تحديد ارتفاع ثابت */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* ضمان بقاء الناف بار فوق أي عنصر آخر */
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 0 20px;
+  background-color: #000 !important;
+  color: #fff;
 }
 
 
+.navbar .navbar-nav {
+  display: flex;
+    margin-right: 200px; 
 
-.search-container, .account-container, .contact-container {
-    display: flex;
-    align-items: center;
-    margin-left: 12px; 
 }
 
-.navbar-toggle {
-    display:none;
-    background-color: transparent;
-    color: white;
-    font-size: 24px;
-    border: none;
-    cursor: pointer;
+.navbar-nav .nav-link {
+  color: white;
+  margin-right: 20px;
+  text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-/* Media query for responsive design */
+.navbar-nav .nav-link:hover {
+  color: #F26B0A;
+}
+
+.navbar-toggler {
+  border-color: #ffffff;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28155, 155, 155, 1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.navbar .dropdown-menu {
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 8px;
+}
+
+.navbar .dropdown-item {
+  color: #fff;
+  transition: background-color 0.3s ease-in-out;
+  border-radius: 25px;
+}
+
+.navbar .dropdown-item:hover {
+  background-color: #F26B0A;
+  color: #fff;
+}
+
+/* Search button styles */
+.btn-search {
+  background-color: #F26B0A;
+  color: white;
+}
+
+.btn-search:hover {
+  background-color: #F06A0A;
+}
+
+.input-group input {
+  border-radius: 25px;
+  border: 1px solid #ccc;
+}
+
+/* Navbar for mobile */
 @media (max-width: 768px) {
-    .navbar {
-        flex-direction: column;  /* Change to column for smaller screens */
-        align-items: flex-start;
-    }
+  .navbar-collapse {
+    display: none;
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.9);
+    padding: 10px;
+  }
 
-    .navbar-left, .navbar-right {
-        display: none;
-        flex-direction: column; /* Make them stack vertically */
-        width: 100%;
-    }
+  .navbar-toggler.collapsed + .navbar-collapse {
+    display: flex;
+  }
 
-    .navbar-toggle {
-        display: inline-block; /* Show toggle button */
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
+  .navbar-nav {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 15px;
+  }
 
-    .navbar-right.show {
-        display: flex;  /* When toggled, show navbar-right */
-    }
+  .navbar-nav .nav-link {
+    margin-bottom: 10px;
+    padding: 10px;
+  }
 
-    .navbar-left.show {
-        display: flex;  /* When toggled, show navbar-left */
-    }
+  .d-flex {
+    margin-top: 10px;
+    justify-content: center;
+  }
 
-    .navbar-left, .navbar-right {
-        margin-top: 10px; /* Add space between navbar-left and navbar-right */
-    }
+  .nav-link {
+    margin-right: 0;
+  }
+}
+
+@media (min-width: 769px) {
+  .navbar-collapse {
+    display: flex !important;
+    justify-content: flex-end;
+  }
+
+  .navbar-toggler {
+    display: none;
+  }
 }
 
 /* start banner-section */
@@ -229,184 +242,213 @@ body {
     color: #F26B0A;
 }
 
-/* Categories section */
+/* ✅ تحسين استايل القسم بالكامل */
 .categories {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap; /* يسمح بانتقال العناصر عند الحاجة */
     gap: 40px;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
 }
 
+/* ✅ ضبط مجموعة العناصر */
 .category-items-wrapper {
     display: flex;
-    gap: 40px;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+    gap: 40px;
 }
 
 .category-item {
     position: relative;
-    width: 33%; 
+    width: 20%;
     text-align: center;
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start; 
-    align-items: center; 
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 40px; 
 }
 
 .category-image {
     width: 100%;
-    height: 200px; 
+    height: 200px;
     object-fit: cover;
     border-radius: 8px;
 }
 
 .category-box {
     position: relative;
-    margin-top: 0px;
-    padding: 20px;
-    width: 70%; 
-    text-align: center; 
-    height: 100px;
+    padding: 15px;
+    width: 100%; 
+    text-align: center;
+    height: auto;
 }
+
 .category-name {
     color: #F26B0A;
     font-weight: bold;
-    font-size: 18px; 
+    font-size: 18px;
     text-decoration: none;
+    display: block;
+    margin-top: 10px;
 }
+
+
+/* للأجهزة اللوحية (Tablet) */
 @media (max-width: 1024px) {
-    .category-items-wrapper {
-        flex-wrap: wrap;
-    }
     .category-item {
-        width: 45%;
-        margin-bottom: 20px;
+        width: 45%; /* عرض عنصرين في الصف الواحد */
+        margin-bottom: 30px;
     }
 }
 
+/* للجوالات (Mobile) */
 @media (max-width: 768px) {
     .category-item {
-        width: 100%;
+        width: 100%; /* عرض عنصر واحد في كل صف */
     }
     .arrow {
         display: none !important;
     }
 }
-/*End Categories section */
 
 .offer-section {
-    position: relative;
-    height: 60vh; 
-    width: 95%; 
-    margin: 0 auto; 
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; 
-    border-radius: 20px;
+    width: 100%;
+    padding: 40px 0;
+    text-align: center;
 }
 
 .offer-carousel {
     position: relative;
-    height: 100%;
-    width: 100%;
+    width: 90%;
+    margin: auto;
     overflow: hidden;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    height: 700px;
 }
 
 .offer-carousel-inner {
     display: flex;
-    transition: transform 0.7s ease-in-out;
-    width: 100%;
-    height: 100%;
+    transition: transform 0.5s ease-in-out;
 }
 
 .offer-carousel-item {
-    width: 100%; 
-    height: 100%; 
-    background-size: cover; 
-    background-position: center center; 
-    object-fit: cover; 
-    flex-shrink: 0;
+    min-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 15px;
 }
 
-.offer-carousel-item:nth-child(1) {
-    background-image: url('../images/offer1.jpeg');
-}
-
-.offer-carousel-item:nth-child(2) {
-    background-image: url('../images/offers.jpeg');
-}
-
-.offer-carousel-item:nth-child(3) {
-    background-image: url('../images/offer3.jpeg');
+.offer-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .offer-item-content {
-    position: relative;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding: 20px;
-    color: white;
-    font-family: 'Poppins', sans-serif;
-    z-index: 1;
+    width: 100%;
+    text-align: center;
+    padding: 25px;
 }
-.offer-item-info {
-    position: absolute;
-    bottom: 30px;
-    left: 20px;
-    z-index: 2;
-    background-color: rgb(0, 0, 0,0.3);
-    border-radius: 15px;
-    padding: 15px;
 
+.offer-item-info {
+    margin-bottom: 10px;
 }
+
 .offer-price {
-    font-size: 2em;
-    color: #F26B0A;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color:#F26B0A;
 }
 
 .offer-description {
-    font-size: 1.2em;
+    font-size: 1rem;
+    color: #555;
+    margin-top: 5px;
 }
 
 .offer-discount-percentage {
     position: absolute;
     top: 20px;
     right: 20px;
-    background-color: rgb(0, 0, 0,0.8);
-    color: #F26B0A;
-    padding: 10px 15px;
-    border-radius: 10px;
-    font-size: 1.5em;
+    background-color: #F06A0A;
+    color: white;
+    padding: 5px 12px;
+    border-radius: 5px;
+    font-size: 0.9rem;
     font-weight: bold;
-    z-index: 3;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .offer-dots {
-    position: absolute;
-    bottom: 16px;
-    width: 100%;
     display: flex;
     justify-content: center;
-    gap: 8px;
+    margin-bottom: 20px;
 }
 
 .offer-dot {
     width: 12px;
     height: 12px;
-    background-color: white;
+    margin: 0 5px;
+    background-color: #ccc;
     border-radius: 50%;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
+
 .offer-dot.active {
-    background-color: #F26B0A;
+    background-color: #F06A0A;
 }
+
+.offer-btn {
+    background-color: #F06A0A;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background 0.3s;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
+}
+
+.offer-btn:hover {
+    background-color: #000;
+}
+
+@media (max-width: 768px) {
+    .offer-carousel {
+        width: 95%;
+    }
+    
+    .offer-price {
+        font-size: 1.3rem;
+    }
+    
+    .offer-description {
+        font-size: 0.9rem;
+    }
+    
+    .offer-discount-percentage {
+        font-size: 0.8rem;
+    }
+}
+
+
 .clients-section h2{
 text-align: center;
 }
@@ -492,14 +534,32 @@ text-align: center;
   background-color: #f06a0a;
   color: white;
   padding: 10px 15px;
-  border-radius: 9999px;
+  border-radius: 25px;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  -webkit-border-radius: 25px;
+  -moz-border-radius: 25px;
+  -ms-border-radius: 25px;
+  -o-border-radius: 25px;
 }
 
 .Add-btn:hover {
   background-color: #333;
+}
+.add-to-cart-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 1;
+    transition: opacity 0.5s ease;
 }
 
 .custom-rating {
@@ -667,12 +727,15 @@ text-align: center;
     display: none; 
 }
 
-/* Footer Styling */
+/* Footer styling */
 .site-footer {
     font-family: Arial, sans-serif;
     background-color: #000;
+    margin-top: auto;  /* Ensures the footer stays at the bottom */
+    padding: 40px 0;
 }
 
+/* Styling for footer content */
 .footer-logo-img {
     width: 100px;
 }
@@ -704,28 +767,29 @@ text-align: center;
 
 .footer-newsletter button:hover {
     background-color: #333; 
-    color:#fff;
+    color: #fff;
 }
 
-
 .footer-bottom {
-    margin-top: auto; /* يدفع العنصر إلى أسفل الصفحة */
-    padding: 10px 0; /* لضبط المسافات الداخلية فقط */
-    color: #fff; /* لون النص */
+    margin-top: auto; 
+    padding: 10px 0; 
+    color: #fff; 
     font-size: 14px;
 }
 
 p {
-    margin: 0; /* إزالة أي مسافات فوق أو تحت النص */
+    margin: 0; 
 }
-.submit{
+
+.submit {
     background-color: #F26B0A;
 }
-.submit:hover{
+
+.submit:hover {
     background-color: #333;
 }
-/* Media Queries for Responsiveness */
 
+/* Media Queries for Responsiveness */
 @media (max-width: 1024px) {
     .footer-container {
         grid-template-columns: 1fr 1fr; 
