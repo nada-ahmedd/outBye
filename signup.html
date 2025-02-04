@@ -34,18 +34,29 @@
                 <a class="nav-link mx-2" href="index.html">Home</a>
                 <a class="nav-link mx-2" href="contact.html">Contact</a>
                 <a class="nav-link mx-2" href="about.html">About</a>
-                <a class="nav-link mx-2" href="signup.html">Sign Up</a>
+            <a id="signupBtn" class="nav-link mx-2 sign-up-link" href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a id="signinBtn" class="nav-link mx-2 sign-in-link" href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+
+
             </div>
 
             <!-- Navbar right icons -->
             <div class="d-flex align-items-center ms-4">
                 <!-- Search icon -->
                 <div class="input-group mx-2">
-                    <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-search" type="submit">
+                    <input id="searchQuery" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button id="searchButton" class="btn btn-search" type="button">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
+
+                <!-- منطقة عرض النتائج -->
+                <div id="searchResults" class="search-results"></div>
+
+
+                <!-- عرض النتائج أسفل الناف بار أو في مكان آخر -->
+                <div id="searchResults"></div>
+
 
                 <!-- Favorite icon -->
                 <a class="nav-link mx-2" href="#">
@@ -55,9 +66,10 @@
                 <!-- Cart icon -->
                 <a class="nav-link mx-2" href="cart.html">
                     <i class="bi bi-cart-fill"></i>
+                    <span class="cart-count">0</span>
                 </a>
 
-                <!-- User icon with dropdown -->
+
                 <div class="dropdown">
                     <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -65,13 +77,15 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <a id="logoutBtn" class="nav-link mx-2" href="javascript:void(0);">Logout</a>
                     </ul>
                 </div>
             </div>
         </div>
     </div>
 </nav>
+
+
 <div class="container-fluid">
     <div class="row signup-container">
         <!-- Right Side: Image -->
@@ -195,5 +209,6 @@
 <script src="js/script.js"></script>
 <script src="js/signup.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
+<script src="js/navbar.js"></script>
 </body>
 </html>

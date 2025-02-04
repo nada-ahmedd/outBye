@@ -12,7 +12,6 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         return;
     }
 
-    // إنشاء كائن FormData لإرسال البيانات
     const formData = new FormData();
     formData.append('username', username);
     formData.append('email', email);
@@ -40,7 +39,6 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         console.log('Response from server:', data);
         if (data.status === "success") {
             alert(data.message);
-            // Store email in localStorage for verification page
             localStorage.setItem('email', email);
             window.location.href = 'verify.html';
         } else {

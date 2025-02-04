@@ -1,6 +1,6 @@
 document.getElementById("loginForm").addEventListener("submit", function (event) {
-  event.preventDefault(); // Prevent default form submission
-
+  event.preventDefault();
+  
   const form = this;
   const submitButton = form.querySelector('button[type="submit"]');
   submitButton.disabled = true;
@@ -21,6 +21,7 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
     .then((data) => {
       if (data.status === "success") {
         alert("Login successful! Redirecting...");
+        localStorage.setItem('isLoggedIn', 'true');
         window.location.href = "index.html";
       } else {
         displayFormError(form, data.message);

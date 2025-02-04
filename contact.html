@@ -16,65 +16,76 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-dark px-4">
-        <div class="container-fluid">
-            <!-- Logo on the left -->
-            <a class="navbar-brand" href="index.html">
-                <img src="images/out bye.png" alt="Logo" width="150" height="100">
-            </a>
+<nav class="navbar navbar-expand-lg bg-dark px-4">
+    <div class="container-fluid">
+        <!-- Logo on the left -->
+        <a class="navbar-brand" href="index.html">
+            <img src="images/out bye.png" alt="Logo" width="150" height="100">
+        </a>
 
-            <!-- Navbar toggler for small screens -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <!-- Navbar toggler for small screens -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
 
-            <!-- Navbar links (Home, About, etc.) -->
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link mx-2" href="index.html">Home</a>
-                    <a class="nav-link mx-2" href="contact.html">Contact</a>
-                    <a class="nav-link mx-2" href="about.html">About</a>
-                    <a class="nav-link mx-2" href="signup.html">Sign Up</a>
+        <!-- Navbar links (Home, About, etc.) -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link mx-2" href="index.html">Home</a>
+                <a class="nav-link mx-2" href="contact.html">Contact</a>
+                <a class="nav-link mx-2" href="about.html">About</a>
+            <a id="signupBtn" class="nav-link mx-2 sign-up-link" href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
+            <a id="signinBtn" class="nav-link mx-2 sign-in-link" href="signin.html"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+
+
+            </div>
+
+            <!-- Navbar right icons -->
+            <div class="d-flex align-items-center ms-4">
+                <!-- Search icon -->
+                <div class="input-group mx-2">
+                    <input id="searchQuery" class="form-control" type="search" placeholder="Search" aria-label="Search">
+                    <button id="searchButton" class="btn btn-search" type="button">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
 
-                <!-- Navbar right icons -->
-                <div class="d-flex align-items-center ms-4">
-                    <!-- Search icon -->
-                    <div class="input-group mx-2">
-                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-                        <button class="btn btn-search" type="submit">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
+                <!-- منطقة عرض النتائج -->
+                <div id="searchResults" class="search-results"></div>
 
-                    <!-- Favorite icon -->
-                    <a class="nav-link mx-2" href="#">
-                        <i class="fa-solid fa-heart"></i>
+
+                <!-- عرض النتائج أسفل الناف بار أو في مكان آخر -->
+                <div id="searchResults"></div>
+
+
+                <!-- Favorite icon -->
+                <a class="nav-link mx-2" href="#">
+                    <i class="fa-solid fa-heart"></i>
+                </a>
+
+                <!-- Cart icon -->
+                <a class="nav-link mx-2" href="cart.html">
+                    <i class="bi bi-cart-fill"></i>
+                    <span class="cart-count">0</span>
+                </a>
+
+
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i>
                     </a>
-
-                    <!-- Cart icon -->
-                    <a class="nav-link mx-2" href="cart.html">
-                        <i class="bi bi-cart-fill"></i>
-                    </a>
-
-                    <!-- User icon with dropdown -->
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Logout</a></li>
-                        </ul>
-                    </div>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <a id="logoutBtn" class="nav-link mx-2" href="javascript:void(0);">Logout</a>
+                    </ul>
                 </div>
             </div>
         </div>
-    </nav>
-
+    </div>
+</nav>
 
 
 <div class="breadcrumb-contact">
@@ -189,6 +200,8 @@
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/script.js"></script>
     <script src="js/signin.js"></script>
+    <script src="js/navbar.js"></script>
+
     </body>
     
     </html>
