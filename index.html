@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Project</title>
+    <title>OutBye</title>
+    <link rel="icon" href="images/out bye.png" type="image/x-icon">
+
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css"> 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"rel="stylesheet">
@@ -44,25 +46,27 @@
             <!-- Navbar right icons -->
             <div class="d-flex align-items-center ms-4">
                 <!-- Search icon -->
-        <div class="input-group mx-2">
-            <input id="searchQuery" class="form-control" type="search" placeholder="Search" aria-label="Search">
-            <button id="searchButton" class="btn btn-search" type="button">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
-        
-        <!-- منطقة عرض النتائج -->
-        <div id="searchResults" class="search-results"></div>
+<div class="input-group mx-2">
+    <input type="text" id="searchQuery" />
+    <button class="btn-search">Search</button>
+</div>
 
-            
-            <!-- عرض النتائج أسفل الناف بار أو في مكان آخر -->
-            <div id="searchResults"></div>
+<!-- منطقة عرض النتائج -->
+<div id="searchResults" class="search-results">
+    <!-- زر الإغلاق -->
+    <button class="close-btn" onclick="closeSearchResults()">×</button>
+
+    <!-- هنا سيتم عرض نتائج البحث -->
+</div>
 
 
-                <!-- Favorite icon -->
-                <a class="nav-link mx-2" href="#">
-                    <i class="fa-solid fa-heart"></i>
-                </a>
+
+
+<!-- Favorite icon -->
+<a class="nav-link mx-2" href="fav.html">
+    <i class="fa-solid fa-heart"></i> 
+</a>
+
 
                 <!-- Cart icon -->
            <a class="nav-link mx-2" href="cart.html">
@@ -104,12 +108,7 @@
             <span class="dot"></span>
         </div>
 
-        <!-- Banner Text -->
-        <div class="banner-text">
-<span>TRY NEW TASTE</span><br>
-Healthy Food is<br>
-Waiting for you
-        </div>
+       
     </div>
 </section>
 <!-- end banner section -->
@@ -746,7 +745,7 @@ Waiting for you
    
 
 
-    <h2 class="title">Hotels& Activities</h2>
+    <h2 class="title">Hotels</h2>
 
     <div id="best-seller" class="client-boxes active-section"data-group="tabs">
 
@@ -1044,6 +1043,309 @@ Waiting for you
             </div>
         </div>
     </div>
+</section>
+<section class="clients-section hotel-section">
+
+
+
+    <h2 class="title">Tourist Places</h2>
+
+    <div id="best-seller" class="client-boxes active-section" data-group="tabs">
+
+        <div class="client-box">
+            <div class="header">
+                <img src="images/catgory.webp" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 1</h5>
+                <h3>Signature Seafood Appetizers</h3>
+                <p class="description">Enjoy a variety of fresh seafood appetizers with unique sauces that cater to all
+                    tastes.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category 2.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 2</h5>
+                <h3>Traditional Faiyum Grills</h3>
+                <p class="description">Delicious grilled dishes in the traditional Faiyum style, with special marinades
+                    that enhance
+                    the flavor of meats and chicken.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category 3.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <span>5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 4</h5>
+                <h3>Fried Seafood Dishes</h3>
+                <p class="description">Fresh fried seafood dishes with a touch of local spices that add a unique and
+                    irresistible
+                    flavor.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="latest-offers" class="client-boxes" data-group="tabs">
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category4.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 5</h5>
+                <h3>Salads & Vegetable Tagine</h3>
+                <p class="description">A mix of fresh salads with a vegetable tagine made from locally sourced Faiyum
+                    vegetables,
+                    offering unique flavors.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category5.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 6</h5>
+                <h3>Traditional Faiyum Sweets</h3>
+                <p class="description">Experience the delicious Faiyum sweets, like basbousa and qatayef, with local
+                    flavors that
+                    will leave you wanting more.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category6.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 7</h5>
+                <h3>Grilled Fish Specialties</h3>
+                <p class="description">Freshly caught fish grilled to perfection, served with a variety of dips and
+                    sides that
+                    complement the natural flavors.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="most-sold" class="client-boxes" data-group="tabs">
+        <div class="client-box">
+            <div class="header">
+                <img src="images/category7.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 8</h5>
+                <h3>Classic Egyptian Kushari</h3>
+                <p class="description">Enjoy a hearty dish of Kushari, a perfect mix of rice, lentils, pasta, and crispy
+                    onions
+                    topped with a tangy tomato sauce.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/cat3.webp" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 9</h5>
+                <h3>Vegetarian Mediterranean Platters</h3>
+                <p class="description">A selection of Mediterranean-inspired vegetarian platters, including falafel,
+                    hummus, and
+                    tabbouleh, served with warm pita bread.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+        <div class="client-box">
+            <div class="header">
+                <img src="images/cat2.jpeg" alt="Client Image" class="client-image">
+                <div class="star-rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star-half-alt"></i>
+                    <span>4.5/5</span>
+                </div>
+            </div>
+
+            <hr class="separator">
+
+            <div class="details">
+                <h5 class="category">Faiyum Restaurant 10</h5>
+                <h3>Faiyum-Style Fatta</h3>
+                <p class="description">Experience the rich flavors of Faiyum's Fatta, a traditional dish made with lamb,
+                    rice, and
+                    crispy bread, all served with a flavorful broth.</p>
+            </div>
+
+            <div class="Add">
+                <button class="Add-btn">Add To Cart</button>
+
+                <div class="icons">
+                    <i class="fas fa-comment"></i><span>150</span>
+                    <i class="fas fa-heart"></i><span>320</span>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="custom-rating">
         <h3 class="custom-title">How was your experience<br>with our restaurant?</h3>
@@ -1128,7 +1430,6 @@ Waiting for you
 
 </footer>
 
-<script src="js/search.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
@@ -1136,6 +1437,7 @@ Waiting for you
 <script src="js/cart.js"></script>
 <script src="js/script.js"></script>
 <script src="js/navbar.js"></script>
+<script src="js/search.js"></script>
 
 
 

@@ -22,18 +22,33 @@ document.addEventListener("DOMContentLoaded", () => {
         const itemsContainer = document.getElementById("items-container");
 
         if (data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
-            itemsContainer.innerHTML = data.data.map(item => `
-                <div class="item">
-                    <h3>${item.items_name}</h3>
-                    <p>${item.items_des}</p>
-                    <p>Price: ${item.items_price} EGP</p>
-                    <p>Discount: ${item.items_discount}%</p>
-                    <img src="${item.items_image}" alt="${item.items_name}">
-                    <button class="add-to-cart" data-itemid="${item.items_id}">Add to Cart</button>
-                </div>
-            `).join('');
+            itemsContainer.innerHTML = data.data.map(item => {
+                const price = item.items_price;
+                const discount = item.items_discount;
+                const discountedPrice = price - (price * discount / 100);
+                return `
+                    <div class="item">
+                        <h3>${item.items_name}</h3>
+                        <p>${item.items_des}</p>
+                        <p class="price">
+                            ${discount > 0 ? `<span class="old-price">${price} EGP</span>` : ''} 
+                            ${discount > 0 ? `<span class="new-price">${discountedPrice} EGP</span>` : `<span class="regular-price">${price} EGP</span>`}
+                        </p>
+                        <p class="discount">${discount > 0 ? `Discount: ${discount}%` : ''}</p>
+                        <img src="${item.items_image}" alt="${item.items_name}">
+                        <button class="addItem-to-cart" 
+                            data-itemid="${item.items_id}" 
+                            data-itemname="${item.items_name}" 
+                            data-itemprice="${item.items_price}" 
+                            data-itemimage="${item.items_image}">
+                            Add to Cart
+                        </button>
+                    </div>
+                `;
+            }).join(''); 
             
-            document.querySelectorAll(".add-to-cart").forEach(button => {
+            // Add event listener for "Add to Cart"
+            document.querySelectorAll(".addItem-to-cart").forEach(button => {
                 button.addEventListener("click", (event) => {
                     const itemId = event.target.getAttribute("data-itemid");
                     addToCart(userId, itemId);
@@ -49,30 +64,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// ✅ إضافة منتج إلى السلة
+// Function to add items to the cart
 function addToCart(userId, itemId) {
-    const cartApiUrl = "https://abdulrahmanantar.com/outbye/cart/add.php";
-
-    fetch(cartApiUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            usersid: userId,
-            itemsid: itemId
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.status === "success") {
-            alert("Item added to cart successfully!");
-        } else {
-            alert("Failed to add item to cart.");
-        }
-    })
-    .catch(error => {
-        console.error("Error adding to cart:", error);
-        alert("Error adding to cart. Please try again.");
-    });
+    // Add the item to the cart logic here (e.g., saving to cart in localStorage)
+    alert("Item added to cart!");
 }

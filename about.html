@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
+        <link rel="icon" href="images/out bye.png" type="image/x-icon">
+
     <link rel="stylesheet" href="css/about.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="css/services.css">
@@ -46,20 +48,13 @@
 
             <!-- Navbar right icons -->
             <div class="d-flex align-items-center ms-4">
-                <!-- Search icon -->
-                <div class="input-group mx-2">
-                    <input id="searchQuery" class="form-control" type="search" placeholder="Search" aria-label="Search">
-                    <button id="searchButton" class="btn btn-search" type="button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-
-                <!-- منطقة عرض النتائج -->
-                <div id="searchResults" class="search-results"></div>
-
-
-                <!-- عرض النتائج أسفل الناف بار أو في مكان آخر -->
-                <div id="searchResults"></div>
+            <div class="input-group mx-2">
+                <input type="text" id="searchQuery" />
+                <button class="btn-search">Search</button>
+            </div>
+            
+            <!-- منطقة عرض النتائج -->
+            <div id="searchResults" class="search-results"></div>
 
 
                 <!-- Favorite icon -->
@@ -81,7 +76,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <a id="logoutBtn" class="nav-link mx-2" href="javascript:void(0);">Logout</a>
+        <a id="logoutBtn" class="nav-link mx-2 dropdown-item" href="javascript:void(0);">Logout</a>
                     </ul>
                 </div>
             </div>

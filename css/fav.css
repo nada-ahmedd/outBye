@@ -1,0 +1,117 @@
+/* تعيين الألوان والخطوط الأساسية */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+}
+
+nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s;
+}
+
+nav a:hover {
+    color: #ff6347;
+}
+
+.favorites-page {
+    padding: 20px;
+    text-align: center;
+}
+
+.favorites-page h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.favorites-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    justify-items: center;
+}
+
+.favorite-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 250px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.favorite-item:hover {
+    transform: scale(1.05);
+}
+
+.favorite-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.favorite-item h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.favorite-item p {
+    font-size: 14px;
+    color: #777;
+    margin-bottom: 10px;
+}
+
+.favorite-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.favorite-actions .remove-btn {
+    background-color: #ff6347;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.favorite-actions .remove-btn:hover {
+    background-color: #e53e33;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+}

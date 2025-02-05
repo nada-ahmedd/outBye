@@ -4,7 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignIn</title>
+    <title>Cart</title>
+        <link rel="icon" href="images/out bye.png" type="image/x-icon">
+
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/cart.css">
@@ -46,20 +48,13 @@
             <!-- Navbar right icons -->
             <div class="d-flex align-items-center ms-4">
                 <!-- Search icon -->
-                <div class="input-group mx-2">
-                    <input id="searchQuery" class="form-control" type="search" placeholder="Search" aria-label="Search">
-                    <button id="searchButton" class="btn btn-search" type="button">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </div>
-
-                <!-- منطقة عرض النتائج -->
-                <div id="searchResults" class="search-results"></div>
-
-
-                <!-- عرض النتائج أسفل الناف بار أو في مكان آخر -->
-                <div id="searchResults"></div>
-
+            <div class="input-group mx-2">
+                <input type="text" id="searchQuery" />
+                <button class="btn-search">Search</button>
+            </div>
+            
+            <!-- منطقة عرض النتائج -->
+            <div id="searchResults" class="search-results"></div>
 
                 <!-- Favorite icon -->
                 <a class="nav-link mx-2" href="#">
@@ -80,7 +75,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <a id="logoutBtn" class="nav-link mx-2" href="javascript:void(0);">Logout</a>
+        <a id="logoutBtn" class="nav-link mx-2 dropdown-item" href="javascript:void(0);">Logout</a>
                     </ul>
                 </div>
             </div>
@@ -99,60 +94,24 @@
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Subtotal</th>
+                <th>Action</th>
             </tr>
         </thead>
-        <tbody>
-            <tr>
-                <td>
-                    <div class="product">
-                        <img src="food.jpg" alt="food">
-                        <span>Food</span>
-                    </div>
-                </td>
-                <td>$650</td>
-                <td>
-                    <select>
-                        <option value="1">01</option>
-                        <option value="2">02</option>
-                        <option value="3">03</option>
-                    </select>
-                </td>
-                <td>$650</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="product">
-                        <img src="dessert.jpg" alt="dessert">
-                        <span>Dessert</span>
-                    </div>
-                </td>
-                <td>$550</td>
-                <td>
-                    <select>
-                        <option value="1">01</option>
-                        <option value="2" selected>02</option>
-                        <option value="3">03</option>
-                    </select>
-                </td>
-                <td>$1100</td>
-            </tr>
+        <tbody id="cart-items">
+            <!-- سيتم ملء المحتوى هنا ديناميكياً باستخدام JavaScript -->
         </tbody>
     </table>
     <div class="cart-actions">
-<a href="index.html" class="btn btn-secondary">Return to Shop</a>
-
-        <button class="btn btn-primary">Update Cart</button>
+        <a href="index.html" class="btn btn-secondary">Return to Shop</a>
+        <button class="btn btn-primary" onclick="updateCart()">Update Cart</button>
     </div>
     <div class="cart-footer">
-       
         <div class="cart-total">
             <h4>Cart Total</h4>
-            <p>Total: <span>$1750</span></p>
+            <p>Total: <span id="total-price">$0</span></p>
         </div>
     </div>
 </div>
-
-
 
 
    
@@ -234,6 +193,7 @@
     <script src="js/script.js"></script>
         <script src="js/cart.js"></script>
         <script src="js/navbar.js"></script>
+        <script src="js/item.js"></script>
 
 
 </body>

@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Code</title>
+    <link rel="icon" href="images/out bye.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.19/dist/sweetalert2.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/verify.css">
 </head>
@@ -12,74 +13,97 @@
 <body>
     <div class="container">
         <h1>Verify Your Email</h1>
-       <form id="verifyForm">
-    <div class="verify-code-group">
-        <input type="text" id="verifyCodeField1" maxlength="1" class="verify-code-field" required>
-        <input type="text" id="verifyCodeField2" maxlength="1" class="verify-code-field" required>
-        <input type="text" id="verifyCodeField3" maxlength="1" class="verify-code-field" required>
-        <input type="text" id="verifyCodeField4" maxlength="1" class="verify-code-field" required>
-        <input type="text" id="verifyCodeField5" maxlength="1" class="verify-code-field" required>
+        <form id="verifyForm">
+            <div class="verify-code-group">
+                <input type="text" id="verifyCodeField1" maxlength="1" class="verify-code-field" required>
+                <input type="text" id="verifyCodeField2" maxlength="1" class="verify-code-field" required>
+                <input type="text" id="verifyCodeField3" maxlength="1" class="verify-code-field" required>
+                <input type="text" id="verifyCodeField4" maxlength="1" class="verify-code-field" required>
+                <input type="text" id="verifyCodeField5" maxlength="1" class="verify-code-field" required>
+            </div>
+            <button type="submit">Verify</button>
+        </form>
     </div>
-    <button type="submit">Verify</button>
-</form>
 
-<script>
-   document.getElementById('verifyForm').addEventListener('submit', function (event) {
-        event.preventDefault();
+    <script>
+        document.getElementById('verifyForm').addEventListener('submit', function (event) {
+            event.preventDefault();
 
-        // جمع القيم المدخلة في الخانات الخمسة
-        let verifyCode = '';
-        for (let i = 1; i <= 5; i++) {
-            verifyCode += document.getElementById('verifyCodeField' + i).value.trim();
-        }
+            let verifyCode = '';
+            for (let i = 1; i <= 5; i++) {
+                verifyCode += document.getElementById('verifyCodeField' + i).value.trim();
+            }
 
-        // التأكد من أنه تم إدخال جميع القيم
-        if (verifyCode.length !== 5) {
-            alert('Please enter all five digits.');
-            return;
-        }
+            if (verifyCode.length !== 5) {
+                alert('Please enter all five digits.');
+                return;
+            }
 
-        const email = localStorage.getItem('email');
+            const email = localStorage.getItem('email');
 
-        if (!email) {
-            alert('No email found in local storage. Please register first.');
-            return;
-        }
+            if (!email) {
+                alert('No email found in local storage. Please register first.');
+                return;
+            }
 
-        const formData = new FormData();
-        formData.append('email', email);
-        formData.append('verifycode', verifyCode);
+            const formData = new FormData();
+            formData.append('email', email);
+            formData.append('verifycode', verifyCode);
 
-        fetch('https://abdulrahmanantar.com/outbye/auth/verfiycode.php', {
-            method: 'POST',
-            body: formData
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
+            fetch('https://abdulrahmanantar.com/outbye/auth/verfiycode.php', {
+                method: 'POST',
+                body: formData
             })
-            .then(data => {
-                alert(data.message);
-                if (data.status === "success") {
-                    window.location.href = 'signin.html';
-                } else {
-                    console.error('Verification failed:', data.message);
-                }
-            })
-            .catch((error) => {
-               Swal.fire({
-                   icon: 'error',
-                   title: 'Error',
-                   text: 'An error occurred while verifying the code. Please try again later.',
-               });
-               console.error('Error:', error);
-           });
-   });
-</script>
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert(data.message);
+                    if (data.status === "success") {
+                        window.location.href = 'signin.html';
+                    } else {
+                        console.error('Verification failed:', data.message);
+                    }
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while verifying the code. Please try again later.',
+                    });
+                    console.error('Error:', error);
+                });
+        });
 
-  
+        document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
+            input.addEventListener('input', function () {
+                if (this.value.length === 1 && index < fields.length - 1) {
+                    fields[index + 1].focus();
+                }
+            });
+
+            input.addEventListener('input', function () {
+                if (this.value.length === 0 && index > 0) {
+                    fields[index - 1].focus();
+                }
+            });
+        });
+
+        document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
+            input.addEventListener('paste', function (e) {
+                const pastedData = e.clipboardData.getData('text');
+                if (pastedData.length === 5) {
+                    pastedData.split('').forEach((char, i) => {
+                        fields[i].value = char;
+                    });
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
