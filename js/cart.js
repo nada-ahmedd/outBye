@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function displayCartItems(items) {
-        cartItemsContainer.innerHTML = ''; // مسح المحتوى القديم
+        cartItemsContainer.innerHTML = ''; 
         items.forEach(item => {
             const row = document.createElement('tr');
             row.innerHTML = `
@@ -40,12 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // دالة لتحديث السعر الإجمالي
     function updateTotalPrice(totalPrice) {
         totalPriceElement.textContent = `${totalPrice} EGP`;
     }
 
-    // دالة لإضافة منتج إلى الكارت
     async function addToCart(itemId) {
         try {
             const response = await fetch('https://abdulrahmanantar.com/outbye/cart/add.php', {
@@ -58,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (data.status === 'success') {
-                fetchCartItems(); // تحديث الكارت بعد الإضافة
+                fetchCartItems(); 
             } else {
                 console.error('Error adding item to cart:', data.message);
             }
@@ -67,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // دالة لحذف منتج من الكارت
     async function removeFromCart(itemId) {
         try {
             const response = await fetch('https://abdulrahmanantar.com/outbye/cart/delet.php', {
@@ -80,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
 
             if (data.status === 'success') {
-                fetchCartItems(); // تحديث الكارت بعد الحذف
+                fetchCartItems(); 
             } else {
                 console.error('Error removing item from cart:', data.message);
             }
@@ -89,12 +86,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // دالة لتحديث الكارت
     function updateCart() {
         fetchCartItems();
     }
-
-    // Event Listeners
     document.querySelectorAll('.addItem-to-cart').forEach(button => {
         button.addEventListener('click', function () {
             const itemId = this.getAttribute('data-itemid');

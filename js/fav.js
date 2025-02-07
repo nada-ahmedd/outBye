@@ -1,8 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const favoritesContainer = document.getElementById("favorites-container");
 
-    // الحصول على الـ Favorites من API (مثال على الجلب من الـ API)
-    const userId = 1; // استبدل بـ ID المستخدم الفعلي
+    const userId = 1; 
     const apiUrl = `https://abdulrahmanantar.com/outbye/favorite/view.php`;
 
     fetch(apiUrl, {

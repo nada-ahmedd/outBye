@@ -74,15 +74,12 @@ document.addEventListener("DOMContentLoaded", () => {
 function toggleFavorite(button, serviceId) {
     const icon = button.querySelector("i");
 
-    // تبديل الكلاس active لتفعيل أو إلغاء تفعيل اللون البرتقالي
     button.classList.toggle("active");
 
-    // تغيير الأيقونة إلى حالة مليئة (fa-solid) أو فارغة (fa-regular)
     if (button.classList.contains("active")) {
         icon.classList.remove("fa-regular");
         icon.classList.add("fa-solid");
 
-        // احصل على تفاصيل الخدمة
         const serviceItem = button.closest('.service-item');
         if (serviceItem) {
             const service = {
@@ -92,7 +89,6 @@ function toggleFavorite(button, serviceId) {
                 service_description: serviceItem.querySelector('.service-description') ? serviceItem.querySelector('.service-description').textContent : ''
             };
 
-            // حفظ تفاصيل المنتج في localStorage
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             favorites.push(service);
             localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -103,7 +99,6 @@ function toggleFavorite(button, serviceId) {
         icon.classList.remove("fa-solid");
         icon.classList.add("fa-regular");
 
-        // إزالة المنتج من المفضلات
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         favorites = favorites.filter(fav => fav.service_id !== serviceId);
         localStorage.setItem('favorites', JSON.stringify(favorites));

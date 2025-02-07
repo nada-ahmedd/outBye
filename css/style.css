@@ -15,7 +15,7 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  z-index: 1000; /* ضمان بقاء الناف بار فوق أي عنصر آخر */
+  z-index: 1000;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -38,11 +38,13 @@ body {
   text-decoration: none;
   transition: color 0.3s ease;
   font-size: 20px;
+     margin-top: 15px;
+
 }
  .sign-up-link {
    background-color: #F06A0A;
    border-radius: 20px;
-   padding: 7px;
+   padding: 4px;
    -webkit-border-radius: 20px;
    -moz-border-radius: 20px;
    -ms-border-radius: 20px;
@@ -53,7 +55,7 @@ body {
     background-color: #ddd;  
     color: #000 !important;  
       border-radius: 20px;
-   padding: 7px;
+   padding: 3px;
   }
 
 
@@ -215,9 +217,7 @@ justify-content: center;
 @media (max-width: 768px) {
   .navbar-collapse {
     display: none;
-    flex-direction: column;
-    background-color: rgba(0, 0, 0);
-    padding: 10px;
+   
   }
 
   .navbar-toggler.collapsed + .navbar-collapse {
@@ -283,18 +283,34 @@ flex-direction: row;
     text-align: center;
   }
 }
-@media (min-width: 992px) {
+@media (max-width: 1600px) {
   .navbar-collapse {
-    display: flex !important;
-    justify-content: flex-end;
-        background-color: rgba(0, 0, 0);
-
+    display: none; /* إخفاء القائمة افتراضيًا */
+    flex-direction: column;
+    background-color: rgba(0, 0, 0, 0.9); /* جعل الخلفية أغمق */
+    padding: 10px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    z-index: 999;
   }
 
-  .navbar-toggler {
-    display: none;
+  .navbar-toggler.collapsed + .navbar-collapse {
+    display: flex; /* إظهار القائمة عند التبديل */
+  }
+
+  .navbar-nav {
+    width: 100%;
+    text-align: center;
+  }
+
+  .navbar-nav .nav-link {
+    padding: 12px 0;
+    display: block;
   }
 }
+
 /* start banner-section */
 .banner {
     position: relative;
@@ -411,17 +427,15 @@ flex-direction: row;
     color: #F26B0A;
 }
 
-/* ✅ تحسين استايل القسم بالكامل */
 .categories {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap; /* يسمح بانتقال العناصر عند الحاجة */
+    flex-wrap: wrap; 
     gap: 40px;
     margin-bottom: 60px;
 }
 
-/* ✅ ضبط مجموعة العناصر */
 .category-items-wrapper {
     display: flex;
     flex-wrap: wrap;
@@ -466,18 +480,15 @@ flex-direction: row;
 }
 
 
-/* للأجهزة اللوحية (Tablet) */
 @media (max-width: 1024px) {
     .category-item {
-        width: 45%; /* عرض عنصرين في الصف الواحد */
+        width: 45%; 
         margin-bottom: 30px;
     }
 }
-
-/* للجوالات (Mobile) */
 @media (max-width: 768px) {
     .category-item {
-        width: 100%; /* عرض عنصر واحد في كل صف */
+        width: 100%;
     }
     .arrow {
         display: none !important;
