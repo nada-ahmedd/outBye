@@ -268,30 +268,34 @@ const offers = [
     items_name: "Large Koshary",
     items_price: "40",
     items_discount: "45",
-    items_image:  "https://abdulrahmanantar.com/outbye/upload/items/pyramid tour.webp",
+    items_image: "https://abdulrahmanantar.com/outbye/upload/items/pyramid tour.webp",
     items_des: "A large portion of the traditional Egyptian koshary with extra toppings.",
-    },
+    items_id: 1
+  },
   {
-      items_name: "Chicken Bucket",
-      items_price: "150",
+    items_name: "Chicken Bucket",
+    items_price: "150",
     items_discount: "10",
     items_image: "https://abdulrahmanantar.com/outbye/upload/items/chicken bucket.jpg",
     items_des: "A bucket of crispy fried chicken pieces, perfect for sharing.",
-    },
-   {
-      items_name: "Breakfast Buffet",
-      items_price:  "200",
-    items_discount:  "55",
-    items_image:   "https://abdulrahmanantar.com/outbye/upload/items/breakfast buffet.jpg",
+    items_id: 2
+  },
+  {
+    items_name: "Breakfast Buffet",
+    items_price: "200",
+    items_discount: "55",
+    items_image: "https://abdulrahmanantar.com/outbye/upload/items/breakfast buffet.jpg",
     items_des: "A rich breakfast buffet with a variety of local and international dishes.",
-    },
-   {
-      items_name: "Pepperoni Pizza",
-      items_price:  "120",
-    items_discount:  "35",
-    items_image:  "https://abdulrahmanantar.com/outbye/upload/items/pepperoni pizza.jpg",
+    items_id: 3
+  },
+  {
+    items_name: "Pepperoni Pizza",
+    items_price: "120",
+    items_discount: "35",
+    items_image: "https://abdulrahmanantar.com/outbye/upload/items/pepperoni pizza.jpg",
     items_des: "A classic pizza with pepperoni and mozzarella cheese.",
-    },
+    items_id: 4
+  },
 ];
 
 const carouselInner = document.getElementById("offer-carousel-inner");
@@ -299,19 +303,19 @@ const dotsContainer = document.getElementById("offer-dots");
 
 offers.forEach((offer, index) => {
   const carouselItem = document.createElement("div");
-  carouselItem.className = `offer-carousel-item ${index === 0 ? "active" : ""}`; 
+  carouselItem.className = `offer-carousel-item ${index === 0 ? "active" : ""}`;
 
   carouselItem.innerHTML = `
     <div class="offer-item-content">
       <div class="offer-item-info">
         <p class="offer-price">$${offer.items_price}</p>
         <p class="offer-description">${offer.items_des}</p>
-       
       </div>
       <div class="offer-discount-percentage">
         <span>${offer.items_discount}% OFF</span>
       </div>
       <img src="${offer.items_image}" alt="${offer.items_name}" class="offer-image">
+      <button class="offer-btn addItem-to-cart" data-itemid="${offer.items_id}">Add To Cart</button>
     </div>
   `;
 
@@ -321,3 +325,45 @@ offers.forEach((offer, index) => {
   dot.className = `offer-dot ${index === 0 ? "active" : ""}`;
   dotsContainer.appendChild(dot);
 });
+
+// إضافة مستمعات الأحداث للأزرار
+function addEventListeners() {
+  document.querySelectorAll(".addItem-to-cart").forEach(button => {
+    button.addEventListener("click", (event) => {
+      const itemId = event.target.getAttribute("data-itemid");
+      if (itemId) addToCart(itemId);
+    });
+  });
+}
+
+// إضافة مستمعات الأحداث بعد تحميل المحتوى
+document.addEventListener("DOMContentLoaded", addEventListeners);
+
+// الدالة الخاصة بإضافة المنتج إلى السلة
+function addToCart(itemId) {
+  const userId = localStorage.getItem("userId");
+  if (!userId) {
+    Swal.fire("⚠️ تسجيل الدخول مطلوب", "يرجى تسجيل الدخول لإضافة المنتجات إلى السلة.", "warning");
+    return;
+  }
+
+  fetch("https://abdulrahmanantar.com/outbye/cart/add.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ usersid: userId, itemsid: itemId, quantity: 1 }).toString()
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log("🛒 Add to Cart Response:", data);
+    if (data.success) {
+      Swal.fire("✅ تمت الإضافة!", "تمت إضافة المنتج إلى السلة بنجاح.", "success");
+      loadCart(); // ✅ تحديث السلة مباشرة بعد الإضافة
+    } else {
+      Swal.fire("❌ خطأ", data.message, "error");
+    }
+  })
+  .catch(error => {
+    console.error("❌ Error adding to cart:", error);
+    Swal.fire("❌ خطأ", "حدث خطأ أثناء إضافة المنتج إلى السلة.", "error");
+  });
+}

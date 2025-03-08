@@ -102,39 +102,15 @@ body {
 }
 
 
-/* تنسيق الكروت داخل النافذة */
-#searchResults .card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 10px;
-    margin-bottom: 10px;
-    background: #fff;
-}
 
-/* ضبط الصور داخل الكروت */
-#searchResults .card img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
 
-/* تنسيق النص داخل الكروت */
-#searchResults .card-title {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 5px;
-}
 
-#searchResults .card-text {
-    font-size: 14px;
-    color: #666;
-}
 
-/* زر الإضافة إلى السلة */
-#searchResults .btn {
-    width: 100%;
-    font-size: 14px;
-}
+
+
+
+
+
 
 /* زر البحث */
 .btn-search {
@@ -148,24 +124,16 @@ body {
     white-space: nowrap; /* يمنع زر البحث من النزول لسطر جديد */
     height: 40px;
 }
-/* زر الإغلاق (X) */
-.close-btn {
-    position: absolute;
-    top: 5px;  /* ترك مسافة صغيرة من الأعلى */
-    right: 5px; /* ترك مسافة صغيرة من اليمين */
-    background: red;
-    color: white;
-    border: none;
-    font-size: 18px;
-    font-weight: bold;
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1100; /* ضمان ظهوره فوق كل شيء */
+
+
+.search-result-link {
+    display: inline-block; /* لجعل الرابط كزر */
+    color: rgb(0, 0, 0); /* لون النص */
+    padding: 10px ; /* التباعد الداخلي */
+    border-radius: 8px; /* زوايا دائرية */
+    text-decoration: none; /* إزالة الخط السفلي */
+    font-weight: bold; /* جعل الخط عريض */
+    transition: background-color 0.3s ease; /* تأثير عند تمرير الماوس */
 }
 
 

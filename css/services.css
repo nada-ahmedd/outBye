@@ -126,3 +126,15 @@ h3 {
     text-decoration: none; /* إزالة الخط السفلي من الرابط */
     font-weight: bold;
 }
+/* ✅ تأثير التمييز للخدمة المحددة */
+.service-item.highlight {
+    background-color: #ffeeba; /* لون مميز للخلفية */
+    border: 2px solid #ffc107; /* إطار بلون أصفر */
+    transition: all 0.3s ease-in-out;
+}
+
+/* ✅ تأثير Hover عند الدخول على الخدمة */
+.service-item.highlight:hover {
+    transform: scale(1.02);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}

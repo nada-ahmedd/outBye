@@ -4,39 +4,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const urlParams = new URLSearchParams(window.location.search);
     const categoryId = urlParams.get("id");
+    const highlightedService = localStorage.getItem("highlightedService");
 
     if (!categoryId || isNaN(categoryId)) {
         servicesContainer.innerHTML = "<p>Invalid category ID.</p>";
         return;
     }
-
     servicesContainer.innerHTML = "<p>Loading services...</p>";
-
     fetch(`${apiUrl}?id=${categoryId}`, {
-        method: "POST",
-        headers: {
-            "Authorization": "24"
-        }
+        method: "GET",
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log("API Response:", data);
+    .then(response => response.json())
+    .then(data => {
+        console.log("API Response:", data);
 
-            if (data.status !== "success") {
-                servicesContainer.innerHTML = `<p>Error: ${data.message || "Failed to fetch services."}</p>`;
-                return;
-            }
+        if (data.status !== "success") {
+            servicesContainer.innerHTML = `<p>Error: ${data.message || "Failed to fetch services."}</p>`;
+            return;
+        }
+        if (Array.isArray(data.data) && data.data.length > 0) {
+            servicesContainer.innerHTML = data.data.map(service => {
+                const isHighlighted = highlightedService == service.service_id ? "highlight" : ""; 
 
-            if (Array.isArray(data.data) && data.data.length > 0) {
-               servicesContainer.innerHTML = data.data.map(service => {
-                    const isFavorited = localStorage.getItem(`favorite-${service.service_id}`) === 'true';
-                    return `
-                    <div class="service-item">
+                return `
+                    <div class="service-item ${isHighlighted}" data-service-id="${service.service_id}">
                         <img src="${service.service_image}" alt="${service.service_name}" class="service-image">
 
                         <div class="service-content">
-                            <h3>${service.service_name}</h3>
-
+                            <h3 class="service-title" onclick="setHighlightedService(${service.service_id})">
+                                ${service.service_name}
+                            </h3>
                             <p class="service-description">${service.service_description}</p>
 
                             <div class="service-details">
@@ -51,79 +48,49 @@ document.addEventListener("DOMContentLoaded", () => {
                             </div>
 
                             <div class="service-actions">
-                                <button class="favorite-btn ${isFavorited ? 'active' : ''}" onclick="toggleFavorite(this, ${service.service_id})">
-                                    <i class="fa ${isFavorited ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-                                </button>
                                 <button class="view-items-btn" onclick="fetchServiceItems(${service.service_id})">View Items</button>
                             </div>
                         </div>
                     </div>
-                    `;
-                }).join('');
+                `;
+            }).join('');
 
-            } else {
-                servicesContainer.innerHTML = "<p>No services found in this category.</p>";
-            }
-        })
-        .catch(error => {
-            console.error("Error fetching services:", error);
-            servicesContainer.innerHTML = "<p>Error loading services. Please check your connection.</p>";
-        });
+            localStorage.removeItem("highlightedService");
+        } else {
+            servicesContainer.innerHTML = "<p>No services found in this category.</p>";
+        }
+    })
+    .catch(error => {
+        console.error("Error fetching services:", error);
+        servicesContainer.innerHTML = "<p>Error loading services. Please check your connection.</p>";
+    });
 });
 
-function toggleFavorite(button, serviceId) {
-    const icon = button.querySelector("i");
-
-    button.classList.toggle("active");
-
-    if (button.classList.contains("active")) {
-        icon.classList.remove("fa-regular");
-        icon.classList.add("fa-solid");
-
-        const serviceItem = button.closest('.service-item');
-        if (serviceItem) {
-            const service = {
-                service_id: serviceId,
-                service_name: serviceItem.querySelector('h3') ? serviceItem.querySelector('h3').textContent : '',
-                service_image: serviceItem.querySelector('.service-image') ? serviceItem.querySelector('.service-image').src : '',
-                service_description: serviceItem.querySelector('.service-description') ? serviceItem.querySelector('.service-description').textContent : ''
-            };
-
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            favorites.push(service);
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-        } else {
-            console.error('Service item not found');
-        }
-    } else {
-        icon.classList.remove("fa-solid");
-        icon.classList.add("fa-regular");
-
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        favorites = favorites.filter(fav => fav.service_id !== serviceId);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-    }
+function setHighlightedService(serviceId) {
+    localStorage.setItem("highlightedService", serviceId);
 }
 
-
-
 function fetchServiceItems(serviceId) {
-    const userId = 10; 
-    const apiUrl = `https://abdulrahmanantar.com/outbye/items/items.php?id=${serviceId}&userid=${userId}`;
+    const apiUrl = `https://abdulrahmanantar.com/outbye/items/items.php?id=${serviceId}`;
 
     fetch(apiUrl, {
         method: "GET",
         headers: {
-            "Authorization": "Bearer your_token_here" 
+            "Authorization": "Bearer your_token_here"
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        console.log("API Response:", data); 
+        console.log("API Response:", data);
 
         if (data.success || data.status === "success") {
             if (data.data && data.data.length > 0) {
-                window.location.href = `item.html?service_id=${serviceId}&user_id=${userId}`;
+                window.location.href = `item.html?service_id=${serviceId}`;
             } else {
                 alert("لا توجد عناصر لهذه الخدمة.");
             }

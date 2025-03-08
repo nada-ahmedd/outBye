@@ -1,54 +1,68 @@
-const form = this;
-const submitButton = form.querySelector('button[type="submit"]');
-submitButton.disabled = true;
-submitButton.textContent = "Processing...";
+document.getElementById("loginForm").addEventListener("submit", function (event) {
+  event.preventDefault();
 
-const formData = new FormData(form);
-const data = {};
-formData.forEach((value, key) => (data[key] = value));
+  const form = this;
+  const submitButton = form.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  submitButton.textContent = "Processing...";
 
-fetch(form.action, {
+  const formData = new FormData(form); 
+  const data = {};
+  formData.forEach((value, key) => (data[key] = value));
+
+  fetch(form.action, {
     method: form.method,
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded',
     },
     body: new URLSearchParams(data).toString(),
-})
-.then((response) => response.json())
-.then((data) => {
-    if (data.status === "success") {
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.status === "success" && data.data) { // ✅ التأكد أن البيانات موجودة
         Swal.fire({
-            title: 'Login Successful!',
-            text: 'Redirecting to home page...',
-            icon: 'success',
-            confirmButtonText: 'OK',
+          icon: 'success',
+          title: 'تم تسجيل الدخول بنجاح!',
+          text: 'جاري إعادة التوجيه...',
+          showConfirmButton: false,
+          timer: 2000
         }).then(() => {
-            localStorage.setItem('isLoggedIn', 'true');
-            window.location.href = "index.html";
+          // ✅ تخزين البيانات بشكل صحيح
+          localStorage.setItem('isLoggedIn', 'true');
+          localStorage.setItem('userId', data.data.users_id); // ✅ حفظ ID المستخدم
+          localStorage.setItem('email', data.data.users_email); // ✅ حفظ البريد الإلكتروني
+
+          window.location.href = "index.html"; // ✅ التوجيه للصفحة الرئيسية
         });
-    } else {
-        let errorMessage = 'Email or password is not valid';
-        if (data.message.includes("password")) {
-            errorMessage = data.message;
-        }
+      } else {
+        displayFormError(form, data.message);
         Swal.fire({
-            title: 'Login Error',
-            text: errorMessage,
-            icon: 'error',
-            confirmButtonText: 'OK',
+          icon: 'error',
+          title: 'فشل تسجيل الدخول',
+          text: data.message || 'البريد الإلكتروني أو كلمة المرور غير صحيحة. حاول مرة أخرى.',
         });
-    }
-})
-.catch((error) => {
-    console.error("Error:", error);
-    Swal.fire({
-        title: 'Network Error',
-        text: 'An error occurred, please try again later.',
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      Swal.fire({
         icon: 'error',
-        confirmButtonText: 'OK',
+        title: 'خطأ في الشبكة',
+        text: 'يرجى المحاولة لاحقًا.',
+      });
+    })
+    .finally(() => {
+      submitButton.disabled = false;
+      submitButton.textContent = "تسجيل الدخول";
     });
-})
-.finally(() => {
-    submitButton.disabled = false;
-    submitButton.textContent = "Login";
 });
+
+function displayFormError(form, message) {
+  form.querySelectorAll(".form-error").forEach((div) => (div.textContent = ""));
+  if (message.includes("email")) {
+    form.querySelector('input[name="email"] + .form-error').textContent = message;
+  }
+  if (message.includes("password")) {
+    form.querySelector('input[name="password"] + .form-error').textContent = message;
+  }
+}

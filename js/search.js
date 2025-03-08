@@ -1,120 +1,121 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const searchQueryInput = document.getElementById("searchQuery");
-    const searchButton = document.querySelector(".btn-search");
-    const searchResultsContainer = document.getElementById("searchResults");
+document.addEventListener("DOMContentLoaded", () => {
+  const searchQueryInput = document.getElementById("searchQuery");
+  const searchResultsContainer = document.getElementById("searchResults");
 
-    if (searchButton && searchQueryInput && searchResultsContainer) {
-        searchButton.addEventListener("click", performSearch);
-        searchQueryInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                performSearch();
-            }
-        });
+  if (!searchQueryInput || !searchResultsContainer) {
+    console.error("Search input or results container not found!");
+    return;
+  }
+
+  searchQueryInput.addEventListener("input", debounce(performSearch, 500));
+
+  function performSearch() {
+    const query = searchQueryInput.value.trim().toLowerCase();
+
+    if (query.length === 0) {
+      searchResultsContainer.innerHTML = "";
+      searchResultsContainer.classList.remove("show");
+      return;
     }
 
-    function performSearch() {
-        const query = searchQueryInput.value.trim();
+    searchResultsContainer.innerHTML = "<p style='color: black;'>Searching...</p>";
+    searchResultsContainer.classList.add("show");
 
-        if (query.length === 0) {
-            searchResultsContainer.innerHTML = `
-                <div class="alert alert-warning">
-                    الرجاء إدخال كلمة البحث
-                </div>
-            `;
-            searchResultsContainer.classList.remove("show");
-            return;
+    fetch("https://abdulrahmanantar.com/outbye/items/search.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ search: query }) 
+    })
+      .then(response => response.json())
+      .then(response => {
+        console.log("Search API Response:", response);
+
+        if (!response || (!response.items?.data?.length && !response.services?.data?.length)) {
+          searchResultsContainer.innerHTML = "<p style='color: red;'>No results found.</p>";
+          return;
         }
 
-        searchResultsContainer.innerHTML = "<p>جاري البحث...</p>";
-        searchResultsContainer.classList.add("show");
+        let resultsHTML = "";
+        if (response.items?.data) {
+          const filteredItems = response.items.data.filter(item =>
+            item.items_name.toLowerCase().includes(query) ||
+            item.items_name_ar.toLowerCase().includes(query)
+          );
 
-        const formData = new FormData();
-        formData.append('search', query);
-
-        fetch("https://abdulrahmanantar.com/outbye/items/search.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(response => {
-            if (!response.data) {
-                throw new Error('No data received');
-            }
-
-            const data = response.data;
-
-            if (data.length === 0) {
-                searchResultsContainer.innerHTML = `
-                    <div class="alert alert-info">
-                        لا توجد نتائج للبحث
-                    </div>
-                `;
-                return;
-            }
-
-            let resultsHtml = '<div class="row">';
-
-            data.forEach(item => {
-                resultsHtml += `
-                    <div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-body">
-                                ${item.service_name ? 
-                                    // Service card template
-                                    `<h5 class="card-title">${item.service_name}</h5>
-                                    ${item.service_image ? 
-                                        `<img src="${item.service_image}" class="card-img-top mb-2" alt="${item.service_name}" onerror="this.style.display='none'">` : ''}
-                                    <p class="card-text">${item.service_description || ''}</p>
-                                    <div class="service-info">
-                                        <p>📍 ${item.service_location || ''}</p>
-                                        <p>⭐ ${item.service_rating || ''}</p>
-                                        <p>📞 ${item.service_phone || ''}</p>
-                                    </div>` :
-                                    // Product card template
-                                    `<h5 class="card-title">${item.items_name || ''}</h5>
-                                    ${item.items_image ? 
-                                        `<img src="${item.items_image}" class="card-img-top mb-2" alt="${item.items_name}" onerror="this.style.display='none'">` : ''}
-                                    <p class="card-text">${item.items_des || ''}</p>
-                                    <p class="price">السعر: ${item.items_price || ''} جنيه</p>
-                                    ${item.items_discount ? 
-                                        `<p class="discount">الخصم: ${item.items_discount}%</p>` : ''}
-                                    <button class="btn btn-primary mt-2" onclick="addToCart(${item.items_id})">
-                                        إضافة للسلة
-                                    </button>`
-                                }
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            resultsHtml += '</div>';
-            searchResultsContainer.innerHTML = resultsHtml;
-        })
-        .catch(error => {
-            console.error("Search error:", error);
-            searchResultsContainer.innerHTML = `
-                <div class="alert alert-danger">
-                    حدث خطأ في البحث
+          if (filteredItems.length > 0) {
+            resultsHTML += `<h3>Items</h3>`;
+            filteredItems.forEach(item => {
+              resultsHTML += `
+                <div class="search-result-item">
+                  <a href="item.html?id=${item.items_id}&service_id=${item.service_id}" class="search-result-link">
+                    <img src="${item.items_image}" alt="${item.items_name}" width="50">
+                    <span>${item.items_name}</span>
+                  </a>
                 </div>
-            `;
+              `;
+            });
+          }
+        }
+
+        if (response.services?.data) {
+          const filteredServices = response.services.data.filter(service =>
+            service.service_name.toLowerCase().includes(query) ||
+            service.service_name_ar.toLowerCase().includes(query)
+          );
+
+          if (filteredServices.length > 0) {
+            resultsHTML += `<h3>Services</h3>`;
+            filteredServices.forEach(service => {
+              resultsHTML += `
+                <div class="search-result-item">
+                  <a href="services.html?id=${service.service_cat}&${service.service_id}" class="search-result-link" data-service-id="${service.service_id}">
+                    <img src="${service.service_image}" alt="${service.service_name}" width="50">
+                    <span>${service.service_name} (${service.service_name_ar})</span>
+                  </a>
+                </div>
+              `;
+            });
+          }
+        }
+
+        searchResultsContainer.innerHTML = resultsHTML;
+
+        document.querySelectorAll(".search-result-link").forEach(link => {
+          link.addEventListener("click", function () {
+            localStorage.setItem("highlightedService", this.dataset.serviceId);
+          });
         });
-    }
+      })
+      .catch(error => {
+        console.error("Error fetching search results:", error);
+        searchResultsContainer.innerHTML = "<p style='color: red;'>Error loading results.</p>";
+      });
+  }
+
+  function debounce(func, wait) {
+    let timeout;
+    return function() {
+      const context = this;
+      const args = arguments;
+      const later = function() {
+        timeout = null;
+        func.apply(context, args);
+      };
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+    };
+  }
 });
 
-function addToCart(itemId) {
-    console.log("Adding to cart:", itemId);
-}
-function closeSearchResults() {
-    document.getElementById("searchResults").classList.remove("show");
-}
-document.getElementById("searchQuery").addEventListener("input", function () {
-    if (this.value.trim() === "") {
-        closeSearchResults();
+document.addEventListener("DOMContentLoaded", () => {
+  const highlightedService = localStorage.getItem("highlightedService");
+  if (highlightedService) {
+    const targetService = document.querySelector(`.service-item[data-service-id="${highlightedService}"]`);
+    if (targetService) {
+      targetService.classList.add("highlight");
     }
+    localStorage.removeItem("highlightedService"); 
+  }
 });

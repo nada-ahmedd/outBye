@@ -26,7 +26,7 @@
     </div>
 
     <script>
-        document.getElementById('verifyForm').addEventListener('submit', function (event) {
+      document.getElementById('verifyForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
             let verifyCode = '';
@@ -35,14 +35,22 @@
             }
 
             if (verifyCode.length !== 5) {
-                alert('Please enter all five digits.');
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Incomplete Code',
+                    text: 'Please enter all five digits.',
+                });
                 return;
             }
 
             const email = localStorage.getItem('email');
 
             if (!email) {
-                alert('No email found in local storage. Please register first.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Email Found',
+                    text: 'No email found in local storage. Please register first.',
+                });
                 return;
             }
 
@@ -61,10 +69,22 @@
                     return response.json();
                 })
                 .then(data => {
-                    alert(data.message);
                     if (data.status === "success") {
-                        window.location.href = 'signin.html';
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Verification Successful!',
+                            text: 'Your code has been verified successfully.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        }).then(() => {
+                            window.location.href = 'signin.html';
+                        });
                     } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Verification Failed',
+                            text: data.message || 'Invalid verification code. Please try again.',
+                        });
                         console.error('Verification failed:', data.message);
                     }
                 })
@@ -78,6 +98,7 @@
                 });
         });
 
+        // Auto move to next input field
         document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
             input.addEventListener('input', function () {
                 if (this.value.length === 1 && index < fields.length - 1) {
@@ -85,13 +106,14 @@
                 }
             });
 
-            input.addEventListener('input', function () {
-                if (this.value.length === 0 && index > 0) {
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
                     fields[index - 1].focus();
                 }
             });
         });
 
+        // Handle pasting a full 5-digit code
         document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
             input.addEventListener('paste', function (e) {
                 const pastedData = e.clipboardData.getData('text');
@@ -103,7 +125,10 @@
                 }
             });
         });
+
     </script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </body>
 
 </html>

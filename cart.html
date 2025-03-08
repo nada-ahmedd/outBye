@@ -56,16 +56,18 @@
             <!-- منطقة عرض النتائج -->
             <div id="searchResults" class="search-results"></div>
 
-                <!-- Favorite icon -->
-                <a class="nav-link mx-2" href="#">
+                <a class="nav-link mx-2" href="favorites.html">
                     <i class="fa-solid fa-heart"></i>
                 </a>
 
-                <!-- Cart icon -->
-                <a class="nav-link mx-2" href="cart.html">
-                    <i class="bi bi-cart-fill"></i>
-                    <span class="cart-count">0</span>
-                </a>
+<a href="cart.html" class="cart-icon relative">
+    <i class="fas fa-shopping-cart text-2xl text-white"></i>
+    <span id="cart-count"
+        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full shadow-md">
+        0
+    </span>
+</a>
+
 
 
                 <div class="dropdown">
@@ -93,32 +95,31 @@
                 <th>Product</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Subtotal</th>
                 <th>Action</th>
+                <th>Subtotal</th>
+
             </tr>
         </thead>
         <tbody id="cart-items">
-            <!-- سيتم ملء المحتوى هنا ديناميكياً باستخدام JavaScript -->
+            <tr>
+                <td colspan="5">Loading...</td>
+            </tr>
+
         </tbody>
     </table>
     <div class="cart-actions">
-        <a href="index.html" class="btn btn-secondary">Return to Shop</a>
-        <button class="btn btn-primary" onclick="updateCart()">Update Cart</button>
+<a id="returnToShop" href="item.html" class="btn btn-primary">Return to Shop</a>
     </div>
     <div class="cart-footer">
         <div class="cart-total">
             <h4>Cart Total</h4>
-            <p>Total: <span id="total-price">$0</span></p>
+            <p>Total: <span id="total-price">0 EGP</span></p>
         </div>
     </div>
 </div>
-
-
-   
     <footer class="site-footer bg-dark text-white py-5">
         <div class="container">
             <div class="row">
-                <!-- Logo and Socials -->
                 <div class="col-lg-2 col-md-6 ">
                     <div class="footer-logo">
                         <img src="images/out bye.png" alt="Logo" class="footer-logo-img ">
@@ -131,7 +132,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Important Links -->
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5>Important Links</h5>
                     <ul class="list-unstyled">
@@ -144,7 +144,6 @@
                         <li><a href="#" class="text-white">Terms & Conditions</a></li>
                     </ul>
                 </div>
-                <!-- Our Services -->
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5>Our Services</h5>
                     <ul class="list-unstyled">
@@ -194,6 +193,9 @@
         <script src="js/cart.js"></script>
         <script src="js/navbar.js"></script>
         <script src="js/item.js"></script>
+                <script src="js/signin.js"></script>
+        <script src="js/signup.js"></script>
+
 
 
 </body>
