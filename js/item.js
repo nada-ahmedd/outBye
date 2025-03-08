@@ -73,10 +73,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function addToCart(itemId) {
     const userId = localStorage.getItem("userId");
+
     if (!userId) {
-        Swal.fire("⚠️ تسجيل الدخول مطلوب", "يرجى تسجيل الدخول لإضافة المنتجات إلى السلة.", "warning");
+        Swal.fire({
+            title: "⚠️ تسجيل الدخول مطلوب",
+            text: "يرجى تسجيل الدخول لإضافة المنتجات إلى السلة.",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "استمرار التصفح",
+            confirmButtonText: "تسجيل الدخول",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // إذا اختار المستخدم تسجيل الدخول
+                window.location.href = "signup.html";  // توجهه لصفحة تسجيل الدخول
+            } else if (result.isDismissed) {
+                // إذا اختار المستخدم استمرار التصفح
+                console.log("استمرار التصفح");
+            }
+        });
         return;
     }
+
+    // هنا باقي الكود لإضافة المنتج إلى السلة
+
+
 
     fetch("https://abdulrahmanantar.com/outbye/cart/add.php", {
         method: "POST",
