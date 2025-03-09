@@ -240,15 +240,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                             categoryHTML += `
                                 <div class="category-item">
-                                    <div class="category-box">
-                                        <img src="${category.categories_image}" alt="${category.categories_name}" class="category-image">
-                                        <div class="category-description">
-                                            <a href="services.html?id=${encodeURIComponent(category.categories_id)}" class="category-name">
-                                                <p>${category.categories_name}</p>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
+    <a href="services.html?id=${encodeURIComponent(category.categories_id)}" class="category-link">
+        <div class="category-box">
+            <img src="${category.categories_image}" alt="${category.categories_name}" class="category-image">
+            <div class="category-description">
+                <p class="category-name">${category.categories_name}</p>
+            </div>
+        </div>
+    </a>
+</div>
                             `;
                         });
 

@@ -429,15 +429,23 @@ flex-direction: row;
     object-fit: cover;
     border-radius: 8px;
 }
-
+.category-link {
+    text-decoration: none; /* إزالة التسطير من اللينك */
+    color: inherit; /* يحافظ على لون النصوص الداخلية */
+    display: block; /* يخلي الـ div كله قابل للكليك */
+}
 .category-box {
     position: relative;
     padding: 15px;
     width: 100%; 
     text-align: center;
     height: auto;
+    transition: all 0.3s ease; /* تأثير ناعم لما تحطي المؤشر */
 }
-
+.category-link:hover .category-box {
+    background-color: #f5f5f5; /* لون خلفية خفيف لما تحطي المؤشر */
+    cursor: pointer; /* المؤشر يبقى يد عشان يوضح إنه لينك */
+}
 .category-name {
     color: #F26B0A;
     font-weight: bold;
