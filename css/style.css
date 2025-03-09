@@ -476,8 +476,7 @@ flex-direction: row;
     overflow: hidden;
     border-radius: 15px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    height: 700px;
-}
+max-height: 800px; /* بدل height ثابتة، نستخدم max-height */}
 
 .offer-carousel-inner {
     display: flex;
@@ -491,6 +490,7 @@ flex-direction: row;
     align-items: center;
     padding: 20px;
     border-radius: 15px;
+    position: relative; /* أضفت ده عشان الـ Discount يتربط بكل Slide */
 }
 
 .offer-image {
@@ -498,12 +498,14 @@ flex-direction: row;
     max-height: 500px;
     object-fit: cover;
     border-radius: 10px;
+    margin-bottom: 20px;
 }
 
 .offer-item-content {
     width: 100%;
     text-align: center;
     padding: 25px;
+
 }
 
 .offer-item-info {
@@ -520,15 +522,16 @@ flex-direction: row;
     font-size: 1rem;
     color: #555;
     margin-top: 5px;
+    line-height: 1.4; /* تحسين المسافة بين السطور */
 }
 
 .offer-discount-percentage {
-    position: absolute;
+    position: absolute; /* لتحديد مكان العرض نسبي للـ Slide */
     top: 20px;
     right: 20px;
     background-color: #F06A0A;
     color: white;
-    padding: 5px 12px;
+    padding: 5px 10px; /* زيادة الـ Padding للتناسق */
     border-radius: 5px;
     font-size: 0.9rem;
     font-weight: bold;
@@ -555,20 +558,16 @@ flex-direction: row;
     background-color: #F06A0A;
 }
 
-.offer-btn {
-    background-color: #F06A0A;
+.offer-btn.addItem-to-cart {    background-color: #F06A0A;
     color: white;
+      display: block !important; /* التأكد إن الزرار ظاهر دايمًا */
     border: none;
-    padding: 10px 15px;
     font-size: 1rem;
     font-weight: bold;
     cursor: pointer;
     border-radius: 15px;
-    transition: background 0.3s;
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    -webkit-border-radius: 15px;
+padding: 15px 20PX;
+margin-top: 10px;    -webkit-border-radius: 15px;
     -moz-border-radius: 15px;
     -ms-border-radius: 15px;
     -o-border-radius: 15px;

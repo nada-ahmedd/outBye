@@ -61,11 +61,9 @@
 </a>
 
 
-<a href="cart.html" class="cart-icon relative">
+<a href="cart.html" id="cartIcon" class="cart-icon relative">
     <i class="fas fa-shopping-cart text-2xl text-white"></i>
-    
 </a>
-
 
                 <div class="dropdown">
                     <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button"
@@ -74,7 +72,8 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-        <a id="logoutBtn" class="nav-link mx-2 dropdown-item" href="javascript:void(0);">Logout</a>
+                        <button id="logoutBtn"  class="nav-link mx-2 dropdown-item">Logout</button>
+
                     </ul>
                 </div>
             </div>
@@ -198,6 +197,7 @@
 </div>
 
 </footer>
+
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>

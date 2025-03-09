@@ -7,7 +7,90 @@
     <title>Verify Code</title>
     <link rel="icon" href="images/out bye.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.19/dist/sweetalert2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/verify.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .verify-code-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .verify-code-field {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .verify-code-field:focus {
+            border-color: #F06A0A;
+        }
+
+        button[type="submit"] {
+            background-color: #F06A0A;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #d95c00;
+        }
+
+        .container p {
+            margin-top: 15px;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        #resendCodeLink {
+            color: #F06A0A;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        #resendCodeLink:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 
 <body>
@@ -23,10 +106,62 @@
             </div>
             <button type="submit">Verify</button>
         </form>
+        <p>Didn't receive a code? <a href="#" id="resendCodeLink">Resend Code</a></p>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-      document.getElementById('verifyForm').addEventListener('submit', function (event) {
+        // إرسال كود تحقق تلقائيًا عند فتح الصفحة
+        document.addEventListener("DOMContentLoaded", function () {
+            const email = localStorage.getItem('resetEmail');
+            if (!email) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Email Found',
+                    text: 'No email found in local storage. Please start the reset process again.',
+                }).then(() => {
+                    window.location.href = "signin.html";
+                });
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('email', email);
+
+            fetch('https://abdulrahmanantar.com/outbye/auth/resend.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Code Sent!',
+                            text: 'A verification code has been sent to your email.',
+                            showConfirmButton: false,
+                            timer: 2000
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Failed to Send Code',
+                            text: data.message || 'Failed to send verification code. Please try again.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while sending the code. Please try again later.',
+                    });
+                    console.error('Error:', error);
+                });
+        });
+
+        // التحقق من الكود
+        document.getElementById('verifyForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
             let verifyCode = '';
@@ -43,13 +178,14 @@
                 return;
             }
 
-            const email = localStorage.getItem('email');
-
+            const email = localStorage.getItem('resetEmail');
             if (!email) {
                 Swal.fire({
                     icon: 'error',
                     title: 'No Email Found',
-                    text: 'No email found in local storage. Please register first.',
+                    text: 'No email found in local storage. Please start the reset process again.',
+                }).then(() => {
+                    window.location.href = "signin.html";
                 });
                 return;
             }
@@ -58,26 +194,21 @@
             formData.append('email', email);
             formData.append('verifycode', verifyCode);
 
-            fetch('https://abdulrahmanantar.com/outbye/auth/verfiycode.php', {
+            fetch('https://abdulrahmanantar.com/outbye/forgetpassword/verifycode.php', {
                 method: 'POST',
                 body: formData
             })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
+                .then(response => response.json())
                 .then(data => {
                     if (data.status === "success") {
                         Swal.fire({
                             icon: 'success',
                             title: 'Verification Successful!',
-                            text: 'Your code has been verified successfully.',
+                            text: 'Code verified. Redirecting to reset password...',
                             showConfirmButton: false,
                             timer: 2000
                         }).then(() => {
-                            window.location.href = 'signin.html';
+                            window.location.href = 'reset-password.html';
                         });
                     } else {
                         Swal.fire({
@@ -93,6 +224,55 @@
                         icon: 'error',
                         title: 'Error',
                         text: 'An error occurred while verifying the code. Please try again later.',
+                    });
+                    console.error('Error:', error);
+                });
+        });
+
+        // إعادة إرسال الكود يدويًا
+        document.getElementById('resendCodeLink').addEventListener('click', function (event) {
+            event.preventDefault();
+
+            const email = localStorage.getItem('resetEmail');
+            if (!email) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Email Found',
+                    text: 'No email found in local storage. Please start the reset process again.',
+                });
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('email', email);
+
+            fetch('https://abdulrahmanantar.com/outbye/auth/resend.php', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Resend Response:", data);
+                    if (data.status === "success") {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Code Resent!',
+                            text: 'A new verification code has been sent to your email.',
+                            showConfirmButton: true
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Resend Failed',
+                            text: data.message || 'Failed to resend the code. Please try again.',
+                        });
+                    }
+                })
+                .catch(error => {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'An error occurred while resending the code. Please try again later.',
                     });
                     console.error('Error:', error);
                 });
@@ -125,10 +305,7 @@
                 }
             });
         });
-
     </script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </body>
 
 </html>

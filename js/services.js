@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
     const apiUrl = "https://abdulrahmanantar.com/outbye/services/services.php";
     const servicesContainer = document.getElementById("services-container");
+    const categoryContainer = document.getElementById("category-container");
 
     const urlParams = new URLSearchParams(window.location.search);
     const categoryId = urlParams.get("id");
@@ -23,6 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
         if (Array.isArray(data.data) && data.data.length > 0) {
+             const category = data.data[0];
+
+            // عرض تفاصيل الكاتيجوري
+            categoryContainer.innerHTML = `
+                <div class="category-header">
+                    <h2>${category.categories_name}</h2>
+                </div>
+            `;
             servicesContainer.innerHTML = data.data.map(service => {
                 const isHighlighted = highlightedService == service.service_id ? "highlight" : ""; 
 
@@ -44,7 +53,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                 </div>
                                 <p class="secondary"><strong>Phone:</strong> ${service.service_phone}</p>
                                 <p class="secondary"><strong>Email:</strong> ${service.service_email}</p>
-                                <p class="secondary"><strong>Website:</strong> <a href="${service.service_website}" target="_blank">${service.service_website}</a></p>
                             </div>
 
                             <div class="service-actions">

@@ -138,3 +138,13 @@ h3 {
     transform: scale(1.02);
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+
+.category-header h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #f26b0a;
+     margin-top: 140px;
+             text-align: center;
+
+}

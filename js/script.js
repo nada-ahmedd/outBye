@@ -301,6 +301,7 @@ const offers = [
 const carouselInner = document.getElementById("offer-carousel-inner");
 const dotsContainer = document.getElementById("offer-dots");
 
+// توليد عناصر الـ Offers
 offers.forEach((offer, index) => {
   const carouselItem = document.createElement("div");
   carouselItem.className = `offer-carousel-item ${index === 0 ? "active" : ""}`;
@@ -316,6 +317,7 @@ offers.forEach((offer, index) => {
       </div>
       <img src="${offer.items_image}" alt="${offer.items_name}" class="offer-image">
       <button class="offer-btn addItem-to-cart" data-itemid="${offer.items_id}">Add To Cart</button>
+
     </div>
   `;
 
@@ -326,44 +328,141 @@ offers.forEach((offer, index) => {
   dotsContainer.appendChild(dot);
 });
 
+// تحكم في الـ Carousel
+let currentIndex = 0;
+const items = document.querySelectorAll(".offer-carousel-item");
+const offerDots = document.querySelectorAll(".offer-dot");
+
+function changeSlide(index) {
+  if (items.length > 0 && offerDots.length > 0) {
+    currentIndex = (index < 0) ? items.length - 1 : (index >= items.length) ? 0 : index;
+
+    items.forEach(item => item.classList.remove("active"));
+    offerDots.forEach(dot => dot.classList.remove("active"));
+
+    items[currentIndex].classList.add("active");
+    offerDots[currentIndex].classList.add("active");
+  }
+}
+
+offerDots.forEach((dot, index) => {
+  dot.addEventListener("click", () => changeSlide(index));
+});
+
+setInterval(() => changeSlide(currentIndex + 1), 5000);
+
 // إضافة مستمعات الأحداث للأزرار
 function addEventListeners() {
-  document.querySelectorAll(".addItem-to-cart").forEach(button => {
+  const buttons = document.querySelectorAll(".addItem-to-cart");
+  console.log("Found Add to Cart buttons:", buttons.length);
+  buttons.forEach(button => {
     button.addEventListener("click", (event) => {
       const itemId = event.target.getAttribute("data-itemid");
+      console.log("Clicked Add to Cart for item:", itemId);
       if (itemId) addToCart(itemId);
     });
   });
 }
 
-// إضافة مستمعات الأحداث بعد تحميل المحتوى
-document.addEventListener("DOMContentLoaded", addEventListeners);
-
-// الدالة الخاصة بإضافة المنتج إلى السلة
+// دالة إضافة المنتج للسلة
 function addToCart(itemId) {
-  const userId = localStorage.getItem("userId");
-  if (!userId) {
-    Swal.fire("⚠️ تسجيل الدخول مطلوب", "يرجى تسجيل الدخول لإضافة المنتجات إلى السلة.", "warning");
-    return;
-  }
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        Swal.fire({
+            title: "⚠️ تسجيل الدخول مطلوب",
+            text: "يرجى تسجيل الدخول لإضافة المنتجات إلى السلة.",
+            icon: "warning",
+            showCancelButton: true,
+            cancelButtonText: "استمرار التصفح",
+            confirmButtonText: "تسجيل الدخول",
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "signup.html";
+            }
+        });
+        return;
+    }
 
-  fetch("https://abdulrahmanantar.com/outbye/cart/add.php", {
+    console.log("Sending to API:", { usersid: userId, itemsid: itemId, quantity: 1 });
+
+    fetch("https://abdulrahmanantar.com/outbye/cart/add.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ usersid: userId, itemsid: itemId, quantity: 1 }).toString()
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log("🛒 Add to Cart Response:", data);
+            if (data.success) {
+                Swal.fire({
+                    title: "✅ تمت الإضافة!",
+                    text: "تمت إضافة المنتج إلى السلة بنجاح. سيتم نقلك للسلة...",
+                    icon: "success",
+                    timer: 1500,
+                    showConfirmButton: false
+                }).then(() => {
+                    window.location.href = "cart.html";
+                });
+                updateCartCount();
+            } else {
+                Swal.fire("❌ خطأ", data.message || "فشل إضافة المنتج إلى السلة.", "error");
+            }
+        })
+        .catch(error => {
+            console.error("❌ Error adding to cart:", error);
+            Swal.fire("❌ خطأ", "حدث خطأ أثناء إضافة المنتج إلى السلة.", "error");
+        });
+}
+
+// تحديث عدد العناصر في السلة
+function updateCartCount() {
+  const userId = localStorage.getItem("userId");
+  if (!userId) return;
+
+  fetch("https://abdulrahmanantar.com/outbye/cart/view.php", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ usersid: userId, itemsid: itemId, quantity: 1 }).toString()
+    body: new URLSearchParams({ usersid: userId }).toString()
   })
-  .then(response => response.json())
-  .then(data => {
-    console.log("🛒 Add to Cart Response:", data);
-    if (data.success) {
-      Swal.fire("✅ تمت الإضافة!", "تمت إضافة المنتج إلى السلة بنجاح.", "success");
-      loadCart(); // ✅ تحديث السلة مباشرة بعد الإضافة
-    } else {
-      Swal.fire("❌ خطأ", data.message, "error");
-    }
-  })
-  .catch(error => {
-    console.error("❌ Error adding to cart:", error);
-    Swal.fire("❌ خطأ", "حدث خطأ أثناء إضافة المنتج إلى السلة.", "error");
-  });
+    .then(response => response.json())
+    .then(data => {
+      console.log("Cart Count Response:", data);
+      if (data.status === "success") {
+        document.querySelector(".cart-count").textContent = data.countprice.totalcount || 0;
+      }
+    })
+    .catch(error => console.error("Error updating cart count:", error));
 }
+
+// دالة تحديث الناف بار
+function updateNavbar() {
+  const isLoggedIn = localStorage.getItem('isLoggedIn');
+  const signupBtn = document.getElementById('signupBtn');
+  const signinBtn = document.getElementById('signinBtn');
+  const logoutBtn = document.getElementById('logoutBtn');
+
+  if (isLoggedIn === 'true') {
+    signupBtn.style.display = 'none';
+    signinBtn.style.display = 'none';
+    logoutBtn.style.display = 'block';
+    updateCartCount();
+  } else {
+    signupBtn.style.display = 'block';
+    signinBtn.style.display = 'block';
+    if (logoutBtn) logoutBtn.style.display = 'none';
+    document.querySelector(".cart-count").textContent = "0";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  addEventListeners();
+  updateNavbar();
+  changeSlide(0);
+});
+
+document.getElementById('logoutBtn')?.addEventListener('click', function () {
+  localStorage.clear();
+  updateNavbar();
+  window.location.href = 'signin.html';
+});

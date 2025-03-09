@@ -128,3 +128,49 @@ button {
     cursor: pointer;
     border-radius: 4px;
 }
+.signup-form .text-muted {
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .login-btn .btn {
+            background-color: #F06A0A;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-btn .btn:hover {
+            background-color: #d95c00;
+        }
+
+        .login-btn .btn:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .forgot-password {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .forgot-password a {
+            color: #F06A0A;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
