@@ -472,23 +472,24 @@ body {
     gap: 40px;
 }
 
-.category-item {
-    position: relative;
-    width: 20%;
-    text-align: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 40px;
-}
 
-.category-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-}
+        .category-item {
+            position: relative;
+            width: 20%; /* العرض بتاع كل عنصر */
+            min-width: 200px; /* حد أدنى للعرض عشان التناسق */
+            text-align: center;
+            display: flex;
+            flex-direction: column; /* غيرته لـ column عشان الصورة والنص يترتبوا رأسيًا */
+            justify-content: flex-start;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .category-image {
+            width: 200px; /* عرض ثابت لكل الصور */
+            height: 200px; /* ارتفاع ثابت لكل الصور */
+            object-fit: cover; /* بيقص الصورة لو كانت أكبر */
+            border-radius: 8px;
+        }
 
 .category-link {
     text-decoration: none;
