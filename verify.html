@@ -111,7 +111,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        // إرسال كود تحقق تلقائيًا عند فتح الصفحة
+        // إرسال كود تحقق تلقائيًا عند فتح الصفحة (بدون Alert)
         document.addEventListener("DOMContentLoaded", function () {
             const email = localStorage.getItem('resetEmail');
             if (!email) {
@@ -134,29 +134,10 @@
             })
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status === "success") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Code Sent!',
-                            text: 'A verification code has been sent to your email.',
-                            showConfirmButton: false,
-                            timer: 2000
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Failed to Send Code',
-                            text: data.message || 'Failed to send verification code. Please try again.',
-                        });
-                    }
+                    console.log("Auto-send Response:", data); // للتأكد في الكونسول بس
                 })
                 .catch(error => {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: 'An error occurred while sending the code. Please try again later.',
-                    });
-                    console.error('Error:', error);
+                    console.error('Error during auto-send:', error); // للتصحيح في الكونسول
                 });
         });
 
