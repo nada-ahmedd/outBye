@@ -1,347 +1,531 @@
-body {
-    overflow-x: hidden;
+/* General Reset */
+* {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    min-height: 100vh;
     box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
 }
 
 /* Navbar Styles */
 .navbar {
-    width: 100%;
-    height: 5.625rem;
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 1.25rem;
+    width: 100%;
     background-color: #000;
     color: #fff;
-}
-
-.navbar .navbar-nav {
+    z-index: 1000;
+    height: 100px;
     display: flex;
-    margin-right: 12.5rem;
-    justify-content: flex-start;
+    align-items: center;
 }
 
-.navbar-nav .nav-link {
-    color: white;
-    margin-right: 0.625rem;
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 1rem; /* المسافة على الجوانب لسه صغيرة */
+}
+
+.navbar-logo .logo-img {
+    width: 150px;
+    height: 100px;
+    object-fit: contain;
+    margin-right: 1.5rem; /* زيادة المسافة بين اللوجو واللينكات شوية */
+}
+
+.navbar-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1;
+    margin-left: 0;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem; /* زيادة المسافة بين اللينكات لـ 1.25rem بدل 1rem */
+}
+
+.nav-link {
+    color: #fff;
     text-decoration: none;
-    transition: color 0.3s ease;
     font-size: 1.25rem;
-    margin-top: 0.9375rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #F26B0A;
 }
 
 .sign-up-link {
-    color: #F06A0A;
-    font-weight: bold;
-    font-size: 1.25rem;
-    text-decoration: none;
-    position: relative;
-    transition: all 0.3s ease;
+    color: #F26B0A;
+    font-weight: 600;
     padding: 0.5rem 1rem;
-}
-
-.sign-up-link::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: #F06A0A;
-    transition: width 0.3s ease;
-}
-
-.sign-up-link:hover::after {
-    width: 100%;
+    border: 2px solid #F26B0A;
+    border-radius: 20px;
+    transition: all 0.3s ease;
 }
 
 .sign-up-link:hover {
-    color: #fff;
-}
-
-.sign-in-link {
-    background-color: #ddd;
-    color: #000;
-    border-radius: 20px;
-    padding: 3px;
-}
-
-.navbar-toggler {
-    border-color: #ffffff;
-    width: 3rem; /* مقاس ديناميكي */
-    height: 3rem;
-    padding: 0.5rem;
-}
-
-.navbar-toggler-icon {
-    width: 1.5rem; /* مقاس ديناميكي */
-    height: 1.5rem;
-    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28155, 155, 155, 1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
-    background-size: contain; /* الصورة تتكيف مع المقاس */
-}
-
-.navbar .dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.9);
-    border-radius: 8px;
-}
-
-.navbar .dropdown-item {
-    color: #fff;
-    transition: background-color 0.3s ease-in-out;
-    border-radius: 25px;
-}
-
-.navbar .dropdown-item:hover {
     background-color: #F26B0A;
     color: #fff;
 }
 
-#searchResults {
-    position: fixed;
-    top: 10%;
-    right: 2rem;
-    width: 40%;
-    max-height: 30vh;
-    overflow-y: auto;
-    background: rgba(255, 255, 255, 0.5);
-    border-radius: 10px;
-    padding: 15px;
-    z-index: 1000;
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem; /* زيادة المسافة بين الأيقونات والسيرش لـ 0.75rem بدل 0.5rem */
+    margin-left: 2rem; /* زيادة المسافة بين اللينكات والأيقونات لـ 2rem بدل 1.5rem */
+}
+
+/* باقي الـ CSS */
+.search-container {
+    display: flex;
+    align-items: center;
+    border: 2px solid #F26B0A;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.search-input {
+    padding: 0.5rem 1rem;
+    border: none;
+    font-size: 1rem;
+    width: 120px;
+    outline: none;
+    background-color: #fff;
+    color: #000;
+    border-radius: 0;
+}
+
+.search-btn {
+    padding: 0.5rem 1rem;
+    background-color: #F26B0A;
+    color: #fff;
+    border: none;
+    border-radius: 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #e65e00;
+}
+
+.nav-icon {
+    color: #fff;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.nav-icon:hover {
+    color: #F26B0A;
+}
+
+.dropdown-toggle::after {
     display: none;
 }
 
-#searchResults.show {
-    display: block;
-}
-
-/* زر البحث */
-.btn-search {
-    background-color: #F26B0A;
-    color: white;
-    border-radius: 8px;
+.dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.95);
     border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    padding: 10px 15px;
-    white-space: nowrap;
-    height: 40px;
-}
-
-.search-result-link {
-    display: inline-block;
-    color: rgb(0, 0, 0);
-    padding: 10px;
     border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    color: #fff;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
     transition: background-color 0.3s ease;
 }
 
-.input-group {
-    display: flex;
-    flex-wrap: nowrap;
-    align-items: center;
-    white-space: nowrap;
-    border-radius: 25px;
-    margin-right: 20px;
+.dropdown-item:hover {
+    background-color: #F26B0A;
+    color: #fff;
 }
 
-.input-group input {
-    flex: 1;
-    min-width: 0;
-    height: 40px;
-}
-
-.search-results-container {
+.search-results {
+    position: fixed;
+    top: 110px;
+    right: 2rem;
+    width: 600px;
     max-height: 400px;
     overflow-y: auto;
-    display: flex;
-    justify-content: center;
-}
-
-.card {
+    background: rgba(255, 255, 255, 0.7);
     border-radius: 10px;
-    transition: transform 0.2s ease-in-out;
-    justify-content: center;
+    padding: 1rem;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.card:hover {
-    transform: scale(1.02);
+.search-results.show {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
 }
 
-.card img {
-    border-radius: 8px;
-    max-height: 150px;
+.search-results h3 {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+.search-results p{
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+}
+.search-result-column {
+    flex: 1;
+}
+
+.search-result-item {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item img {
+    width: 50px;
+    height: 50px;
     object-fit: cover;
+    border-radius: 5px;
 }
 
-/* Navbar Media Queries */
-@media (max-width: 768px) {
+.search-result-item a {
+    text-decoration: none;
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.search-result-item a:hover {
+    color: #F26B0A;
+}
+
+.close-btn {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: #F26B0A;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+    background-color: #e65e00;
+}
+
+.navbar-toggler {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+}
+
+.navbar-toggler-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    z-index: 1000;
+    height: 100px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 1rem;
+}
+
+.navbar-logo .logo-img {
+    width: 150px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.navbar-links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; /* مسافة بين اللينكات */
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #F26B0A;
+}
+
+.sign-up-link {
+    color: #F26B0A;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border: 2px solid #F26B0A;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.sign-up-link:hover {
+    background-color: #F26B0A;
+    color: #fff;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* مسافة بين الأيقونات والسيرش */
+}
+
+/* Mobile Styles */
+@media (max-width: 991px) {
     .navbar {
-        padding: 0 1rem;
-        height: 4rem;
+        height: 90px;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-logo .logo-img {
+        width: 120px;
+        height: 80px;
+    }
+
+    .navbar-toggler {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #fff;
+        cursor: pointer;
     }
 
     .navbar-collapse {
-        display: none;
-    }
-
-    .navbar-toggler.collapsed + .navbar-collapse {
-        display: flex;
-        flex-direction: column;
-        background-color: rgba(0, 0, 0, 0.9); /* رجعت الـ Background السوداء الشفافة */
-        padding: 10px;
+        background-color: #000; /* خلفية سودا */
         position: absolute;
         top: 100%;
         left: 0;
         width: 100%;
-        z-index: 999;
+        padding: 1rem;
+        border-top: 1px solid #F26B0A; /* خط تفصيلي برتقالي */
     }
 
-    .navbar-nav {
+    .navbar-collapse.show {
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* محاذاة العناصر في النص */
+    }
+
+    .navbar-links {
+        flex-direction: column;
+        align-items: center; /* اللينكات في النص */
+        gap: 1.5rem; /* مسافة بين اللينكات */
         width: 100%;
-        text-align: center;
-        margin-bottom: 1rem;
-        margin-right: 0;
+        padding: 1rem 0; /* مسافة داخلية */
     }
 
-    .navbar-nav .nav-link {
-        margin-bottom: 0.625rem;
-        padding: 0.625rem;
-        margin-right: 0;
+    .nav-link {
+        font-size: 1.25rem; /* حجم أكبر للقراءة */
+        padding: 0.5rem;
+    }
+
+    .sign-up-link {
+        padding: 0.5rem 1rem;
+        width: auto;
+    }
+
+    .navbar-right {
+        flex-direction: column;
+        align-items: center; /* الأيقونات في النص */
+        gap: 1.5rem; /* مسافة بين الأيقونات */
         width: 100%;
-        text-align: center;
-        font-size: 1rem;
+        padding: 1rem 0;
     }
 
-    .d-flex {
-        margin-top: 0.625rem;
-        flex-direction: row;
-        align-items: center;
+    .search-container {
+        width: 80%; /* السيرش ياخد عرض أقل */
+        margin: 0 auto;
     }
 
-    .sign-up-link {
-        margin: 0.625rem auto;
-        display: block;
-        width: fit-content;
-        font-size: 1rem;
+    .search-input {
+        width: 100%;
+        padding: 0.75rem; /* حشوة أكبر للسيرش */
     }
 
-    .navbar-toggler {
-        width: 2.5rem; /* تقليل المقاس للموبايل */
-        height: 2.5rem;
+    .search-btn {
+        padding: 0.75rem 1rem;
     }
 
-    .navbar-toggler-icon {
-        width: 1.25rem;
-        height: 1.25rem;
-    }
-}
-
-@media (min-width: 769px) and (max-width: 991px) {
-    .navbar {
-        padding: 0 1rem;
-        height: 4.5rem;
+    .nav-icon {
+        font-size: 1.75rem; /* أيقونات أكبر */
     }
 
-    .navbar-nav {
-        margin-right: 3rem;
-        flex-wrap: nowrap;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 1.125rem;
-        margin-right: 0.5rem;
-        margin-top: 0.625rem;
-    }
-
-    .navbar-collapse {
-        display: flex;
-        position: static;
-        background-color: transparent;
-        padding: 0;
-    }
-
-    .sign-up-link {
-        font-size: 1.125rem;
-        padding: 0.375rem 0.9375rem;
+    .search-results {
+        width: 90%;
+        right: 5%;
+        top: 100px;
+        flex-direction: column;
     }
 }
-
-@media (min-width: 992px) and (max-width: 1283px) {
-    .navbar {
-        padding: 0 1.25rem;
+.search-container {
+        width: 70%; /* تقليل العرض لـ 70% بدل 80% عشان ما ياخدش المساحة كلها */
+        max-width: 300px; /* حد أقصى للعرض عشان يبقى متناسق */
+        margin: 0 auto;
+        border: 2px solid #F26B0A;
+        border-radius: 20px;
+        overflow: hidden;
     }
 
-    .navbar-nav {
-        margin-right: 5rem; /* Margin أقل عشان يناسب 1283px */
-        flex-wrap: nowrap;
+.search-input {
+        width: 100%;
+        padding: 0.75rem 1rem; /* زيادة الحشوة عشان يكبر */
+        font-size: 1.1rem; /* زيادة حجم الخط */
+        border: none;
+        outline: none;
+        background-color: #fff;
+        color: #000;
+        border-radius: 0;
     }
 
-    .navbar-collapse {
-        display: flex;
-        position: static;
-        background-color: transparent;
-        padding: 0;
+.search-btn {
+        padding: 0.75rem 1.25rem; /* زيادة الحشوة عشان يكبر */
+        font-size: 1.1rem; /* زيادة حجم الخط */
+        background-color: #F26B0A;
+        color: #fff;
+        border: none;
+        border-radius: 0;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
-    .navbar-nav .nav-link {
-        font-size: 1.125rem;
-        margin-right: 0.5rem;
-    }
-
-    .sign-up-link {
-        font-size: 1.125rem;
-    }
+.search-btn:hover {
+    background-color: #e65e00;
 }
 
-@media (min-width: 1284px) and (max-width: 1600px) {
-    .navbar {
-        padding: 0 1.25rem;
-    }
-
-    .navbar-nav {
-        margin-right: 8rem; /* Margin متوسط */
-    }
-
-    .navbar-collapse {
-        display: flex;
-        position: static;
-        background-color: transparent;
-        padding: 0;
-    }
-
-    .navbar-nav .nav-link {
-        font-size: 1.25rem;
-    }
-
-    .sign-up-link {
-        font-size: 1.25rem;
-    }
+.nav-icon {
+    color: #fff;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
-@media (min-width: 1601px) {
-    .navbar-nav {
-        margin-right: 12.5rem; /* الـ Default Margin للشاشات الكبيرة */
-    }
-
-    .navbar-collapse {
-        display: flex;
-        position: static;
-        background-color: transparent;
-        padding: 0;
-    }
+.nav-icon:hover {
+    color: #F26B0A;
 }
 
+.dropdown-toggle::after {
+    display: none;
+}
+
+.dropdown-menu {
+    background-color: rgba(0, 0, 0, 0.95);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem;
+}
+
+.dropdown-item {
+    color: #fff;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #F26B0A;
+    color: #fff;
+}
+
+.search-results {
+    position: fixed;
+    top: 110px;
+    right: 2rem;
+    width: 600px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 1rem;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+@media (min-width: 1201px) {
+    .navbar-links {
+        gap: 1.25rem; /* المسافة بين اللينكات في الشاشات الكبيرة */
+    }
+
+    .search-input {
+        width: 140px;
+    }
+
+    .navbar-right {
+        margin-left: 2rem; /* المسافة بين اللينكات والأيقونات في الشاشات الكبيرة */
+    }
+}
 /* Banner Section */
         .banner {
             position: relative;

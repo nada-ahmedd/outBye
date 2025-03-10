@@ -16,13 +16,12 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg bg-dark px-4">
-    <div class="container-fluid">
-        <!-- Logo on the left -->
-        <a class="navbar-brand" href="index.html">
-            <img src="images/out bye.png" alt="Logo" width="150" height="100">
-        </a>
-
+<nav class="navbar">
+    <div class="navbar-container">
+    <!-- Logo -->
+    <a class="navbar-logo" href="index.html">
+        <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+    </a>
         <!-- Navbar toggler for small screens -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
             aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -30,15 +29,16 @@
         </button>
 
 
-        <!-- Navbar links (Home, About, etc.) -->
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <div class="navbar-nav ms-auto">
-                <a class="nav-link mx-2" href="index.html">Home</a>
-                <a class="nav-link mx-2" href="contact.html">Contact</a>
-                <a class="nav-link mx-2" href="about.html">About</a>
-            <a id="signupBtn" class="nav-link mx-2 sign-up-link" href="signup.html"><i class="fas fa-user-plus"></i> Sign Up</a>
-
-
+        <!-- Navbar Content -->
+        <div class="navbar-content" id="navbarContent">
+            <!-- Links -->
+            <div class="navbar-links">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+                <a class="nav-link" href="about.html">About</a>
+                <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
             </div>
 
           

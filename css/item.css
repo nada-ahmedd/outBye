@@ -1,29 +1,33 @@
+/* General Body Styling */
 body {
-    background-color: black;
-    color: white;
+    background-color: #000;
+    color: #fff;
     font-family: 'Poppins', sans-serif;
-    padding-top: 50px;
-    height: 100%;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
     text-align: center;
 }
 
-/* الحاوية الأساسية للكروت */
+/* Items Container */
 #items-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 30px;
-    padding: 40px;
-    margin: auto;
+    gap: 20px; /* Reduced gap for tighter layout */
+    padding: 20px; /* Reduced padding */
+    max-width: 1200px; /* Constrain width for better control */
+    margin: 0 auto;
 }
 
-/* تصميم الكارد */
+/* Item Card Styling */
 .item {
-    background-color: rgba(255, 255, 255, 0.15); 
+    background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid #F26B0A;
-    border-radius: 15px;
-    padding: 20px;
-    width: 25%;  /* جعل الكارد أكبر ليتناسب مع العرض */
+    border-radius: 12px;
+    padding: 15px; /* Reduced padding */
+    width: 22%; /* Slightly smaller for better fit */
+    min-width: 250px; /* Minimum width for consistency */
     text-align: center;
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -31,82 +35,85 @@ body {
 }
 
 .item:hover {
-    transform: scale(1.05);
-    box-shadow: 0px 0px 15px rgba(242, 107, 10, 0.7);
+    transform: translateY(-5px); /* Subtle lift effect */
+    box-shadow: 0 8px 20px rgba(242, 107, 10, 0.5);
 }
 
-/* تنسيق الصورة */
+/* Item Image */
 .item img {
     width: 100%;
-    height: 250px; /* تكبير الصورة */
+    height: 200px; /* Reduced height for balance */
     object-fit: cover;
-    border-radius: 15px;
+    border-radius: 10px;
+    margin-bottom: 10px; /* Added spacing */
 }
 
-/* عنوان المنتج */
+/* Item Title */
 .item h3 {
-    font-size: 1.5rem;
-    margin: 15px 0;
-    color:#F26B0A ;
+    font-size: 1.3rem; /* Slightly smaller for elegance */
+    margin: 10px 0;
+    color: #F26B0A;
 }
 
-/* وصف المنتج */
+/* Item Description */
 .item p {
-    font-size: 1rem;
-    color: black;
-    margin-bottom: 10px;
+    font-size: 0.9rem;
+    color: #000; /* Changed to white for contrast */
+    margin: 0 0 10px;
 }
 
-/* أسعار المنتج */
+/* Pricing */
 .old-price {
     text-decoration: line-through;
-    color: gray;
-    margin-right: 10px;
+    color: #888;
+    margin-right: 8px;
+    font-size: 0.9rem;
 }
 
 .new-price {
     font-weight: bold;
-    color: green;
-    font-size: 22px;
+    color: #00cc00; /* Brighter green for visibility */
+    font-size: 1.2rem;
 }
 
 .regular-price {
     font-weight: bold;
     color: #F26B0A;
-    font-size: 22px;
+    font-size: 1.2rem;
 }
 
-/* زر إضافة إلى السلة */
+/* Add to Cart Button */
 .addItem-to-cart {
-    background-color: #f06a0a;
-    color: white;
-    padding: 12px 20px;
-    border-radius: 25px;
+    background-color: #F26B0A;
+    color: #fff;
+    padding: 10px 18px; /* Slightly smaller */
+    border-radius: 20px;
     border: none;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-top: 20px;
-    font-size: 1rem;
+    margin-top: 10px; /* Reduced margin */
+    font-size: 0.9rem;
 }
 
 .addItem-to-cart:hover {
-    background-color: #000;
-    transform: translateY(-5px);
+    background-color: #e65c00; /* Darker shade for hover */
+    transform: translateY(-3px);
 }
 
-/* زر الإضافة إلى المفضلة */
+/* Favorite Button */
 .addItem-to-favorites {
-    background: none;
+    background: #000;
     border: none;
     cursor: pointer;
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 10px;
+    right: 10px;
+    color: #000;
 }
 
-.addItem-to-favorites .fa-heart {
-    font-size: 28px;
-    color: #bbb;
+.favorite-btn .fa-heart {
+    font-size: 24px;
+    color: #000000;
     transition: color 0.3s ease;
 }
 
@@ -114,101 +121,112 @@ body {
     color: #F26B0A;
 }
 
-/* تأثير تمييز المنتج */
+/* Highlight Effect */
 .highlight {
     border: 2px solid #ff9800;
-    background-color: rgba(255, 152, 0, 0.2);
-    transition: all 0.3s ease-in-out;
+    background-color: rgba(255, 152, 0, 0.15);
 }
 
-/* ميديا كويري لضبط التصميم على الشاشات الصغيرة */
-@media (max-width: 768px) {
-    .item {
-        width: 90%; /* جعل الكارد يأخذ عرض الصفحة تقريبًا */
-    }
-    
-    .item img {
-        height: 200px;
-    }
-}
-/* الحاوية الرئيسية للكارد */
+/* Service Container */
 .service-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: 100%;
-    padding: 40px;
+    padding: 20px; /* Reduced padding */
+    max-width: 1200px; /* Match items container */
+    margin: 0 auto;
 }
 
+/* Service Card */
 .service-card {
-    color: black;
-    padding: 20px;
-    max-width: 100%;
+    color: #000;
+    background-color: #fff;
+    padding: 15px; /* Reduced padding */
+    max-width: 600px; /* Constrain width */
     margin: 20px auto;
-    box-shadow: 0px 4px 10px rgba(255, 165, 0, 0.2); /* ظل برتقالي خفيف */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(255, 229, 182, 0.15);
     text-align: center;
     position: relative;
-    margin-top: 90px;
 }
 
-
-
-/* عنوان الخدمة */
+/* Service Title */
 .service-card h2 {
-    font-size: 1.8rem;
-    margin-bottom: 10px;
-    color: #f26b0a;
-    font-weight: bold;
+    font-size: 1.6rem; /* Slightly smaller */
+    margin-bottom: 8px;
+    color: #F26B0A;
+    font-weight: 600;
 }
 
-/* نصوص المعلومات */
+/* Service Info */
 .service-card p {
-    font-size: 1rem;
-    margin: 8px 0;
-    color: rgb(0, 0, 0);
+    font-size: 0.95rem;
+    margin: 6px 0;
+    color: #333; /* Darker for readability */
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-
+    gap: 6px;
 }
 
-
-/* تقييم الخدمة */
+/* Rating */
 .service-card .rating {
     display: flex;
     justify-content: center;
-    gap: 5px;
-    font-size: 1.2rem;
-    margin-top: 10px;
+    gap: 4px;
+    font-size: 1.1rem;
+    margin-top: 8px;
 }
 
-
-
-/* روابط الهاتف والموقع */
+/* Links */
 .service-card a {
-    color: #000000;
-    font-weight: bold;
+    color: #F26B0A;
+    font-weight: 600;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .service-card a:hover {
+    color: #e65c00;
     text-decoration: underline;
-    color: #f26b0a;
-}
-/* الحاوية التي تحتوي على الصورة والاسم */
-.service-header {
-    align-items: center;
-    gap: 10px; /* مسافة بين الصورة والاسم */
 }
 
-/* تنسيق صورة الخدمة */
+/* Service Header */
+.service-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* Service Image */
 .service-img {
-    width: 50px; /* حجم صغير */
-    height: 50px;
-    border-radius: 50%; /* جعلها دائرية */
-    object-fit: cover; /* ضبط الحجم دون تشويه */
-    border: 2px solid #f26b0a; /* إطار برتقالي أنيق */
+    width: 40px; /* Slightly smaller */
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #F26B0A;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .item {
+        width: 45%; /* Two per row on medium screens */
+    }
+    
+    .item img {
+        height: 150px; /* Adjusted for smaller screens */
+    }
+
+    .service-card {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .item {
+        width: 90%; /* Full width on small screens */
+    }
 }

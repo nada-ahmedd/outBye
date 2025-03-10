@@ -6,35 +6,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favorites</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" href="images/out bye.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
+            padding: 30px;
+            background-color: #f9f9f9;
         }
 
         h1 {
             color: #F26B0A;
             text-align: center;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .favorite-item {
             display: flex;
             align-items: center;
             background-color: white;
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .favorite-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         }
 
         .favorite-item img {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
-            border-radius: 5px;
-            margin-right: 15px;
+            border-radius: 8px;
+            margin-right: 20px;
+            border: 1px solid #eee;
         }
 
         .favorite-info {
@@ -43,34 +62,126 @@
 
         .favorite-info h3 {
             margin: 0;
-            font-size: 18px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
         }
 
         .favorite-info p {
-            margin: 5px 0;
-            color: #555;
+            margin: 8px 0;
+            color: #777;
+            font-size: 16px;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .discount-price {
+            color: #e63946;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .discount-badge {
+            background-color: #e63946;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
         }
 
         .remove-favorite-btn {
             background-color: #F26B0A;
             color: white;
             border: none;
-            padding: 8px 12px;
-            border-radius: 5px;
+            padding: 10px 15px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
         }
 
         .remove-favorite-btn:hover {
-            background-color: #333;
+            background-color: #d35400;
         }
     </style>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="navbar-container">
+            <!-- Logo (شمال) -->
+            <a class="navbar-logo" href="index.html">
+                <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+            </a>
+    
+            <!-- Toggler -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+    
+            <!-- Navbar Content -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Links (نص) -->
+                <div class="navbar-links mx-auto"> <!-- mx-auto عشان اللينكات تبقى في النص -->
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="contact.html">Contact</a>
+                    <a class="nav-link" href="about.html">About</a>
+                    <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                </div>
+    
+                <!-- Right Section (يمين) -->
+                <div class="navbar-right ms-auto"> <!-- ms-auto عشان يتحرك لليمين -->
+                    <div class="search-container">
+                        <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                        <button class="search-btn">Search</button>
+                    </div>
+                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
+                    <div class="dropdown">
+                        <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Search Results -->
+        <div id="searchResults" class="search-results">
+            <button class="close-btn" onclick="closeSearchResults()">×</button>
+        </div>
+    </nav>
+
     <h1>Your Favorites</h1>
     <div id="favorites-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/item.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const userId = localStorage.getItem("userId");
@@ -79,7 +190,6 @@
                 window.location.href = "signup.html";
                 return;
             }
-
             fetchFavorites(userId);
         });
 
@@ -94,18 +204,32 @@
                     console.log("✅ Favorites Response:", data);
                     const container = document.getElementById("favorites-container");
                     if (data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
-                        container.innerHTML = data.data.map(item => `
-                        <div class="favorite-item" id="fav-${item.favorite_id}" data-itemid="${item.favorite_itemsid}">
-                            <img src="${item.items_image}" alt="${item.items_name}">
-                            <div class="favorite-info">
-                                <h3>${item.items_name}</h3>
-                                <p>${item.items_price} EGP</p>
+                        container.innerHTML = data.data.map(item => {
+                            const discount = parseFloat(item.items_discount) || 0;
+                            const price = parseFloat(item.items_price);
+                            const discountedPrice = discount > 0 ? (price - (price * discount / 100)).toFixed(2) : price;
+
+                            return `
+                            <div class="favorite-item" id="fav-${item.favorite_id}" data-itemid="${item.favorite_itemsid}">
+                                <img src="${item.items_image}" alt="${item.items_name}">
+                                <div class="favorite-info">
+                                    <h3>${item.items_name}</h3>
+                                    <div class="price-container">
+                                        ${discount > 0 ? `
+                                            <p class="original-price">${price} EGP</p>
+                                            <p class="discount-price">${discountedPrice} EGP</p>
+                                            <span class="discount-badge">${discount}% OFF</span>
+                                        ` : `
+                                            <p>${price} EGP</p>
+                                        `}
+                                    </div>
+                                </div>
+                                <button class="remove-favorite-btn" data-itemid="${item.favorite_itemsid}">
+                                    <i class="fas fa-trash"></i> Remove
+                                </button>
                             </div>
-                            <button class="remove-favorite-btn" data-itemid="${item.favorite_itemsid}">
-                                <i class="fas fa-trash"></i> Remove
-                            </button>
-                        </div>
-                    `).join("");
+                        `;
+                        }).join("");
                         addRemoveListeners();
                     } else {
                         container.innerHTML = "<p>لا توجد منتجات مفضلة.</p>";
@@ -121,22 +245,13 @@
             const userId = localStorage.getItem("userId");
             if (!userId) return;
 
-            console.log("Removing item with usersid:", userId, "and itemsid:", itemId);
             fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
             })
-                .then(response => {
-                    console.log("Raw Remove Response:", response);
-                    return response.text();
-                })
-                .then(text => {
-                    console.log("Remove Response Text:", text);
-                    if (!text) {
-                        throw new Error("Empty response from server");
-                    }
-                    const data = JSON.parse(text);
+                .then(response => response.json())
+                .then(data => {
                     if (data.status === "success") {
                         Swal.fire("✅ تمت الإزالة!", "تمت إزالة المنتج من المفضلة.", "success");
                         document.querySelector(`.favorite-item[data-itemid="${itemId}"]`).remove();

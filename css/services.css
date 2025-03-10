@@ -2,101 +2,169 @@ body {
     background-color: black;
     color: white;
     font-family: 'Poppins', sans-serif;
-      padding-top: 100px; 
-          height: 100%;
-
+    padding-top: 80px; /* تقليل ليتناسب مع ارتفاع الناف بار (100px) */
+    height: 100%;
+    overflow-x: hidden; /* عشان نمنع التمرير الأفقي */
 }
 
+/* Container للسيرفسز */
 #services-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 30px;
     padding: 20px;
-    margin-top: 100px;
+    padding-top: 20px; /* بدل margin-top عشان يتناسب مع الناف بار */
 }
 
+/* عنصر السيرفس */
 .service-item {
-    background-color: rgba(255, 255, 255, 0.1); 
     border: 1px solid #F26B0A;
     border-radius: 15px;
     padding: 20px;
     width: 400px;
     text-align: center;
     position: relative;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease; /* إضافة انيميشن العتامة */
     display: flex;
     flex-direction: column;
+    animation: fadeIn 0.8s ease-in-out; /* انيميشن ظهور */
 }
 
+/* انيميشن Fade-in للسيرفسز */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+/* تأثير Hover على السيرفس */
 .service-item:hover {
     transform: scale(1.05);
-    box-shadow: 0px 0px 10px rgba(242, 107, 10, 0.7);
+    box-shadow: 0px 0px 15px rgba(242, 107, 10, 0.9); /* ظل أقوى */
+    z-index: 1; /* ليظهر فوق الآخرين */
 }
 
+/* صورة السيرفس */
 .service-image {
     width: 100%;
     height: 180px;
     object-fit: cover;
     border-radius: 15px;
+    transition: transform 0.3s ease; /* انيميشن للصورة */
 }
 
+.service-item:hover .service-image {
+    transform: scale(1);
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+}
+
+/* العناوين */
 h3 {
     color: #F26B0A;
     margin-top: 10px;
     font-size: 20px;
+    transition: color 0.3s ease; /* انيميشن لون العنوان */
 }
 
+.service-item:hover h3 {
+    color: #ff8c00; /* تغيير لون العنوان عند الـ Hover */
+}
+
+/* الوصف */
 .service-description {
-    color: white;
+    color: black;
     font-size: 14px;
     line-height: 1.6;
     margin: 10px 0;
+    opacity: 0.9;
+    transition: opacity 0.3s ease; /* انيميشن العتامة */
 }
 
+.service-item:hover .service-description {
+    opacity: 1; /* يبقى أوضح عند الـ Hover */
+}
+
+/* التفاصيل */
 .service-details {
     text-align: left;
     margin-top: 10px;
 }
 
+/* النصوص الثانوية */
 .secondary {
-    color: gray; 
+    color: gray;
     font-size: 14px;
     margin: 5px 0;
 }
 
+.secondary a {
+    color: #F26B0A;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease; /* انيميشن لون الرابط */
+}
+
+.secondary a:hover {
+    color: #ff8c00; /* لون مختلف عند الـ Hover */
+}
+
+/* التقييم */
 .rating {
     display: flex;
     align-items: center;
     color: #F26B0A;
     margin: 5px 0;
+    animation: pulse 1.5s infinite; /* انيميشن نبض للنجوم */
 }
 
 .rating i {
     margin-right: 5px;
+    transition: transform 0.3s ease; /* انيميشن للنجوم */
 }
 
+.service-item:hover .rating i {
+    transform: scale(1.2); /* تكبير النجوم عند الـ Hover */
+}
+
+/* انيميشن نبض للتقييم */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* أزرار التحكم */
 .service-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 15px;
+    gap: 10px; /* مسافة بين الأزرار */
 }
 
+/* زر المفضلة */
 .favorite-btn {
     background: none;
     border: none;
-    color: #000;
+    color: #fff;
     font-size: 30px;
     cursor: pointer;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, transform 0.3s ease; /* انيميشن لون وحركة */
+}
+
+.favorite-btn:hover {
+    color: #F26B0A;
+    transform: rotate(15deg); /* دوران صغير عند الـ Hover */
 }
 
 .favorite-btn.active i {
-    color: #F26B0A; /* اللون البرتقالي عند التفعيل */
+    color: #F26B0A;
 }
 
-
+/* زر عرض العناصر */
 .view-items-btn {
     background-color: #F26B0A;
     color: white;
@@ -104,12 +172,31 @@ h3 {
     border-radius: 25px;
     border: none;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease; /* انيميشن شامل */
+    position: relative;
+    overflow: hidden;
+}
+
+.view-items-btn::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    top: 0;
+    left: 0;
+    transition: width 0.3s ease;
+    z-index: 0;
+}
+
+.view-items-btn:hover::after {
+    width: 100%; /* تأثير موجة عند الـ Hover */
 }
 
 .view-items-btn:hover {
     background-color: #000;
-    transform: translateY(-3px);
+    transform: translateY(-3px); /* رفع الزر */
+    box-shadow: 0 5px 15px rgba(242, 107, 10, 0.5); /* ظل أقوى */
 }
 
 .view-items-btn:active {
@@ -121,30 +208,68 @@ h3 {
     outline: none;
     box-shadow: 0 0 5px 2px rgba(242, 107, 10, 0.7);
 }
-.secondary a {
-    color: #F26B0A;
-    text-decoration: none; /* إزالة الخط السفلي من الرابط */
-    font-weight: bold;
-}
-/* ✅ تأثير التمييز للخدمة المحددة */
+
+/* تأثير التمييز للخدمة المحددة */
 .service-item.highlight {
-    background-color: #ffeeba; /* لون مميز للخلفية */
-    border: 2px solid #ffc107; /* إطار بلون أصفر */
+    background-color: #ffeeba;
+    border: 2px solid #ffc107;
     transition: all 0.3s ease-in-out;
 }
 
-/* ✅ تأثير Hover عند الدخول على الخدمة */
+/* تأثير Hover عند الدخول على الخدمة المحددة */
 .service-item.highlight:hover {
     transform: scale(1.02);
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-
+/* العنوان الرئيسي للفئة */
 .category-header h2 {
     font-size: 32px;
     font-weight: bold;
     color: #f26b0a;
-     margin-top: 140px;
-             text-align: center;
+    margin-top: 100px; /* تعديل ليتناسب مع الناف بار */
+    text-align: center;
+    animation: slideDown 0.8s ease-in-out; /* انيميشن انزلاق */
+}
 
+/* انيميشن انزلاق للعنوان */
+@keyframes slideDown {
+    0% { transform: translateY(-20px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .service-item {
+        width: 100%;
+        max-width: 350px;
+    }
+
+    #services-container {
+        padding: 10px;
+    }
+
+    .category-header h2 {
+        margin-top: 80px;
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 576px) {
+    .service-item {
+        padding: 15px;
+    }
+
+    .service-image {
+        height: 150px;
+    }
+
+    h3 {
+        font-size: 18px;
+    }
+
+    .view-items-btn {
+        padding: 8px 12px;
+        font-size: 14px;
+    }
 }

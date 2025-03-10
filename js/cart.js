@@ -31,12 +31,16 @@ function showAlert({ icon, title, text, confirmText, cancelText, onConfirm }) {
 
 // تحميل الصفحة
 document.addEventListener("DOMContentLoaded", () => {
+  updateNavbar();
   if (isLoggedIn()) {
     loadCart();
   } else {
-    document.getElementById("cart-items").innerHTML = `<tr><td colspan='6'>🚫 يجب تسجيل الدخول لعرض السلة.</td></tr>`;
-    document.getElementById("cart-count").textContent = "0";
-    document.getElementById("total-price").textContent = "0 EGP";
+    const cartItems = document.getElementById("cart-items");
+    const cartCount = document.getElementById("cart-count");
+    const totalPrice = document.getElementById("total-price");
+    if (cartItems) cartItems.innerHTML = `<tr><td colspan='5'>🚫 يجب تسجيل الدخول لعرض السلة.</td></tr>`;
+    if (cartCount) cartCount.textContent = "0";
+    if (totalPrice) totalPrice.textContent = "0 EGP";
   }
 
   const cartIcon = document.getElementById("cartIcon");
@@ -85,39 +89,61 @@ async function loadCart() {
     window.scrollTo(0, scrollPosition);
   } catch (error) {
     console.error("❌ Error fetching cart:", error);
-    document.getElementById("cart-items").innerHTML = `<tr><td colspan='6'>${MESSAGES.ERROR_FETCH}</td></tr>`;
+    const cartItems = document.getElementById("cart-items");
+    if (cartItems) cartItems.innerHTML = `<tr><td colspan='5'>${MESSAGES.ERROR_FETCH}</td></tr>`;
     window.scrollTo(0, scrollPosition);
   }
 }
 
 // تحديث واجهة السلة
 function updateCartUI(data) {
-  document.getElementById("total-price").textContent = `${data.countprice.totalprice} EGP`;
-  document.getElementById("cart-count").textContent = data.countprice.totalcount;
-  document.getElementById("cart-items").innerHTML = data.datacart.map(item => `
+  const totalPrice = document.getElementById("total-price");
+  const cartCount = document.getElementById("cart-count");
+  const cartItems = document.getElementById("cart-items");
+
+  // التحقق من وجود العناصر
+  if (!totalPrice || !cartCount || !cartItems) {
+    console.error("❌ One or more cart UI elements not found:", {
+      totalPrice: totalPrice,
+      cartCount: cartCount,
+      cartItems: cartItems
+    });
+    return;
+  }
+
+  // تحديث السعر والعدد
+  totalPrice.textContent = `${data.countprice.totalprice || '0'} EGP`;
+  cartCount.textContent = data.countprice.totalcount || '0';
+
+  // تحديث العناصر
+  cartItems.innerHTML = data.datacart.map(item => `
     <tr id="cart-item-${item.cart_itemsid}">
       <td><img src="${item.items_image}" alt="${item.items_name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
       <td>${item.items_name}</td>
-      <td>${item.items_price} EGP</td>
+      <td>${item.items_price || '0'} EGP</td>
       <td class="d-flex align-items-center gap-2">
         <button class="btn btn-danger btn-sm decrease-item-btn" data-itemid="${item.cart_itemsid}">
           <i class="fas fa-minus"></i>
         </button>
-        <span id="quantity-${item.cart_itemsid}" class="fs-5 fw-bold">${item.cart_quantity}</span>
+        <span id="quantity-${item.cart_itemsid}" class="fs-5 fw-bold">${item.cart_quantity || '0'}</span>
         <button class="btn btn-success btn-sm increase-item-btn" data-itemid="${item.cart_itemsid}">
           <i class="fas fa-plus"></i>
         </button>
       </td>
-      <td id="total-${item.cart_itemsid}">${item.total_price} EGP</td>
+      <td id="total-${item.cart_itemsid}">${item.total_price || '0'} EGP</td>
     </tr>
   `).join("");
 }
 
 // رسالة السلة الفارغة
 function showEmptyCartMessage() {
-  document.getElementById("cart-items").innerHTML = `<tr><td colspan='6'>${MESSAGES.CART_EMPTY}</td></tr>`;
-  document.getElementById("cart-count").textContent = "0";
-  document.getElementById("total-price").textContent = "0 EGP";
+  const cartItems = document.getElementById("cart-items");
+  const cartCount = document.getElementById("cart-count");
+  const totalPrice = document.getElementById("total-price");
+
+  if (cartItems) cartItems.innerHTML = `<tr><td colspan='5'>${MESSAGES.CART_EMPTY}</td></tr>`;
+  if (cartCount) cartCount.textContent = "0";
+  if (totalPrice) totalPrice.textContent = "0 EGP";
 }
 
 // إضافة Event Listeners للأزرار
@@ -224,4 +250,7 @@ function updateNavbar() {
 
 document.addEventListener("DOMContentLoaded", () => {
   updateNavbar();
+  if (isLoggedIn()) {
+    loadCart();
+  }
 });
