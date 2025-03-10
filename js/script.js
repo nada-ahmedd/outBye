@@ -139,28 +139,39 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.carousel-item');
-    const dots = document.querySelectorAll('.dot');
+ let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dot');
 
-    function showSlide(index) {
-        if (slides.length > 0 && dots.length > 0) {
-            slides.forEach((slide, i) => {
-                slide.style.display = 'none';
-                dots[i].classList.remove('active');
-            });
-            slides[index].style.display = 'block';
-            dots[index].classList.add('active');
+        function showSlide(index) {
+            if (slides.length > 0 && dots.length > 0) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active');
+                    dots[i].classList.remove('active');
+                });
+                slides[index].classList.add('active');
+                dots[index].classList.add('active');
+            }
         }
-    }
 
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        showSlide(currentSlide);
-    }
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slides.length;
+            showSlide(currentSlide);
+        }
 
-    setInterval(nextSlide, 3000);
-    showSlide(currentSlide);
+        // الضغط على الـ dots
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentSlide = index;
+                showSlide(currentSlide);
+            });
+        });
+
+        // تحميل الصور قبل بدء الـ Carousel
+        window.addEventListener('load', () => {
+            showSlide(currentSlide); // نعرض الصورة الأولى بعد التحميل
+            setInterval(nextSlide, 3000); // تغيير تلقائي كل 3 ثواني
+        });
 
     function showSection(sectionId) {
         document.querySelectorAll('.client-boxes').forEach(section => {

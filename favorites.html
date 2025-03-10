@@ -4,175 +4,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Items</title>
-    <link rel="icon" href="images/out bye.png" type="image/x-icon">
+    <title>Favorites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
 
-    <link rel="stylesheet" href="css/item.css">
-    <link rel="stylesheet" href="css/services.css">
-    <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-        <link rel="stylesheet" href="css/fav.css">
+        h1 {
+            color: #F26B0A;
+            text-align: center;
+        }
 
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <!-- مكتبة Spin.js لللودينج -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+        .favorite-item {
+            display: flex;
+            align-items: center;
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-    <!-- مكتبة ReadMore.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/readmore-js/2.2.1/readmore.min.js"></script>
+        .favorite-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
 
+        .favorite-info {
+            flex-grow: 1;
+        }
+
+        .favorite-info h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .favorite-info p {
+            margin: 5px 0;
+            color: #555;
+        }
+
+        .remove-favorite-btn {
+            background-color: #F26B0A;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .remove-favorite-btn:hover {
+            background-color: #333;
+        }
+    </style>
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg bg-dark px-4">
-        <div class="container-fluid">
-            <!-- Logo on the left -->
-            <a class="navbar-brand" href="index.html">
-                <img src="images/out bye.png" alt="Logo" width="150" height="100">
-            </a>
-
-            <!-- Navbar toggler for small screens -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-
-            <!-- Navbar links (Home, About, etc.) -->
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <div class="navbar-nav ms-auto">
-                    <a class="nav-link mx-2" href="index.html">Home</a>
-                    <a class="nav-link mx-2" href="contact.html">Contact</a>
-                    <a class="nav-link mx-2" href="about.html">About</a>
-                    <a id="signupBtn" class="nav-link mx-2 sign-up-link" href="signup.html"><i
-                            class="fas fa-user-plus"></i> Sign Up</a>
-                  
-
-                </div>
-
-                <div class="d-flex align-items-center ms-4">
-                    <div class="input-group mx-2">
-                        <input type="text" id="searchQuery" />
-                        <button class="btn-search">Search</button>
-                    </div>
-
-                    <div id="searchResults" class="search-results"></div>
-                    <a class="nav-link mx-2" href="favorites.html">
-                        <i class="fa-solid fa-heart"></i>
-                    </a>
-
-
-<a href="cart.html" class="cart-icon relative">
-    <i class="fas fa-shopping-cart text-2xl text-white"></i>
-   
-</a>
-
-
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle mx-2" href="#" id="userDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <a id="logoutBtn" class="nav-link mx-2 dropdown-item" href="javascript:void(0);">Logout</a>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-<div id="favorites-container">
-    <p>جاري تحميل المنتجات...</p>
-</div>
-    <footer class="site-footer bg-dark text-white py-5">
-        <div class="container">
-            <div class="row">
-                <!-- Logo and Socials -->
-                <div class="col-lg-2 col-md-6 ">
-                    <div class="footer-logo">
-                        <img src="images/out bye.png" alt="Logo" class="footer-logo-img ">
-                        <p>Your go-to place for restaurants, cafes, and hotels.</p>
-                        <div class="footer-socials">
-                            <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
-                            <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Important Links -->
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Important Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="#" class="text-white">About Us</a></li>
-                        <li><a href="#" class="text-white">Best Offers</a></li>
-                        <li><a href="#" class="text-white">Contact Us</a></li>
-                        <li><a href="#" class="text-white">FAQ</a></li>
-                        <li><a href="#" class="text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="text-white">Terms & Conditions</a></li>
-                    </ul>
-                </div>
-                <!-- Our Services -->
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Our Services</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Restaurants</a></li>
-                        <li><a href="#" class="text-white">Cafes</a></li>
-                        <li><a href="#" class="text-white">Hotels</a></li>
-                        <li><a href="#" class="text-white">Delivery</a></li>
-                        <li><a href="#" class="text-white">Visitor Ratings</a></li>
-                        <li><a href="#" class="text-white">Bookings</a></li>
-                    </ul>
-                </div>
-                <!-- Newsletter -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h4>Subscribe</h4>
-                    <p>Get the latest offers<br> and updates directly in your inbox!</p>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email"
-                            required>
-                        <button class="btn submit" type="submit">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-
-
-                </div>
-                <!-- Contact Information -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5>Contact Information</h5>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Email:</strong> contact@restaurant.com</p>
-                    <p><strong>Address:</strong> 123 Example St., City, Country</p>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom text-center">
-            <p>&copy; 2024 All Rights Reserved. Designed and developed by our team.</p>
-        </div>
-
-    </footer>
+    <h1>Your Favorites</h1>
+    <div id="favorites-container"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-    <script src="js/jquery-3.7.1.min.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/services.js"></script>
-    <script src="js/item.js"></script>
-    <script src="js/navbar.js"></script>
-    <script src="js/search.js"></script>
-    <script src="js/signin.js"></script>
-    <script src="js/signup.js"></script>
-    <script src="js/favorites.js"></script> <!-- ملف الجافاسكريبت -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                Swal.fire("⚠️ خطأ", "يرجى تسجيل الدخول لعرض المفضلة.", "warning");
+                window.location.href = "signup.html";
+                return;
+            }
 
+            fetchFavorites(userId);
+        });
+
+        function fetchFavorites(userId) {
+            fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ id: userId }).toString()
+            })
+                .then(response => response.json())
+                .then(data => {
+                    console.log("✅ Favorites Response:", data);
+                    const container = document.getElementById("favorites-container");
+                    if (data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
+                        container.innerHTML = data.data.map(item => `
+                        <div class="favorite-item" id="fav-${item.favorite_id}" data-itemid="${item.favorite_itemsid}">
+                            <img src="${item.items_image}" alt="${item.items_name}">
+                            <div class="favorite-info">
+                                <h3>${item.items_name}</h3>
+                                <p>${item.items_price} EGP</p>
+                            </div>
+                            <button class="remove-favorite-btn" data-itemid="${item.favorite_itemsid}">
+                                <i class="fas fa-trash"></i> Remove
+                            </button>
+                        </div>
+                    `).join("");
+                        addRemoveListeners();
+                    } else {
+                        container.innerHTML = "<p>لا توجد منتجات مفضلة.</p>";
+                    }
+                })
+                .catch(error => {
+                    console.error("❌ Error fetching favorites:", error);
+                    document.getElementById("favorites-container").innerHTML = "<p>⚠️ حدث خطأ أثناء تحميل المفضلة.</p>";
+                });
+        }
+
+        function removeFromFavorites(itemId) {
+            const userId = localStorage.getItem("userId");
+            if (!userId) return;
+
+            console.log("Removing item with usersid:", userId, "and itemsid:", itemId);
+            fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+            })
+                .then(response => {
+                    console.log("Raw Remove Response:", response);
+                    return response.text();
+                })
+                .then(text => {
+                    console.log("Remove Response Text:", text);
+                    if (!text) {
+                        throw new Error("Empty response from server");
+                    }
+                    const data = JSON.parse(text);
+                    if (data.status === "success") {
+                        Swal.fire("✅ تمت الإزالة!", "تمت إزالة المنتج من المفضلة.", "success");
+                        document.querySelector(`.favorite-item[data-itemid="${itemId}"]`).remove();
+                        fetchFavorites(userId);
+                    } else {
+                        Swal.fire("❌ خطأ", data.message || "لم يتمكن السيرفر من حذف المنتج.", "error");
+                    }
+                })
+                .catch(error => {
+                    console.error("❌ Error removing favorite:", error);
+                    Swal.fire("❌ خطأ", "حدث خطأ أثناء إزالة المنتج: " + error.message, "error");
+                });
+        }
+
+        function addRemoveListeners() {
+            document.querySelectorAll(".remove-favorite-btn").forEach(button => {
+                button.addEventListener("click", () => {
+                    const itemId = button.getAttribute("data-itemid");
+                    removeFromFavorites(itemId);
+                });
+            });
+        }
+    </script>
 </body>
 
 </html>
-   

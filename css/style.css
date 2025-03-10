@@ -342,103 +342,92 @@ body {
     }
 }
 
-/* Start banner-section */
-.banner {
-    position: relative;
-    height: 100vh;
-    width: 100%;
-    background-size: cover;
-    background-position: center;
-}
-
-.carousel {
-    position: relative;
-    height: 100%;
-}
-
-.carousel-inner {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    transition: transform 0.7s ease-in-out;
-}
-
-.carousel-item {
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center center;
-}
-
-.carousel-item:nth-child(1) {
-    background-image: url('../images/pexels-photo-260922.webp');
-}
-
-.carousel-item:nth-child(2) {
-    background-image: url('../images/lanscape-empty-restaurant.jpg');
-}
-
-.carousel-item:nth-child(3) {
-    background-image: url('../images/pexels-photo-338504.jpeg');
-}
-
-.dots {
-    position: absolute;
-    bottom: 16px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-}
-
-.dot {
-    width: 12px;
-    height: 12px;
-    background-color: white;
-    border-radius: 50%;
-    cursor: pointer;
-}
-
-.dot.active {
-    background-color: #F26B0A;
-}
-
-.banner-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    color: white;
-    font-size: 4vw;
-    text-align: center;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-style: italic;
-}
-
-.banner-text span {
-    color: #F26B0A;
-}
-
-@media (max-width: 768px) {
-    .banner-text {
-        font-size: 7vw;
-    }
-
-    .dot {
-        width: 10px;
-        height: 10px;
-    }
-}
-
-@media (max-width: 480px) {
-    .banner-text {
-        font-size: 8vw;
-    }
-}
-
-/* End banner-section */
+/* Banner Section */
+        .banner {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+        }
+        .carousel {
+            position: relative;
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+        }
+        .carousel-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .carousel-item.active {
+            opacity: 1;
+            position: relative;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .carousel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* طبقة نص شفافة سوداء */
+            z-index: 1; /* فوق الصورة، تحت النص */
+        }
+        .dots {
+            position: absolute;
+            bottom: 16px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            z-index: 2; /* فوق الـ overlay */
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            background-color: white;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .dot.active {
+            background-color: #F26B0A;
+        }
+        .banner-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 4vw;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            z-index: 2; /* فوق الـ overlay */
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .banner-text span {
+            color: #F26B0A;
+        }
+        @media (max-width: 768px) {
+            .banner-text {
+                font-size: 7vw;
+            }
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
 
 /* Start Categories section */
 .container {
@@ -507,7 +496,6 @@ body {
 }
 
 .category-link:hover .category-box {
-    background-color: #f5f5f5;
     cursor: pointer;
 }
 
