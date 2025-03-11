@@ -1,46 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // اجبار الصفحة تروح لأعلى فورًا
+    // إجبار الصفحة على الصعود للأعلى فورًا
     window.scrollTo({
         top: 0,
         behavior: "instant"
     });
 
-    // إعداد الـ Spinner باستخدام Spin.js
-    const spinnerTarget = document.createElement("div");
-    spinnerTarget.id = "spinner-container";
-    document.body.appendChild(spinnerTarget);
-
-    const spinner = new Spinner({
-        lines: 13, // عدد الخطوط في الـ spinner
-        length: 28, // طول كل خط
-        width: 10, // عرض الخط
-        radius: 42, // نص القطر
-        scale: 1, // حجم الـ spinner
-        corners: 1, // شكل الأطراف (مستديرة)
-        color: '#ffffff', // لون الـ spinner (أبيض)
-        speed: 1, // سرعة الدوران
-        trail: 60, // الطول البعدي للخطوط
-        shadow: true, // ظل للإحساس بالعمق
-        hwaccel: true, // تسريع الأداء
-        position: "fixed", // مكان الـ spinner في الصفحة
-        top: "50%", // في النص رأسيًا
-        left: "50%", // في النص أفقيًا
-        zIndex: 9999 // فوق كل العناصر
-    }).spin(spinnerTarget);
-
-    // إضافة خلفية بسيطة للـ spinner
-    const overlay = document.createElement("div");
-    overlay.id = "spinner-overlay";
-    overlay.style.cssText = `
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.9);
-        z-index: 9998;
+    // إنشاء عنصر الـ Spinner
+    const spinnerOverlay = document.createElement("div");
+    spinnerOverlay.id = "spinner-overlay";
+    spinnerOverlay.innerHTML = `
+        <div class="custom-spinner">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     `;
-    document.body.appendChild(overlay);
+    document.body.appendChild(spinnerOverlay);
+
+    // إزالة الـ Spinner عند انتهاء التحميل
+    window.onload = () => {
+        setTimeout(() => {
+            spinnerOverlay.style.opacity = "0";
+            setTimeout(() => spinnerOverlay.remove(), 500);
+        }, 500);
+    };
+
 
     // دالة إعادة بناء الجدول
     function renderTable() {
@@ -517,7 +501,197 @@ document.addEventListener("DOMContentLoaded", () => {
     updateNavbar();
     changeSlide(0);
 });
+fetch('https://abdulrahmanantar.com/outbye/topselling.php')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('items-container');
+        data.items.data.forEach(item => {
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+            slide.id = `item-${item.items_id}`;
+            slide.innerHTML = `
+                <img src="${item.items_image}" alt="${item.items_name}">
+                <h3>${item.items_name}</h3>
+                <p>${item.items_des}</p>
+                <p class="price">
+                    ${item.itemspricedisount ? `<span class="old-price">${item.items_price} EGP</span> <span class="new-price">${item.itemspricedisount} EGP</span>` : `<span class="regular-price">${item.items_price} EGP</span>`}
+                </p>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                    <button class="addItem-to-cart" data-itemid="${item.items_id}">Add to Cart</button>
+                    <button class="favorite-btn" data-itemid="${item.items_id}">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(slide);
+        });
 
+        const swiper = new Swiper('.swiper-container', {
+            slidesPerView: 4,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                768: { slidesPerView: 2 },
+                480: { slidesPerView: 1 }
+            },
+            loop: false,
+            on: {
+                init: function () {
+                    if (this.slides.length <= this.params.slidesPerView) {
+                        this.navigation.nextEl.style.display = 'none';
+                        this.navigation.prevEl.style.display = 'none';
+                    }
+                },
+                slideChange: function () {
+                    if (this.isEnd) this.navigation.nextEl.style.display = 'none';
+                    else this.navigation.nextEl.style.display = 'block';
+                    if (this.isBeginning) this.navigation.prevEl.style.display = 'none';
+                    else this.navigation.prevEl.style.display = 'block';
+                }
+            }
+        });
+
+        // Add to Cart
+        document.querySelectorAll('.addItem-to-cart').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const itemId = btn.getAttribute('data-itemid');
+                if (!isLoggedIn()) {
+                    Swal.fire("⚠️ خطأ", "يرجى تسجيل الدخول أولاً.", "warning");
+                } else {
+                    const userId = localStorage.getItem("userId");
+                    fetch("https://abdulrahmanantar.com/outbye/cart/add.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: new URLSearchParams({ usersid: userId, itemsid: itemId, quantity: 1 }).toString()
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire("✅ تمت الإضافة!", "تمت إضافة المنتج إلى السلة بنجاح.", "success");
+                        } else {
+                            Swal.fire("❌ خطأ", data.message || "فشل إضافة المنتج.", "error");
+                        }
+                    })
+                    .catch(error => Swal.fire("❌ خطأ", "حدث خطأ أثناء الإضافة.", "error"));
+                }
+            });
+        });
+
+        // Favorite Functionality
+        document.querySelectorAll('.favorite-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const itemId = btn.getAttribute('data-itemid');
+                toggleFavorite(itemId, btn);
+            });
+        });
+
+        // Check initial favorite status
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+            fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ id: userId }).toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success" && Array.isArray(data.data)) {
+                    data.data.forEach(fav => {
+                        updateFavoriteUI(fav.favorite_itemsid, true, fav.favorite_id);
+                    });
+                }
+            })
+            .catch(error => console.error("Error fetching favorites:", error));
+        }
+    })
+    .catch(error => console.error('Error fetching data:', error));
+
+// Favorite Functions (from your Favorites code)
+function toggleFavorite(itemId, button) {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        Swal.fire("⚠️ خطأ", "يجب تسجيل الدخول أولًا لإضافة المنتجات إلى المفضلة.", "warning");
+        return;
+    }
+
+    const icon = button.querySelector("i");
+    const isFavorited = icon.classList.contains("fa-solid");
+
+    if (!isFavorited) {
+        fetch("https://abdulrahmanantar.com/outbye/favorite/add.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                Swal.fire("✅ تمت الإضافة!", "تمت إضافة المنتج إلى المفضلة.", "success");
+                updateFavoriteUI(itemId, true, data.favorite_id || null); // Assuming API returns favorite_id
+            } else {
+                Swal.fire("❌ خطأ", data.message || "لم يتمكن السيرفر من إضافة المنتج.", "error");
+            }
+        })
+        .catch(error => {
+            console.error("❌ Error adding to favorites:", error);
+            Swal.fire("❌ خطأ", "حدث خطأ أثناء الإضافة: " + error.message, "error");
+        });
+    } else {
+        const favId = button.dataset.favid;
+        if (!favId) {
+            Swal.fire("❌ خطأ", "معرف المفضلة غير متاح.", "error");
+            return;
+        }
+        fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", { // Changed to remove.php
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                Swal.fire("✅ تمت الإزالة!", "تمت إزالة المنتج من المفضلة.", "success");
+                updateFavoriteUI(itemId, false);
+            } else {
+                Swal.fire("❌ خطأ", data.message || "لم يتمكن السيرفر من حذف المنتج.", "error");
+            }
+        })
+        .catch(error => {
+            console.error("❌ Error removing favorite:", error);
+            Swal.fire("❌ خطأ", "حدث خطأ أثناء الإزالة: " + error.message, "error");
+        });
+    }
+}
+
+function updateFavoriteUI(itemId, isFavorited, favId = null) {
+    const button = document.querySelector(`.favorite-btn[data-itemid="${itemId}"]`);
+    if (button) {
+        const icon = button.querySelector("i");
+        if (isFavorited) {
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+            icon.style.color = "#F26B0A";
+            if (favId) button.dataset.favid = favId;
+        } else {
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+            icon.style.color = "";
+            delete button.dataset.favid;
+        }
+    }
+}
+
+// Assuming isLoggedIn is defined elsewhere
+function isLoggedIn() {
+    return !!localStorage.getItem("userId");
+}
 // حدث تسجيل الخروج
 document.getElementById('logoutBtn')?.addEventListener('click', function () {
     localStorage.clear();

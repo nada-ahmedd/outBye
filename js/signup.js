@@ -12,10 +12,6 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         return;
     }
 
-    if (password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
-        Swal.fire({ title: 'خطأ', text: 'كلمة المرور يجب أن تكون 8 أحرف على الأقل وتحتوي على حرف كبير ورقم.', icon: 'error' });
-        return;
-    }
 
     submitButton.disabled = true;
     submitButton.textContent = 'Processing...';

@@ -6,7 +6,9 @@ body {
     height: 100%;
     overflow-x: hidden; /* عشان نمنع التمرير الأفقي */
 }
-
+main {
+    flex: 1; /* بيخلي المحتوى يتمدد ويدفع الفوتر لتحت */
+}
 /* Container للسيرفسز */
 #services-container {
     display: flex;

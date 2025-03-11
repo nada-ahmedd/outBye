@@ -56,10 +56,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const newPassword = document.getElementById("newPassword").value.trim();
         const email = localStorage.getItem("resetEmail");
 
-        if (!newPassword || newPassword.length < 6) {
-            document.getElementById("passwordError").textContent = "Password must be at least 6 characters.";
-            return;
-        }
+      
 
         fetch("https://abdulrahmanantar.com/outbye/forgetpassword/resetpassword.php", {
             method: "POST",
