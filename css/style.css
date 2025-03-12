@@ -20,7 +20,7 @@ body {
     background-color: #000;
     color: #fff;
     z-index: 1000;
-    height: 100px;
+    height: 70px;
     display: flex;
     align-items: center;
 }
@@ -32,14 +32,14 @@ body {
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
-    padding: 0 1rem; /* المسافة على الجوانب لسه صغيرة */
+    padding: 0 1rem;
 }
 
 .navbar-logo .logo-img {
-    width: 150px;
-    height: 100px;
+    width: 120px;
+    height: 60px;
     object-fit: contain;
-    margin-right: 1.5rem; /* زيادة المسافة بين اللوجو واللينكات شوية */
+    margin-right: 1.5rem;
 }
 
 .navbar-content {
@@ -47,19 +47,18 @@ body {
     align-items: center;
     justify-content: center;
     flex-grow: 1;
-    margin-left: 0;
 }
 
 .navbar-links {
     display: flex;
     align-items: center;
-    gap: 1.25rem; /* زيادة المسافة بين اللينكات لـ 1.25rem بدل 1rem */
+    gap: 1.5rem;
 }
 
 .nav-link {
     color: #fff;
     text-decoration: none;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 500;
     transition: color 0.3s ease;
 }
@@ -71,7 +70,7 @@ body {
 .sign-up-link {
     color: #F26B0A;
     font-weight: 600;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 1rem;
     border: 2px solid #F26B0A;
     border-radius: 20px;
     transition: all 0.3s ease;
@@ -85,36 +84,39 @@ body {
 .navbar-right {
     display: flex;
     align-items: center;
-    gap: 0.75rem; /* زيادة المسافة بين الأيقونات والسيرش لـ 0.75rem بدل 0.5rem */
-    margin-left: 2rem; /* زيادة المسافة بين اللينكات والأيقونات لـ 2rem بدل 1.5rem */
+    gap: 2rem; /* التعديل هنا: زيادة المسافة بين الأيقونات والسيرش */
+    margin-left: 1.5rem;
 }
 
-/* باقي الـ CSS */
 .search-container {
     display: flex;
-    align-items: center;
     border: 2px solid #F26B0A;
     border-radius: 20px;
     overflow: hidden;
+    width: 250px;
+    height: 40px;
+    left:20px;
 }
 
 .search-input {
-    padding: 0.5rem 1rem;
+    width: 70%;
+    height: 100%;
+    padding: 0.6rem 0.8rem;
     border: none;
     font-size: 1rem;
-    width: 120px;
     outline: none;
     background-color: #fff;
     color: #000;
-    border-radius: 0;
 }
 
 .search-btn {
-    padding: 0.5rem 1rem;
+    width: 35%;
+    height: 100%;
+    padding: 0.5rem;
     background-color: #F26B0A;
     color: #fff;
     border: none;
-    border-radius: 0;
+    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
@@ -125,13 +127,19 @@ body {
 
 .nav-icon {
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     text-decoration: none;
     transition: color 0.3s ease;
+    padding: 10px;
 }
 
 .nav-icon:hover {
     color: #F26B0A;
+    border-radius: 15px;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    -ms-border-radius: 15px;
+    -o-border-radius: 15px;
 }
 
 .dropdown-toggle::after {
@@ -159,12 +167,12 @@ body {
 
 .search-results {
     position: fixed;
-    top: 110px;
+    top: 80px;
     right: 2rem;
     width: 600px;
     max-height: 400px;
     overflow-y: auto;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
     padding: 1rem;
     z-index: 1000;
@@ -180,14 +188,16 @@ body {
 
 .search-results h3 {
     color: #333;
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
 }
-.search-results p{
+
+.search-results p {
     color: #333;
-    font-size: 1.1rem;
+    font-size: 1rem;
     margin-bottom: 0.5rem;
 }
+
 .search-result-column {
     flex: 1;
 }
@@ -205,8 +215,8 @@ body {
 }
 
 .search-result-item img {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     object-fit: cover;
     border-radius: 5px;
 }
@@ -230,12 +240,12 @@ body {
     background: #F26B0A;
     border: none;
     border-radius: 50%;
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -260,270 +270,110 @@ body {
     background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28255, 255, 255, 1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-/* General Reset */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    overflow-x: hidden;
-    min-height: 100vh;
-}
-
-/* Navbar Styles */
-.navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    background-color: #000;
-    color: #fff;
-    z-index: 1000;
-    height: 100px;
-    display: flex;
-    align-items: center;
-}
-
-.navbar-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 0 1rem;
-}
-
-.navbar-logo .logo-img {
-    width: 150px;
-    height: 100px;
-    object-fit: contain;
-}
-
-.navbar-links {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem; /* مسافة بين اللينكات */
-}
-
-.nav-link {
-    color: #fff;
-    text-decoration: none;
-    font-size: 1.25rem;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.nav-link:hover {
-    color: #F26B0A;
-}
-
-.sign-up-link {
-    color: #F26B0A;
-    font-weight: 600;
-    padding: 0.5rem 1rem;
-    border: 2px solid #F26B0A;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-}
-
-.sign-up-link:hover {
-    background-color: #F26B0A;
-    color: #fff;
-}
-
-.navbar-right {
-    display: flex;
-    align-items: center;
-    gap: 1rem; /* مسافة بين الأيقونات والسيرش */
-}
-
-/* Mobile Styles */
+/* Responsive Design */
 @media (max-width: 991px) {
     .navbar {
-        height: 90px;
-        padding: 0.5rem 1rem;
+        height: 60px;
+        padding: 0 0.75rem;
     }
 
     .navbar-logo .logo-img {
-        width: 120px;
-        height: 80px;
+        width: 100px;
+        height: 50px;
     }
 
     .navbar-toggler {
         display: block;
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        color: #fff;
-        cursor: pointer;
     }
 
     .navbar-collapse {
-        background-color: #000; /* خلفية سودا */
+        display: none;
+        background-color: #000;
         position: absolute;
-        top: 100%;
+        top: 60px;
         left: 0;
         width: 100%;
         padding: 1rem;
-        border-top: 1px solid #F26B0A; /* خط تفصيلي برتقالي */
+        border-top: 1px solid #F26B0A;
     }
 
     .navbar-collapse.show {
         display: flex;
         flex-direction: column;
-        align-items: center; /* محاذاة العناصر في النص */
+        align-items: center;
     }
 
     .navbar-links {
         flex-direction: column;
-        align-items: center; /* اللينكات في النص */
-        gap: 1.5rem; /* مسافة بين اللينكات */
+        gap: 1rem;
         width: 100%;
-        padding: 1rem 0; /* مسافة داخلية */
+        padding: 1rem 0;
     }
 
     .nav-link {
-        font-size: 1.25rem; /* حجم أكبر للقراءة */
+        font-size: 1rem;
         padding: 0.5rem;
     }
 
     .sign-up-link {
-        padding: 0.5rem 1rem;
-        width: auto;
+        padding: 0.4rem 1rem;
     }
 
     .navbar-right {
         flex-direction: column;
-        align-items: center; /* الأيقونات في النص */
-        gap: 1.5rem; /* مسافة بين الأيقونات */
+        gap: 1.5rem; /* تقليل المسافة في الموبايل لـ 1.5rem */
         width: 100%;
         padding: 1rem 0;
     }
 
     .search-container {
-        width: 80%; /* السيرش ياخد عرض أقل */
+        width: 90%;
+        max-width: 250px;
+        height: 36px;
         margin: 0 auto;
     }
 
     .search-input {
-        width: 100%;
-        padding: 0.75rem; /* حشوة أكبر للسيرش */
+        width: 70%;
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
     }
 
     .search-btn {
-        padding: 0.75rem 1rem;
+        width: 30%;
+        padding: 0.5rem;
+        font-size: 0.9rem;
     }
 
     .nav-icon {
-        font-size: 1.75rem; /* أيقونات أكبر */
+        font-size: 1.3rem;
     }
 
     .search-results {
         width: 90%;
         right: 5%;
-        top: 100px;
+        top: 70px;
         flex-direction: column;
-    }
-}
-.search-container {
-        width: 70%; /* تقليل العرض لـ 70% بدل 80% عشان ما ياخدش المساحة كلها */
-        max-width: 300px; /* حد أقصى للعرض عشان يبقى متناسق */
-        margin: 0 auto;
-        border: 2px solid #F26B0A;
-        border-radius: 20px;
-        overflow: hidden;
+        padding: 0.75rem;
     }
 
-.search-input {
-        width: 100%;
-        padding: 0.75rem 1rem; /* زيادة الحشوة عشان يكبر */
-        font-size: 1.1rem; /* زيادة حجم الخط */
-        border: none;
-        outline: none;
-        background-color: #fff;
-        color: #000;
-        border-radius: 0;
+    .search-result-item img {
+        width: 35px;
+        height: 35px;
     }
-
-.search-btn {
-        padding: 0.75rem 1.25rem; /* زيادة الحشوة عشان يكبر */
-        font-size: 1.1rem; /* زيادة حجم الخط */
-        background-color: #F26B0A;
-        color: #fff;
-        border: none;
-        border-radius: 0;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-.search-btn:hover {
-    background-color: #e65e00;
-}
-
-.nav-icon {
-    color: #fff;
-    font-size: 1.5rem;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.nav-icon:hover {
-    color: #F26B0A;
-}
-
-.dropdown-toggle::after {
-    display: none;
-}
-
-.dropdown-menu {
-    background-color: rgba(0, 0, 0, 0.95);
-    border: none;
-    border-radius: 8px;
-    padding: 0.5rem;
-}
-
-.dropdown-item {
-    color: #fff;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-.dropdown-item:hover {
-    background-color: #F26B0A;
-    color: #fff;
-}
-
-.search-results {
-    position: fixed;
-    top: 110px;
-    right: 2rem;
-    width: 600px;
-    max-height: 400px;
-    overflow-y: auto;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    padding: 1rem;
-    z-index: 1000;
-    display: none;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 @media (min-width: 1201px) {
     .navbar-links {
-        gap: 1.25rem; /* المسافة بين اللينكات في الشاشات الكبيرة */
+        gap: 1.5rem;
     }
 
-    .search-input {
-        width: 140px;
+    .search-container {
+        width: 220px;
     }
 
     .navbar-right {
-        margin-left: 2rem; /* المسافة بين اللينكات والأيقونات في الشاشات الكبيرة */
+        margin-left: 2rem;
     }
 }
 /* Banner Section */
@@ -708,138 +558,8 @@ body {
     }
 }
 
-/* Offer Section */
-.offer-section {
-    width: 100%;
-    padding: 40px 0;
-    text-align: center;
-}
 
-.offer-carousel {
-    position: relative;
-    width: 90%;
-    margin: auto;
-    overflow: hidden;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    max-height: 800px;
-}
-
-.offer-carousel-inner {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
-
-.offer-carousel-item {
-    min-width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    border-radius: 15px;
-    position: relative;
-}
-
-.offer-image {
-    width: 100%;
-    max-height: 500px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-
-.offer-item-content {
-    width: 100%;
-    text-align: center;
-    padding: 25px;
-}
-
-.offer-item-info {
-    margin-bottom: 10px;
-}
-
-.offer-price {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #F26B0A;
-}
-
-.offer-description {
-    font-size: 1rem;
-    color: #555;
-    margin-top: 5px;
-    line-height: 1.4;
-}
-
-.offer-discount-percentage {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: #F06A0A;
-    color: white;
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    font-weight: bold;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.offer-dots {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
-}
-
-.offer-dot {
-    width: 12px;
-    height: 12px;
-    margin: 0 5px;
-    background-color: #ccc;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.offer-dot.active {
-    background-color: #F06A0A;
-}
-
-.offer-btn.addItem-to-cart {
-    background-color: #F06A0A;
-    color: white;
-    display: block !important;
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    border-radius: 15px;
-    padding: 15px 20px;
-    margin-top: 10px;
-}
-
-.offer-btn:hover {
-    background-color: #000;
-}
-
-@media (max-width: 768px) {
-    .offer-carousel {
-        width: 95%;
-    }
-    
-    .offer-price {
-        font-size: 1.3rem;
-    }
-    
-    .offer-description {
-        font-size: 0.9rem;
-    }
-    
-    .offer-discount-percentage {
-        font-size: 0.8rem;
-    }
-}
-
-.swiper-container {
+.glide {
     max-width: 90%;
     margin: 30px auto;
     padding: 0 20px;
@@ -847,11 +567,23 @@ body {
     overflow: hidden;
 }
 
-.swiper-wrapper {
-    display: flex;
+.glide__track {
+    overflow: hidden;
 }
 
-.swiper-slide {
+.glide__slides {
+    display: flex;
+}
+/* للعنوان لو عايزة تظبطيه */
+.section-title {
+    text-align: center;
+    color: #F26B0A;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+}
+.glide__slide {
     border: 2px solid #F26B0A;
     border-radius: 15px;
     padding: 20px;
@@ -860,24 +592,20 @@ body {
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     flex-shrink: 0;
-    animation: fadeIn 0.8s ease-in-out; /* انيميشن ظهور */
+    animation: fadeIn 0.8s ease-in-out;
 }
 
 @keyframes fadeIn {
     0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); -webkit-transform: translateY(0); -moz-transform: translateY(0); -ms-transform: translateY(0); -o-transform: translateY(0); }
+    100% { opacity: 1; transform: translateY(0); }
 }
 
-.swiper-slide:hover {
+.glide__slide:hover {
     transform: scale(1.02);
     box-shadow: 0 10px 20px rgba(242, 107, 10, 0.7);
-    -webkit-transform: scale(1.02);
-    -moz-transform: scale(1.02);
-    -ms-transform: scale(1.02);
-    -o-transform: scale(1.02);
 }
 
-.swiper-slide img {
+.glide__slide img {
     width: 100%;
     height: 300px;
     object-fit: cover;
@@ -886,33 +614,31 @@ body {
     transition: transform 0.3s ease;
 }
 
-.swiper-slide:hover img {
-    transform: scale(1.03); /* تكبير خفيف للصورة */
+.glide__slide:hover img {
+    transform: scale(1.03);
 }
 
-.swiper-slide h3 {
+.glide__slide h3 {
     color: #F26B0A;
     font-size: 20px;
     font-weight: 600;
     margin: 10px 0;
-    text-transform: uppercase; /* حروف كابيتال للاحترافية */
+    text-transform: uppercase;
     transition: color 0.3s ease;
 }
 
-.swiper-slide:hover h3 {
-    color: #ff8c00; /* تغيير لون عند الـ hover */
+.glide__slide:hover h3 {
+    color: #ff8c00;
 }
 
-.swiper-slide p {
-    color: #000; /* لون رمادي فاتح للقراءة المريحة */
+.glide__slide p {
+    color: #000;
     font-size: 14px;
     line-height: 1.6;
     margin: 10px 0;
     opacity: 0.9;
     transition: opacity 0.3s ease;
 }
-
-
 
 .old-price {
     text-decoration: line-through;
@@ -960,7 +686,7 @@ body {
 }
 
 .addItem-to-cart:hover::after {
-    width: 100%; /* تأثير موجة */
+    width: 100%;
 }
 
 .addItem-to-cart:hover {
@@ -976,50 +702,81 @@ body {
     font-size: 24px;
     cursor: pointer;
     transition: color 0.3s ease, transform 0.3s ease;
-    margin-left: 10px; /* مسافة من زر Add to Cart */
+    margin-left: 10px;
 }
 
 .favorite-btn:hover {
     color: #F26B0A;
-    transform: scale(1.1); /* تكبير خفيف */
+    transform: scale(1.1);
 }
 
 .favorite-btn.favorited .fa-heart {
     color: #F26B0A;
-    transform: scale(1.2); /* تكبير عند التفعيل */
+    transform: scale(1.2);
 }
 
+.glide__arrows {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
 
-.swiper-button-next, .swiper-button-prev {
-    color: #333;
-    width: 40px;
-    height: 40px;
+.glide__arrow {
+    position: absolute;
     background: #fff;
+    border: none;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    transition: opacity 0.3s;
+    color: #F26B0A;
+    font-size: 15px;
+    font-weight: 900;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    transition: background 0.3s ease;
 }
 
-.swiper-button-next { right: 10px; }
-.swiper-button-prev { left: 10px; }
+.glide__arrow:hover {
+    background: #F26B0A;
+    color: #fff;
+}
 
+.glide__arrow--left {
+    left: -10px;
+}
 
+.glide__arrow--right {
+    right: 20px;
+}
 
-
-
+.glide__arrow--disabled {
+    display: none !important;
+}
 
 @media (max-width: 768px) {
-    .swiper-slide {
-        width: 45%;
+    .glide__slide {
+        max-width: 45%;
     }
-    .swiper-slide img {
+    .glide__slide img {
         height: 150px;
+    }
+    .glide__arrow--left {
+        left: 0;
+    }
+    .glide__arrow--right {
+        right: 5;
     }
 }
 
 @media (max-width: 480px) {
-    .swiper-slide {
-        width: 90%;
+    .glide__slide {
+        max-width: 90%;
     }
     .addItem-to-cart {
         padding: 8px 16px;
