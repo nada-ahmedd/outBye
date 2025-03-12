@@ -45,13 +45,12 @@
                 </a>
             </div>
 
-        <div class="search-container">
-            <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
-            <button class="search-btn">Search</button>
-        </div>
-        <div id="searchResults" class="search-results">
-        </div>
-
+            <!-- Right Section (يمين) -->
+            <div class="navbar-right ms-auto"> <!-- ms-auto عشان يتحرك لليمين -->
+                <div class="search-container">
+                    <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                    <button class="search-btn">Search</button>
+                </div>
                 <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
                 <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
                 <div class="dropdown">
@@ -60,6 +59,7 @@
                         <i class="fas fa-user"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a href="addresses.html" id="addresses-link">Addresses</a></li>
                         <li><a class="dropdown-item" href="#">Profile</a></li>
                         <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
                     </ul>

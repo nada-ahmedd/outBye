@@ -73,32 +73,33 @@
 </nav>
 
 <div class="cart-container">
-    <nav class="breadcrumb">
-        <a href="index.html">Home</a> / <span>Cart</span>
-    </nav>
+    <div class="breadcrumb">
+        <a href="index.html">Home</a> <span>></span> <a href="cart.html">Cart</a>
+    </div>
     <table class="cart-table">
         <thead>
             <tr>
-                <th>Product</th>
+                <th>Image</th>
+                <th>Product Name</th>
                 <th>Price</th>
                 <th>Quantity</th>
-                <th>Action</th>
-                <th>Subtotal</th>
+                <th>Total</th>
             </tr>
         </thead>
-        <tbody id="cart-items">
-            <tr>
-                <td colspan="5">Loading...</td>
-            </tr>
-        </tbody>
+        <tbody id="cart-items"></tbody>
     </table>
     <div class="cart-actions">
-        <a href="index.html" class="btn btn-primary">Return to Shop</a>
+        <button class="btn btn-primary">Continue Shopping</button>
+        <button class="btn btn-secondary">Update Cart</button>
     </div>
     <div class="cart-footer">
+        <div class="coupon">
+            <input type="text" id="coupon-input"placeholder="Enter Coupon Code">
+            <button class="btn" id="apply-coupon-btn">Apply</button>
+        </div>
         <div class="cart-total">
             <h4>Cart Total</h4>
-            <p>Total Items: <span id="cart-count">0</span></p> <!-- إضافة #cart-count هنا -->
+            <p>Number of Items: <span id="cart-count">0</span></p>
             <p>Total: <span id="total-price">0 EGP</span></p>
         </div>
     </div>
