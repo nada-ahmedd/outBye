@@ -62,10 +62,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // إضافة Event Listener لزر تطبيق الكوبون
   const applyCouponBtn = document.getElementById("apply-coupon-btn");
   if (applyCouponBtn) {
     applyCouponBtn.addEventListener("click", applyCoupon);
+  }
+
+  // إضافة Event Listener لزر "Update Cart"
+  const updateCartBtn = document.querySelector(".cart-actions .btn-secondary");
+  if (updateCartBtn) {
+    updateCartBtn.addEventListener("click", () => {
+      loadCart(); // تحديث السلة من السيرفر
+    });
   }
 });
 
@@ -85,6 +92,7 @@ async function loadCart() {
     if (data.status === "success" && Array.isArray(data.datacart) && data.datacart.length > 0) {
       updateCartUI(data);
       addCartEventListeners();
+      updateCartTotals(); // نطبق الخصم بعد تحديث السلة
     } else {
       showEmptyCartMessage();
     }
@@ -109,7 +117,6 @@ function updateCartUI(data) {
     return;
   }
 
-  totalPrice.textContent = `${data.countprice.totalprice || '0'} EGP`;
   cartCount.textContent = data.countprice.totalcount || '0';
 
   cartItems.innerHTML = data.datacart.map(item => {
@@ -139,8 +146,6 @@ function updateCartUI(data) {
       </tr>
     `;
   }).join("");
-
-  updateCartTotals(); // تحديث الإجمالي بعد عرض السلة
 }
 
 function showEmptyCartMessage() {
@@ -167,7 +172,7 @@ function addCartEventListeners() {
 
 async function handleDecrease(event) {
   const itemId = event.target.closest("button").getAttribute("data-itemid");
-  await decreaseItemQuantity(localStorage.getItem("userId"), itemId);
+  await decreaseItemQuantity(localStorage.getItem("userId"), itemId); // بدون تأكيد
 }
 
 async function handleIncrease(event) {
@@ -176,32 +181,23 @@ async function handleIncrease(event) {
 }
 
 async function decreaseItemQuantity(userId, itemId) {
-  showAlert({
-    icon: "warning",
-    title: "هل تريد تقليل الكمية؟",
-    text: "إذا وصلت الكمية إلى 1، سيتم حذف المنتج.",
-    confirmText: "نعم، قلل الكمية!",
-    cancelText: "إلغاء",
-    onConfirm: async () => {
-      try {
-        const response = await fetch(ENDPOINTS.DELETE, {
-          method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
-        });
-        const data = await response.json();
-        if (data.success) {
-          updateCartItemLocally(itemId, "decrease");
-        } else {
-          showAlert({ icon: "error", title: "خطأ", text: data.message || "لم يتمكن النظام من تقليل الكمية!" });
-          await loadCart();
-        }
-      } catch (error) {
-        console.error("❌ Error decreasing item:", error);
-        await loadCart();
-      }
+  try {
+    const response = await fetch(ENDPOINTS.DELETE, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+    });
+    const data = await response.json();
+    if (data.success) {
+      updateCartItemLocally(itemId, "decrease");
+    } else {
+      showAlert({ icon: "error", title: "خطأ", text: data.message || "لم يتمكن النظام من تقليل الكمية!" });
+      await loadCart();
     }
-  });
+  } catch (error) {
+    console.error("❌ Error decreasing item:", error);
+    await loadCart();
+  }
 }
 
 async function increaseItemQuantity(userId, itemId) {
@@ -253,21 +249,40 @@ function updateCartItemLocally(itemId, action) {
 
 function updateCartTotals() {
   const cartItems = document.querySelectorAll("#cart-items tr");
+  const totalPriceElement = document.getElementById("total-price");
+  const cartCountElement = document.getElementById("cart-count");
+
+  if (!totalPriceElement || !cartCountElement) {
+    console.error("❌ Total price or cart count element not found:", {
+      totalPriceElement: totalPriceElement,
+      cartCountElement: cartCountElement
+    });
+    return;
+  }
+
   let totalPrice = 0;
   let totalCount = 0;
 
   cartItems.forEach(row => {
-    const quantity = parseInt(row.querySelector(".fs-5").textContent) || 0;
-    const total = parseFloat(row.querySelector(`td:last-child`).textContent.replace(" EGP", "")) || 0;
+    const quantityElement = row.querySelector(".fs-5.fw-bold");
+    const totalElement = row.querySelector(`td:last-child`);
+    const quantity = parseInt(quantityElement ? quantityElement.textContent : "0") || 0;
+    const total = parseFloat(totalElement ? totalElement.textContent.replace(" EGP", "").trim() : "0") || 0;
+
+    console.log("Row Total:", total, "Quantity:", quantity);
+
     totalPrice += total;
     totalCount += quantity;
   });
 
-  // تطبيق خصم الكوبون على الإجمالي
+  console.log("Total before discount:", totalPrice, "Discount:", appliedCouponDiscount);
+
   const finalPrice = totalPrice - appliedCouponDiscount > 0 ? totalPrice - appliedCouponDiscount : 0;
 
-  document.getElementById("total-price").textContent = `${finalPrice} EGP`;
-  document.getElementById("cart-count").textContent = totalCount;
+  console.log("Final price after discount:", finalPrice);
+
+  totalPriceElement.textContent = `${finalPrice} EGP`;
+  cartCountElement.textContent = totalCount;
 
   if (cartItems.length === 0) {
     showEmptyCartMessage();
@@ -281,19 +296,24 @@ async function applyCoupon() {
     return;
   }
 
-  try {
-    console.log("Sending request to:", `${ENDPOINTS.COUPON}?couponname=${encodeURIComponent(couponInput)}`);
-    const response = await fetch(`${ENDPOINTS.COUPON}?couponname=${encodeURIComponent(couponInput)}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    console.log("Response status:", response.status);
-    const data = await response.json();
-    console.log("Coupon API Response:", data);
+  const userId = localStorage.getItem("userId");
+  if (!userId) {
+    showAlert({ icon: "error", title: "خطأ", text: "يجب تسجيل الدخول أولاً!" });
+    return;
+  }
 
-    if (data.status === "success") {
+  try {
+    const url = ENDPOINTS.COUPON;
+    console.log("Request URL:", url);
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ couponname: couponInput, usersid: userId }).toString()
+    });
+    const data = await response.json();
+    console.log("Server Response:", data);
+
+    if (data.status === "success" && data.data) {
       const discount = parseFloat(data.data.coupon_discount) || 0;
       const expireDate = new Date(data.data.coupon_expiredate);
       const now = new Date();
@@ -313,14 +333,16 @@ async function applyCoupon() {
       showAlert({ icon: "error", title: "كود غير صالح", text: data.message || "الكوبون غير متاح أو منتهي!" });
     }
 
+    console.log("Applied Coupon Discount:", appliedCouponDiscount);
     updateCartTotals();
   } catch (error) {
-    console.error("❌ Error applying coupon:", error);
+    console.error("Fetch Error:", error);
     appliedCouponDiscount = 0;
-    showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء فحص كود الخصم! تأكد من الاتصال بالإنترنت أو حاول لاحقًا." });
+    showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء فحص كود الخصم!" });
     updateCartTotals();
   }
 }
+
 function logout() {
   localStorage.clear();
   window.location.reload();

@@ -14,6 +14,7 @@ body {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* تحسين الـ Breadcrumb */
 .breadcrumb {
   margin-bottom: 20px;
   font-size: 14px;
@@ -21,7 +22,7 @@ body {
 
 .breadcrumb a {
   text-decoration: none;
-  color: #ff6600; /* لون برتقالي للروابط */
+  color: #ff6600;
   transition: color 0.3s;
 }
 
@@ -33,6 +34,7 @@ body {
   color: #888;
 }
 
+/* تحسين الجدول */
 .cart-table {
   width: 100%;
   border-collapse: collapse;
@@ -47,16 +49,13 @@ body {
 }
 
 .cart-table th {
-  background: rgb(255, 102, 0,0.9);
-  /*لونرأسالجدولبرتقالي*/color: #fff;
+  background: rgba(255, 102, 0, 0.9);
+  color: #fff;
   font-weight: bold;
-  border-radius:35px ;
-  -webkit-border-radius:35px ;
-  -moz-border-radius:35px ;
-  -ms-border-radius:35px ;
-  -o-border-radius:35px ;
+  border-radius: 35px;
 }
 
+/* تصميم المنتج */
 .product {
   display: flex;
   align-items: center;
@@ -67,19 +66,22 @@ body {
   width: 50px;
   height: 50px;
   border-radius: 5px;
-  border: 1px solid #ff6600; /* إطار برتقالي خفيف */
+  border: 1px solid #ff6600;
   object-fit: cover;
-  transition: transform 0.3s; /* تأثير عند الـ Hover */
+  transition: transform 0.3s;
 }
 
 .product img:hover {
-  transform: scale(1.05); /* تكبير خفيف عند الـ Hover */
+  transform: scale(1.05);
 }
 
+/* أزرار التحكم */
 .cart-actions {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  flex-wrap: wrap; /* للسماح بلف الأزرار في الشاشات الصغيرة */
+  gap: 10px;
 }
 
 .cart-actions .btn {
@@ -89,6 +91,7 @@ body {
   border-radius: 5px;
   font-weight: 600;
   transition: all 0.3s;
+  width: 48%; /* توزيع متساوي في الشاشات الصغيرة */
 }
 
 .btn-primary {
@@ -112,15 +115,18 @@ body {
   box-shadow: 0 2px 5px rgba(255, 102, 0, 0.3);
 }
 
+/* تحسين الـ Footer */
 .cart-footer {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
+  flex-wrap: wrap; /* للسماح بلف العناصر في الشاشات الصغيرة */
 }
 
 .coupon {
   flex: 1;
+  min-width: 250px; /* حد أدنى للعرض */
 }
 
 .coupon input {
@@ -151,10 +157,11 @@ body {
 
 .cart-total {
   flex: 1;
+  min-width: 250px; /* حد أدنى للعرض */
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 12px;
-  background: #fff5e6; /* خلفية برتقالية خفيفة */
+  background: #fff5e6;
 }
 
 .cart-total h4 {
@@ -169,6 +176,7 @@ body {
   font-size: 16px;
 }
 
+/* أزرار الإزالة */
 .remove-btn {
   background-color: #ff6600;
   color: #fff;
@@ -219,4 +227,80 @@ body {
   color: #F26B0A;
   text-decoration: line-through;
   margin-right: 8px;
+}
+
+/* Media Queries للريسبونسيف */
+@media (max-width: 768px) {
+  body {
+    padding-top: 80px; /* تقليل padding عند الشاشات الصغيرة */
+  }
+
+  .cart-container {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  .cart-table th,
+  .cart-table td {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .cart-table th {
+    border-radius: 20px;
+  }
+
+  .product img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .cart-actions .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .cart-footer {
+    flex-direction: column;
+  }
+
+  .coupon input {
+    width: 60%;
+  }
+
+  .cart-total,
+  .coupon {
+    min-width: 100%;
+    margin-bottom: 20px;
+  }
+
+  .cart-total p {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .cart-table th,
+  .cart-table td {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  .product {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .product img {
+    width: 30px;
+    height: 30px;
+  }
+
+  .coupon input {
+    width: 50%;
+  }
+
+  .cart-total h4 {
+    font-size: 18px;
+  }
 }
