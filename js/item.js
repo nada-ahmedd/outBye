@@ -28,11 +28,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let apiUrl = "https://abdulrahmanantar.com/outbye/items/items.php";
     if (serviceId) {
-        apiUrl += `?id=${serviceId}`;
+        apiUrl += `?id=${serviceId}&t=${new Date().getTime()}`;
     }
+    console.log("Request URL:", apiUrl);
 
-    fetch(apiUrl, { method: "POST" })
-    .then(response => response.json())
+    fetch(apiUrl, { method: "POST", cache: "no-cache" })
+    .then(response => {
+        console.log("Fetch Response Status:", response.status);
+        return response.json();
+    })
     .then(data => {
         console.log("✅ Raw API Response:", data);
         console.log("Data Details:", data.data);
@@ -40,15 +44,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const serviceContainer = document.getElementById("service-details");
 
         if (data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
-            // اعرض بيانات الـ service من العنصر الأول
             const service = data.data[0];
             displayServiceDetails(service);
 
-            // امسح الـ DOM
             itemsContainer.innerHTML = '';
 
-            // الـ API بترجع كل العناصر مع service_id صحيح، فهنعرض كل العناصر اللي فيها items_id
-            const items = data.data.filter(item => item && item.items_id);
+            // فلترة إضافية في الـ frontend للتأكد من service_id
+            const items = data.data.filter(item => item && item.items_id && item.service_id === serviceId);
             console.log("Items to display:", items);
 
             if (items.length === 0) {

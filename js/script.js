@@ -270,219 +270,220 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(error => console.error('Error fetching discount items:', error));
 
     // جلب بيانات الـ Top Selling
-    fetch('https://abdulrahmanantar.com/outbye/topselling.php')
-        .then(response => response.json())
-        .then(data => {
-            const container = document.getElementById('items-container');
-            if (!container) {
-                console.error("Top selling items container not found!");
-                return;
-            }
-            if (!data.items.data.length) {
-                container.innerHTML = "<p>No top selling items available.</p>";
-                return;
-            }
-
-            data.items.data.forEach(item => {
-                const slide = document.createElement('div');
-                slide.className = 'glide__slide';
-                slide.id = `item-${item.items_id}`;
-                slide.innerHTML = `
-                    <img src="${item.items_image}" alt="${item.items_name}">
-                    <h3>${item.items_name}</h3>
-                    <p>${item.items_des}</p>
-                    <p class="price">
-                        ${item.itemspricedisount ? `<span class="old-price">${item.items_price} EGP</span> <span class="new-price">${item.itemspricedisount} EGP</span>` : `<span class="regular-price">${item.items_price} EGP</span>`}
-                    </p>
-                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-                        <button class="addItem-to-cart" data-itemid="${item.items_id}">Add to Cart</button>
-                        <button class="favorite-btn" data-itemid="${item.items_id}">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(slide);
-            });
-
-            const glideTopSelling = new Glide('.top-selling-glide', {
-                type: 'carousel',
-                perView: 4,
-                gap: 20,
-                breakpoints: { 768: { perView: 2 }, 480: { perView: 1 } },
-                peek: 0,
-                rewind: false,
-                swipeThreshold: false,
-                dragThreshold: false,
-            });
-
-            glideTopSelling.mount();
-            setupEventListeners(glideTopSelling, '.top-selling-glide');
-
-            document.querySelector('.top-selling-glide').addEventListener('click', (e) => {
-                if (!e.target.closest('.glide__arrow')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            });
-
-            checkInitialFavorites();
-        })
-        .catch(error => console.error('Error fetching top selling items:', error));
-
-    // دالة للتحقق من الـ Favorites الابتدائية
-    function checkInitialFavorites() {
-        const userId = localStorage.getItem("userId");
-        if (userId) {
-            fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({ id: userId }).toString()
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === "success" && Array.isArray(data.data)) {
-                    data.data.forEach(fav => {
-                        updateFavoriteUI(fav.favorite_itemsid, true, fav.favorite_id);
-                    });
-                }
-            })
-            .catch(error => console.error('Error fetching initial favorites:', error));
+// جلب بيانات الـ Top Selling
+fetch('https://abdulrahmanantar.com/outbye/topselling.php')
+    .then(response => response.json())
+    .then(data => {
+        const container = document.getElementById('top-selling-container'); // تغيير الـ ID
+        if (!container) {
+            console.error("Top selling items container not found!");
+            return;
         }
-    }
-
-    // Favorite Functions
-    function toggleFavorite(itemId, button, glide) {
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-            glide.disable();
-            Swal.fire({
-                icon: "warning",
-                title: "⚠️ خطأ",
-                text: "يجب تسجيل الدخول أولًا لإضافة المنتجات إلى المفضلة.",
-                confirmButtonText: "حسنًا"
-            }).then(() => glide.enable());
+        if (!data.items.data.length) {
+            container.innerHTML = "<p>No top selling items available.</p>";
             return;
         }
 
-        const icon = button.querySelector("i");
-        const isFavorited = icon.classList.contains("fa-solid");
+        container.innerHTML = ''; // مسح الـ container قبل الإضافة
+        data.items.data.forEach(item => {
+            const slide = document.createElement('div');
+            slide.className = 'glide__slide';
+            slide.id = `item-${item.items_id}`;
+            slide.innerHTML = `
+                <img src="${item.items_image}" alt="${item.items_name}">
+                <h3>${item.items_name}</h3>
+                <p>${item.items_des}</p>
+                <p class="price">
+                    ${item.itemspricedisount ? `<span class="old-price">${item.items_price} EGP</span> <span class="new-price">${item.itemspricedisount} EGP</span>` : `<span class="regular-price">${item.items_price} EGP</span>`}
+                </p>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                    <button class="addItem-to-cart" data-itemid="${item.items_id}">Add to Cart</button>
+                    <button class="favorite-btn" data-itemid="${item.items_id}">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+                </div>
+            `;
+            container.appendChild(slide);
+        });
 
-        if (!isFavorited) {
-            updateFavoriteUI(itemId, true);
-            glide.disable();
-            fetch("https://abdulrahmanantar.com/outbye/favorite/add.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
-            })
-            .then(response => {
-                console.log("Add Favorite Raw Response:", response);
-                if (!response.ok) throw new Error("Network response was not ok");
-                return response.text();
-            })
-            .then(text => {
-                console.log("Add Favorite Text:", text);
-                let data = text.trim() === "" ? { status: "success" } : JSON.parse(text) || { status: "error", message: text };
-                if (data.status === "success") {
-                    Swal.fire({
-                        icon: "success",
-                        title: "✅ تمت الإضافة!",
-                        text: "تمت إضافة المنتج إلى المفضلة.",
-                        confirmButtonText: "حسنًا"
-                    }).then(() => glide.enable());
-                    updateFavoriteUI(itemId, true, data.favorite_id || null);
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "❌ خطأ",
-                        text: data.message || "لم يتمكن السيرفر من إضافة المنتج.",
-                        confirmButtonText: "حسنًا"
-                    }).then(() => {
-                        glide.enable();
-                        updateFavoriteUI(itemId, false);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Error adding favorite:", error);
+        const glideTopSelling = new Glide('.top-selling-glide', {
+            type: 'carousel',
+            perView: 4,
+            gap: 20,
+            breakpoints: { 768: { perView: 2 }, 480: { perView: 1 } },
+            peek: 0,
+            rewind: false,
+            swipeThreshold: false,
+            dragThreshold: false,
+        });
+
+        glideTopSelling.mount();
+        setupEventListeners(glideTopSelling, '.top-selling-glide');
+
+        document.querySelector('.top-selling-glide').addEventListener('click', (e) => {
+            if (!e.target.closest('.glide__arrow')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        });
+
+        checkInitialFavorites();
+    })
+    .catch(error => console.error('Error fetching top selling items:', error));
+
+// دالة للتحقق من الـ Favorites الابتدائية
+function checkInitialFavorites() {
+    const userId = localStorage.getItem("userId");
+    if (userId) {
+        fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ id: userId }).toString()
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success" && Array.isArray(data.data)) {
+                data.data.forEach(fav => {
+                    updateFavoriteUI(fav.favorite_itemsid, true, fav.favorite_id);
+                });
+            }
+        })
+        .catch(error => console.error('Error fetching initial favorites:', error));
+    }
+}
+
+// Favorite Functions
+function toggleFavorite(itemId, button, glide) {
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        glide.disable();
+        Swal.fire({
+            icon: "warning",
+            title: "⚠️ خطأ",
+            text: "يجب تسجيل الدخول أولًا لإضافة المنتجات إلى المفضلة.",
+            confirmButtonText: "حسنًا"
+        }).then(() => glide.enable());
+        return;
+    }
+
+    const icon = button.querySelector("i");
+    const isFavorited = icon.classList.contains("fa-solid");
+
+    if (!isFavorited) {
+        updateFavoriteUI(itemId, true);
+        glide.disable();
+        fetch("https://abdulrahmanantar.com/outbye/favorite/add.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+        })
+        .then(response => {
+            console.log("Add Favorite Raw Response:", response);
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.text();
+        })
+        .then(text => {
+            console.log("Add Favorite Text:", text);
+            let data = text.trim() === "" ? { status: "success" } : JSON.parse(text) || { status: "error", message: text };
+            if (data.status === "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "✅ تمت الإضافة!",
+                    text: "تمت إضافة المنتج إلى المفضلة.",
+                    confirmButtonText: "حسنًا"
+                }).then(() => glide.enable());
+                updateFavoriteUI(itemId, true, data.favorite_id || null);
+            } else {
                 Swal.fire({
                     icon: "error",
                     title: "❌ خطأ",
-                    text: "حدث خطأ أثناء الإضافة.",
+                    text: data.message || "لم يتمكن السيرفر من إضافة المنتج.",
                     confirmButtonText: "حسنًا"
                 }).then(() => {
                     glide.enable();
                     updateFavoriteUI(itemId, false);
                 });
+            }
+        })
+        .catch(error => {
+            console.error("Error adding favorite:", error);
+            Swal.fire({
+                icon: "error",
+                title: "❌ خطأ",
+                text: "حدث خطأ أثناء الإضافة.",
+                confirmButtonText: "حسنًا"
+            }).then(() => {
+                glide.enable();
+                updateFavoriteUI(itemId, false);
             });
-        } else {
-            updateFavoriteUI(itemId, false);
-            glide.disable();
-            fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
-            })
-            .then(response => {
-                console.log("Remove Favorite Raw Response:", response);
-                if (!response.ok) throw new Error("Network response was not ok");
-                return response.text();
-            })
-            .then(text => {
-                console.log("Remove Favorite Text:", text);
-                let data = text.trim() === "" ? { status: "success" } : JSON.parse(text) || { status: "error", message: text };
-                if (data.status === "success") {
-                    Swal.fire({
-                        icon: "success",
-                        title: "✅ تمت الإزالة!",
-                        text: "تمت إزالة المنتج من المفضلة.",
-                        confirmButtonText: "حسنًا"
-                    }).then(() => glide.enable());
-                } else {
-                    Swal.fire({
-                        icon: "error",
-                        title: "❌ خطأ",
-                        text: data.message || "لم يتمكن السيرفر من حذف المنتج.",
-                        confirmButtonText: "حسنًا"
-                    }).then(() => {
-                        glide.enable();
-                        updateFavoriteUI(itemId, true);
-                    });
-                }
-            })
-            .catch(error => {
-                console.error("Error removing favorite:", error);
+        });
+    } else {
+        updateFavoriteUI(itemId, false);
+        glide.disable();
+        fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+        })
+        .then(response => {
+            console.log("Remove Favorite Raw Response:", response);
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.text();
+        })
+        .then(text => {
+            console.log("Remove Favorite Text:", text);
+            let data = text.trim() === "" ? { status: "success" } : JSON.parse(text) || { status: "error", message: text };
+            if (data.status === "success") {
+                Swal.fire({
+                    icon: "success",
+                    title: "✅ تمت الإزالة!",
+                    text: "تمت إزالة المنتج من المفضلة.",
+                    confirmButtonText: "حسنًا"
+                }).then(() => glide.enable());
+            } else {
                 Swal.fire({
                     icon: "error",
                     title: "❌ خطأ",
-                    text: "حدث خطأ أثناء الإزالة.",
+                    text: data.message || "لم يتمكن السيرفر من حذف المنتج.",
                     confirmButtonText: "حسنًا"
                 }).then(() => {
                     glide.enable();
                     updateFavoriteUI(itemId, true);
                 });
-            });
-        }
-    }
-
-    function updateFavoriteUI(itemId, isFavorited, favId = null) {
-        const button = document.querySelector(`.favorite-btn[data-itemid="${itemId}"]`);
-        if (button) {
-            const icon = button.querySelector("i");
-            if (isFavorited) {
-                icon.classList.remove("fa-regular");
-                icon.classList.add("fa-solid");
-                icon.style.color = "#F26B0A";
-                if (favId) button.dataset.favid = favId;
-            } else {
-                icon.classList.remove("fa-solid");
-                icon.classList.add("fa-regular");
-                icon.style.color = "";
-                delete button.dataset.favid;
             }
+        })
+        .catch(error => {
+            console.error("Error removing favorite:", error);
+            Swal.fire({
+                icon: "error",
+                title: "❌ خطأ",
+                text: "حدث خطأ أثناء الإزالة.",
+                confirmButtonText: "حسنًا"
+            }).then(() => {
+                glide.enable();
+                updateFavoriteUI(itemId, true);
+            });
+        });
+    }
+}
+
+function updateFavoriteUI(itemId, isFavorited, favId = null) {
+    const button = document.querySelector(`.favorite-btn[data-itemid="${itemId}"]`);
+    if (button) {
+        const icon = button.querySelector("i");
+        if (isFavorited) {
+            icon.classList.remove("fa-regular");
+            icon.classList.add("fa-solid");
+            icon.style.color = "#F26B0A";
+            if (favId) button.dataset.favid = favId;
+        } else {
+            icon.classList.remove("fa-solid");
+            icon.classList.add("fa-regular");
+            icon.style.color = "";
+            delete button.dataset.favid;
         }
     }
-
+}
     function isLoggedIn() {
         return !!localStorage.getItem("userId");
     }

@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // اجبار الصفحة تروح لأعلى لما تتحمل (حتى في صفحة الـ services)
     window.scrollTo({
         top: 0,
         behavior: "instant"
@@ -33,7 +32,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (Array.isArray(data.data) && data.data.length > 0) {
                 const category = data.data[0];
 
-                // عرض تفاصيل الكاتيجوري
                 categoryContainer.innerHTML = `
                     <div class="category-header">
                         <h2>${category.categories_name}</h2>
@@ -80,7 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function setHighlightedService(serviceId) {
     localStorage.setItem("highlightedService", serviceId);
-    // لما نضغط على الـ service title، نروح لأعلى الصفحة كمان
     window.scrollTo({
         top: 0,
         behavior: "instant"
@@ -88,13 +85,11 @@ function setHighlightedService(serviceId) {
 }
 
 function fetchServiceItems(serviceId) {
-    const apiUrl = `https://abdulrahmanantar.com/outbye/items/items.php?id=${serviceId}`;
-
+    const apiUrl = "https://abdulrahmanantar.com/outbye/items/items.php";
     fetch(apiUrl, {
-        method: "GET",
-        headers: {
-            "Authorization": "Bearer your_token_here"
-        }
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ id: serviceId }).toString()
     })
         .then(response => {
             if (!response.ok) {
@@ -104,7 +99,6 @@ function fetchServiceItems(serviceId) {
         })
         .then(data => {
             console.log("API Response:", data);
-
             if (data.success || data.status === "success") {
                 if (data.data && data.data.length > 0) {
                     window.location.href = `item.html?service_id=${serviceId}`;
