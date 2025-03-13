@@ -38,31 +38,33 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
             const service = data.data[0];
             displayServiceDetails(service);
-            itemsContainer.innerHTML = data.data.map(item => {
-                const price = item.items_price;
-                const discount = item.items_discount;
-                const discountedPrice = price - (price * discount / 100);
-                const isHighlighted = itemId && item.items_id === itemId ? "highlight" : "";
+            itemsContainer.innerHTML = data.data
+                .filter(item => item.service_id === serviceId)
+                .map(item => {
+                    const price = item.items_price;
+                    const discount = item.items_discount;
+                    const discountedPrice = price - (price * discount / 100);
+                    const isHighlighted = itemId && item.items_id === itemId ? "highlight" : "";
 
-                return `
-                    <div class="item ${isHighlighted}" id="item-${item.items_id}">
-                        <h3>${item.items_name}</h3>
-                        <p>${item.items_des}</p>
-                        <p class="price">
-                            ${discount > 0 ? `<span class="old-price">${price} EGP</span>` : ''} 
-                            ${discount > 0 ? `<span class="new-price">${discountedPrice} EGP</span>` : `<span class="regular-price">${price} EGP</span>`}
-                        </p>
-                        <p class="discount">${discount > 0 ? `Discount: ${discount}%` : ''}</p>
-                        <img src="${item.items_image}" alt="${item.items_name}">
-                        <button class="addItem-to-cart" data-itemid="${item.items_id}">
-                            Add to Cart
-                        </button>
-                        <button class="favorite-btn" data-itemid="${item.items_id}">
-                            <i class="fa-regular fa-heart"></i>
-                        </button>
-                    </div>
-                `;
-            }).join("");
+                    return `
+                        <div class="item ${isHighlighted}" id="item-${item.items_id}">
+                            <h3>${item.items_name}</h3>
+                            <p>${item.items_des}</p>
+                            <p class="price">
+                                ${discount > 0 ? `<span class="old-price">${price} EGP</span>` : ''} 
+                                ${discount > 0 ? `<span class="new-price">${discountedPrice} EGP</span>` : `<span class="regular-price">${price} EGP</span>`}
+                            </p>
+                            <p class="discount">${discount > 0 ? `Discount: ${discount}%` : ''}</p>
+                            <img src="${item.items_image}" alt="${item.items_name}">
+                            <button class="addItem-to-cart" data-itemid="${item.items_id}">
+                                Add to Cart
+                            </button>
+                            <button class="favorite-btn" data-itemid="${item.items_id}">
+                                <i class="fa-regular fa-heart"></i>
+                            </button>
+                        </div>
+                    `;
+                }).join("");
 
             fetchFavorites(userId);
             addEventListeners();
@@ -181,15 +183,15 @@ function toggleFavorite(itemId, button) {
             console.log("Add Response Text:", text);
             let data;
             try {
-                data = text ? JSON.parse(text) : { status: "success" }; // افتراض النجاح لو الـ Response فاضي
+                data = text ? JSON.parse(text) : { status: "success" };
             } catch (e) {
                 console.warn("⚠️ Response is not valid JSON, assuming success:", text);
-                data = { status: "success" }; // افتراض النجاح لو مش JSON
+                data = { status: "success" };
             }
             if (data.status === "success") {
                 Swal.fire("✅ تمت الإضافة!", "تمت إضافة المنتج إلى المفضلة.", "success");
-                updateFavoriteUI(itemId, true); // تحديث القلب فورًا
-                fetchFavorites(userId); // جلب الـ fav_id لو لزم الأمر
+                updateFavoriteUI(itemId, true);
+                fetchFavorites(userId);
             } else if (data.status === "fail") {
                 Swal.fire("⚠️ موجود بالفعل", "هذا المنتج موجود بالفعل في المفضلة.", "info");
             } else {
