@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact</title>
-        <link rel="icon" href="images/out bye.png" type="image/x-icon">
-
+    <link rel="icon" href="images/out bye.png" type="image/x-icon">
     <link rel="stylesheet" href="css/contact.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
@@ -15,106 +14,236 @@
         rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 90px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .container-contact {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 50px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-info,
+        .contact-form {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-info:hover,
+        .contact-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-info {
+            flex: 1;
+            padding: 40px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        }
+
+        .contact-info h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-info p {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .contact-info .icon {
+            color: #F26B0A;
+            font-size: 1.8rem;
+            margin-right: 15px;
+        }
+
+        .contact-form {
+            flex: 1.5;
+            padding: 40px;
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+        }
+
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: #F26B0A;
+            box-shadow: 0 0 8px rgba(242, 107, 10, 0.2);
+            outline: none;
+        }
+
+        .contact-form textarea {
+            resize: none;
+            height: 180px;
+        }
+
+        .contact-form button {
+            background-color: #F26B0A;
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .contact-form button:hover {
+            background-color: #d95c00;
+            transform: scale(1.02);
+        }
+
+        .contact-form button:active {
+            transform: scale(0.98);
+        }
+
+        .breadcrumb-contact {
+            display: block;
+            width: 100%;
+            text-align: center;
+            font-size: 16px;
+            margin: 20px 0;
+            color: #555;
+        }
+
+        .breadcrumb-contact a {
+            text-decoration: none;
+            color: #F26B0A;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb-contact a:hover {
+            color: #d95c00;
+        }
+
+        .breadcrumb-contact span {
+            color: #888;
+        }
+
+        @media (max-width: 768px) {
+            .container-contact {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .contact-info,
+            .contact-form {
+                margin: 10px 0;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg">
-    <div class="navbar-container">
-        <!-- Logo (شمال) -->
-        <a class="navbar-logo" href="index.html">
-            <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
-        </a>
-
-        <!-- Toggler -->
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <!-- Navbar Content -->
-        <div class="collapse navbar-collapse" id="navbarContent">
-            <!-- Links (نص) -->
-            <div class="navbar-links mx-auto"> <!-- mx-auto عشان اللينكات تبقى في النص -->
-                <a class="nav-link" href="index.html">Home</a>
-                <a class="nav-link" href="contact.html">Contact</a>
-                <a class="nav-link" href="about.html">About</a>
-                <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
-                    <i class="fas fa-user-plus"></i> Sign Up
-                </a>
-            </div>
-
-            <!-- Right Section (يمين) -->
-            <div class="navbar-right ms-auto"> <!-- ms-auto عشان يتحرك لليمين -->
-                <div class="search-container">
-                    <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
-                    <button class="search-btn">Search</button>
-                </div>
-                <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
-                <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
-                <div class="dropdown">
-                    <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fas fa-user"></i>
+    <nav class="navbar navbar-expand-lg">
+        <div class="navbar-container">
+            <a class="navbar-logo" href="index.html">
+                <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-links mx-auto">
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="contact.html">Contact</a>
+                    <a class="nav-link" href="about.html">About</a>
+                    <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                        <i class="fas fa-user-plus"></i> Sign Up
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
-                    </ul>
+                </div>
+                <div class="navbar-right ms-auto">
+                    <div class="search-container">
+                        <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                        <button class="search-btn">Search</button>
+                    </div>
+                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
+                            class="fas fa-shopping-cart"></i></a>
+                    <div class="dropdown">
+                        <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
+        <div id="searchResults" class="search-results">
+            <button class="close-btn" onclick="closeSearchResults()">×</button>
+        </div>
+    </nav>
+
+    <div class="breadcrumb-contact">
+        <a href="index.html">Home</a> / <span>Contact</span>
     </div>
 
-    <!-- Search Results -->
-    <div id="searchResults" class="search-results">
-        <button class="close-btn" onclick="closeSearchResults()">×</button>
+    <div class="container-contact">
+        <div class="contact-info">
+            <h3><span class="icon">📞</span> Call To Us</h3>
+            <p>We are available 24/7, 7 days a week.</p>
+            <p>Phone: 01069504099</p>
+            <hr>
+            <h3><span class="icon">✉️</span> Write To Us</h3>
+            <p>Fill out our form and we will contact you within 24 hours.</p>
+            <p>Email: outbyet@gmail.com</p>
+        </div>
+
+        <div class="contact-form">
+            <form id="contactForm" action="https://formspree.io/f/xvgkggpj" method="POST">
+                <input type="text" name="name" placeholder="Your Name *" required>
+                <input type="email" name="email" placeholder="Your Email *" required>
+                <input type="text" name="phone" placeholder="Your Phone *" required>
+                <textarea name="message" placeholder="Your Message" required></textarea>
+                <button type="submit">Send Message</button>
+            </form>
+        </div>
     </div>
-</nav>
-
-
-<div class="breadcrumb-contact">
-    <a href="index.html">Home</a> / <span>Contact</span>
-</div>
-
-<div class="container-contact">
-    <div class="contact-info">
-        <h3><span class="icon">📞</span> Call To Us</h3>
-        <p>We are available 24/7, 7 days a week.</p>
-        <p>Phone: +880611112222</p>
-        <hr>
-        <h3><span class="icon">✉️</span> Write To Us</h3>
-        <p>Fill out our form and we will contact you within 24 hours.</p>
-        <p>Emails: customer@exclusive.com</p>
-        <p>Emails: support@exclusive.com</p>
-    </div>
-
-    <div class="contact-form">
-        <form>
-            <input type="text" placeholder="Your Name *" required>
-            <input type="email" placeholder="Your Email *" required>
-            <input type="text" placeholder="Your Phone *" required>
-            <textarea placeholder="Your Message" required></textarea>
-            <button type="submit">Send Message</button>
-        </form>
-    </div>
-</div>
-
-
-
-
-
-
-
-
-
 
     <footer class="site-footer bg-dark text-white py-5">
         <div class="container">
             <div class="row">
-                <!-- Logo and Socials -->
-                <div class="col-lg-2 col-md-6 ">
+                <div class="col-lg-2 col-md-6">
                     <div class="footer-logo">
-                        <img src="images/out bye.png" alt="Logo" class="footer-logo-img ">
+                        <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
                         <p>Your go-to place for restaurants, cafes, and hotels.</p>
                         <div class="footer-socials">
                             <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
@@ -124,7 +253,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- Important Links -->
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5>Important Links</h5>
                     <ul class="list-unstyled">
@@ -137,7 +265,6 @@
                         <li><a href="#" class="text-white">Terms & Conditions</a></li>
                     </ul>
                 </div>
-                <!-- Our Services -->
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5>Our Services</h5>
                     <ul class="list-unstyled">
@@ -149,35 +276,30 @@
                         <li><a href="#" class="text-white">Bookings</a></li>
                     </ul>
                 </div>
-                <!-- Newsletter -->
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h4>Subscribe</h4>
                     <p>Get the latest offers<br> and updates directly in your inbox!</p>
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
+                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email"
+                            required>
                         <button class="btn submit" type="submit">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </div>
-    
-    
                 </div>
-                <!-- Contact Information -->
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h5>Contact Information</h5>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Email:</strong> contact@restaurant.com</p>
+                    <p><strong>Phone:</strong> 01069504099</p>
+                    <p><strong>Email:</strong> outbyet@gmail.com</p>
                     <p><strong>Address:</strong> 123 Example St., City, Country</p>
                 </div>
             </div>
         </div>
         <div class="footer-bottom text-center">
-            <p>&copy; 2024 All Rights Reserved. Designed and developed by our team.</p>
+            <p>© 2025 All Rights Reserved. Designed and developed by our team.</p>
         </div>
-    
     </footer>
-    
-    
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
@@ -185,7 +307,35 @@
     <script src="js/script.js"></script>
     <script src="js/signin.js"></script>
     <script src="js/navbar.js"></script>
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function (event) {
+            const name = document.querySelector('input[name="name"]').value.trim();
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const phone = document.querySelector('input[name="phone"]').value.trim();
+            const message = document.querySelector('textarea[name="message"]').value.trim();
 
-    </body>
-    
-    </html>
+            if (!name || !email || !phone || !message) {
+                event.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Incomplete Form',
+                    text: 'Please fill all fields.',
+                });
+                return;
+            }
+
+            // إذا تم إرسال النموذج بنجاح، أظهر تنبيه
+            setTimeout(() => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Message Sent!',
+                    text: 'Your message has been sent successfully.',
+                    timer: 2000
+                });
+                document.getElementById('contactForm').reset(); // إعادة تعيين النموذج
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

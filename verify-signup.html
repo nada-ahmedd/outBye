@@ -85,10 +85,28 @@
             color: #F06A0A;
             text-decoration: none;
             font-weight: bold;
+            pointer-events: none;
+            /* تعطيل النقر في البداية */
+            opacity: 0.6;
+            /* لإظهار أنه معطل */
+        }
+
+        #resendCodeLink.enabled {
+            pointer-events: auto;
+            /* تفعيل النقر بعد 30 ثانية */
+            opacity: 1;
+            /* إعادة الشفافية الطبيعية */
         }
 
         #resendCodeLink:hover {
             text-decoration: underline;
+        }
+
+        .timer {
+            color: #F06A0A;
+            font-size: 1rem;
+            margin-top: 5px;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -107,10 +125,13 @@
             <button type="submit">Verify</button>
         </form>
         <p>Didn't receive a code? <a href="#" id="resendCodeLink">Resend Code</a></p>
+        <div id="timer" class="timer"></div> <!-- إضافة عداد الثواني -->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        let lastResendTime = Date.now(); // بدء التايمر بمجرد تحميل الصفحة
+
         document.addEventListener("DOMContentLoaded", function () {
             const email = localStorage.getItem('signupEmail');
             if (!email) {
@@ -146,6 +167,9 @@
                 .catch(error => {
                     console.error('Error during auto-send:', error);
                 });
+
+            startResendTimer(); // بدء التايمر عند تحميل الصفحة
+            updateTimer(); // بدء تحديث العداد
         });
 
         document.getElementById('verifyForm').addEventListener('submit', function (event) {
@@ -177,7 +201,7 @@
             formData.append('email', email);
             formData.append('verifycode', verifyCode);
 
-            fetch('https://abdulrahmanantar.com/outbye/auth/verfiycode.php', { // نقطة نهاية مخصصة لو متاحة
+            fetch('https://abdulrahmanantar.com/outbye/auth/verfiycode.php', {
                 method: 'POST',
                 body: formData
             })
@@ -221,6 +245,16 @@
                 return;
             }
 
+            if (!this.classList.contains('enabled')) {
+                const timeLeft = Math.ceil((lastResendTime + 30000 - Date.now()) / 1000);
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Wait Required',
+                    text: `Try again after ${timeLeft} second${timeLeft > 1 ? 's' : ''}.`,
+                });
+                return;
+            }
+
             const formData = new FormData();
             formData.append('email', email);
 
@@ -236,6 +270,10 @@
                             title: 'Code Resent!',
                             text: 'A new verification code has been sent to your email.',
                         });
+                        this.classList.remove('enabled'); // تعطيل الزر بعد الضغط
+                        lastResendTime = Date.now(); // تحديث وقت الإرسال الأخير
+                        startResendTimer(); // إعادة تشغيل التايمر
+                        updateTimer(); // إعادة تحديث العداد
                     } else {
                         Swal.fire({
                             icon: 'error',
@@ -274,6 +312,28 @@
                 }
             });
         });
+
+        function startResendTimer() {
+            const resendLink = document.getElementById('resendCodeLink');
+            resendLink.classList.remove('enabled'); // تعطيل الزر في البداية
+            setTimeout(() => {
+                resendLink.classList.add('enabled'); // تفعيل الزر بعد 30 ثانية
+                document.getElementById('timer').textContent = ''; // إخفاء العداد عند الانتهاء
+            }, 30000); // 30 ثانية
+        }
+
+        function updateTimer() {
+            const timerElement = document.getElementById('timer');
+            const interval = setInterval(() => {
+                const timeLeft = Math.ceil((lastResendTime + 30000 - Date.now()) / 1000);
+                if (timeLeft > 0) {
+                    timerElement.textContent = `Resend available in ${timeLeft} second${timeLeft > 1 ? 's' : ''}`;
+                } else {
+                    timerElement.textContent = '';
+                    clearInterval(interval);
+                }
+            }, 1000); // تحديث كل ثانية
+        }
     </script>
 </body>
 

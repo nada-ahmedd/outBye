@@ -228,8 +228,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 slide.className = 'glide__slide';
                 slide.id = `item-${item.items_id}`;
                 slide.innerHTML = `
+                                    <h5>${item.service_name}</h5>
                     <img src="${item.items_image}" alt="${item.items_name}">
                     <h3>${item.items_name}</h3>
+                    <h5>${item.service_name}</h5>
                     <p>${item.items_des}</p>
                     <p class="price">
                         ${item.items_discount ? `<span class="old-price">${item.items_price} EGP</span> <span class="new-price">${item.items_discount} EGP</span>` : `<span class="regular-price">${item.items_price} EGP</span>`}

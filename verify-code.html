@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verify Reset Code</title>
+    <title>Verify Code</title>
     <link rel="icon" href="images/out bye.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.19/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
@@ -85,17 +85,41 @@
             color: #F06A0A;
             text-decoration: none;
             font-weight: bold;
+            pointer-events: none;
+            /* تعطيل النقر في البداية */
+            opacity: 0.6;
+            /* لإظهار أنه معطل */
+        }
+
+        #resendCodeLink.enabled {
+            pointer-events: auto;
+            /* تفعيل النقر بعد 30 ثانية */
+            opacity: 1;
+            /* إعادة الشفافية الطبيعية */
         }
 
         #resendCodeLink:hover {
             text-decoration: underline;
+        }
+
+        .timer {
+            color: #F06A0A;
+            font-size: 1rem;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <h1>Verify Your Email</h1>
+        <h1>Verify Code</h1>
         <form id="verifyForm">
             <div class="verify-code-group">
                 <input type="text" id="verifyCodeField1" maxlength="1" class="verify-code-field" required>
@@ -107,104 +131,70 @@
             <button type="submit">Verify</button>
         </form>
         <p>Didn't receive a code? <a href="#" id="resendCodeLink">Resend Code</a></p>
+        <div id="timer" class="timer"></div> <!-- إضافة عداد الثواني -->
+        <div id="codeError" class="error-message"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
+        let lastResendTime = Date.now(); // بدء التايمر بمجرد تحميل الصفحة
+
         document.addEventListener("DOMContentLoaded", function () {
             const email = localStorage.getItem('resetEmail');
             if (!email) {
                 Swal.fire({
                     icon: 'error',
                     title: 'No Email Found',
-                    text: 'Please start the reset process again.',
+                    text: 'Please start the password reset process again.',
                 }).then(() => {
                     window.location.href = "signin.html";
                 });
                 return;
             }
-
-            const formData = new FormData();
-            formData.append('email', email);
-
-            fetch('https://abdulrahmanantar.com/outbye/auth/resend.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    console.log("Auto-send Response:", data);
-                    if (data.status === "success") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Code Sent!',
-                            text: 'A verification code has been sent to your email.',
-                            timer: 2000
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error during auto-send:', error);
-                });
+            startResendTimer(); // بدء التايمر عند تحميل الصفحة
+            updateTimer(); // بدء تحديث العداد
         });
 
         document.getElementById('verifyForm').addEventListener('submit', function (event) {
             event.preventDefault();
 
             let verifyCode = '';
-            for (let i = 1; i <= 5; i++) {
-                verifyCode += document.getElementById('verifyCodeField' + i).value.trim();
-            }
+            const fields = document.querySelectorAll('.verify-code-field');
+            fields.forEach(field => {
+                verifyCode += field.value.trim();
+            });
 
             if (verifyCode.length !== 5) {
-                Swal.fire({ icon: 'warning', title: 'Incomplete Code', text: 'Please enter all five digits.' });
+                document.getElementById('codeError').textContent = 'Please enter all five digits.';
                 return;
             }
 
             const email = localStorage.getItem('resetEmail');
             if (!email) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No Email Found',
-                    text: 'Please start the reset process again.',
-                }).then(() => {
-                    window.location.href = "signin.html";
-                });
+                document.getElementById('codeError').textContent = 'Email not found in storage.';
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('email', email);
-            formData.append('verifycode', verifyCode);
-
             fetch('https://abdulrahmanantar.com/outbye/forgetpassword/verifycode.php', {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ email, verifycode: verifyCode })
             })
                 .then(response => response.json())
                 .then(data => {
                     if (data.status === "success") {
                         Swal.fire({
                             icon: 'success',
-                            title: 'Verification Successful!',
-                            text: 'Redirecting to reset password...',
-                            showConfirmButton: false,
-                            timer: 2000
+                            title: 'Code Verified!',
+                            text: 'Your code is correct. Redirecting to reset password...',
                         }).then(() => {
-                            window.location.href = 'reset-password.html';
+                            window.location.href = 'signin.html?reset=true';
                         });
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Verification Failed',
-                            text: data.message || 'Invalid verification code.',
-                        });
+                        document.getElementById('codeError').textContent = data.message || 'Verification code is incorrect.';
                     }
                 })
-                .catch(error => {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred. Please try again later.' });
-                    console.error('Error:', error);
-                });
+                .catch(error => document.getElementById('codeError').textContent = 'Error occurred: ' + error.message);
         });
 
         document.getElementById('resendCodeLink').addEventListener('click', function (event) {
@@ -212,20 +202,24 @@
 
             const email = localStorage.getItem('resetEmail');
             if (!email) {
+                document.getElementById('codeError').textContent = 'Email not found in storage.';
+                return;
+            }
+
+            if (!this.classList.contains('enabled')) {
+                const timeLeft = Math.ceil((lastResendTime + 30000 - Date.now()) / 1000);
                 Swal.fire({
-                    icon: 'error',
-                    title: 'No Email Found',
-                    text: 'Please start the reset process again.',
+                    icon: 'warning',
+                    title: 'Wait Required',
+                    text: `Try again after ${timeLeft} second${timeLeft > 1 ? 's' : ''}.`,
                 });
                 return;
             }
 
-            const formData = new FormData();
-            formData.append('email', email);
-
             fetch('https://abdulrahmanantar.com/outbye/auth/resend.php', {
                 method: 'POST',
-                body: formData
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ email })
             })
                 .then(response => response.json())
                 .then(data => {
@@ -233,22 +227,25 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Code Resent!',
-                            text: 'A new verification code has been sent to your email.',
+                            text: 'The code has been sent again.',
                         });
+                        // مسح الحقول بعد إعادة الإرسال
+                        document.querySelectorAll('.verify-code-field').forEach(field => {
+                            field.value = '';
+                        });
+                        document.getElementById('verifyCodeField1').focus();
+                        this.classList.remove('enabled'); // تعطيل الزر بعد الضغط
+                        lastResendTime = Date.now(); // تحديث وقت الإرسال الأخير
+                        startResendTimer(); // إعادة تشغيل التايمر
+                        updateTimer(); // إعادة تحديث العداد
                     } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Resend Failed',
-                            text: data.message || 'Failed to resend the code.',
-                        });
+                        document.getElementById('codeError').textContent = data.message || 'Failed to resend the code.';
                     }
                 })
-                .catch(error => {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'An error occurred. Please try again later.' });
-                    console.error('Error:', error);
-                });
+                .catch(error => document.getElementById('codeError').textContent = 'Error occurred: ' + error.message);
         });
 
+        // التنقل بين الحقول تلقائيًا
         document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
             input.addEventListener('input', function () {
                 if (this.value.length === 1 && index < fields.length - 1) {
@@ -262,6 +259,7 @@
             });
         });
 
+        // إعادة إضافة خاصية اللصق
         document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
             input.addEventListener('paste', function (e) {
                 const pastedData = e.clipboardData.getData('text');
@@ -269,10 +267,33 @@
                     pastedData.split('').forEach((char, i) => {
                         fields[i].value = char;
                     });
+                    fields[fields.length - 1].focus();
                     e.preventDefault();
                 }
             });
         });
+
+        function startResendTimer() {
+            const resendLink = document.getElementById('resendCodeLink');
+            resendLink.classList.remove('enabled'); // تعطيل الزر في البداية
+            setTimeout(() => {
+                resendLink.classList.add('enabled'); // تفعيل الزر بعد 30 ثانية
+                document.getElementById('timer').textContent = ''; // إخفاء العداد عند الانتهاء
+            }, 30000); // 30 ثانية
+        }
+
+        function updateTimer() {
+            const timerElement = document.getElementById('timer');
+            const interval = setInterval(() => {
+                const timeLeft = Math.ceil((lastResendTime + 30000 - Date.now()) / 1000);
+                if (timeLeft > 0) {
+                    timerElement.textContent = `Resend available in ${timeLeft} second${timeLeft > 1 ? 's' : ''}`;
+                } else {
+                    timerElement.textContent = '';
+                    clearInterval(interval);
+                }
+            }, 1000); // تحديث كل ثانية
+        }
     </script>
 </body>
 

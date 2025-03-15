@@ -40,30 +40,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 servicesContainer.innerHTML = data.data.map(service => {
                     const isHighlighted = highlightedService == service.service_id ? "highlight" : ""; 
 
-                    return `
-                        <div class="service-item ${isHighlighted}" data-service-id="${service.service_id}">
-                            <img src="${service.service_image}" alt="${service.service_name}" class="service-image">
-                            <div class="service-content">
-                                <h3 class="service-title" onclick="setHighlightedService(${service.service_id})">
-                                    ${service.service_name}
-                                </h3>
-                                <p class="service-description">${service.service_description}</p>
-                                <div class="service-details">
-                                    <p class="secondary"><strong>Location:</strong> ${service.service_location}</p>
-                                    <div class="rating">
-                                        <i class="fa fa-star"></i>
-                                        <span>${service.service_rating}</span>
-                                    </div>
-                                    <p class="secondary"><strong>Phone:</strong> ${service.service_phone}</p>
-                                    <p class="secondary"><strong>Email:</strong> ${service.service_email}</p>
-                                </div>
-                                <div class="service-actions">
-                                    <button class="view-items-btn" onclick="fetchServiceItems(${service.service_id})">View Items</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
+                 return `
+    <div class="service-item ${isHighlighted}" data-service-id="${service.service_id}">
+        <img src="${service.service_image}" alt="${service.service_name}" class="service-image">
+        <div class="service-content">
+            <h3 class="service-title" onclick="setHighlightedService(${service.service_id})">
+                ${service.service_name}
+            </h3>
+            <p class="service-description">${service.service_description}</p>
+            <div class="service-details">
+                <p class="secondary"><strong>Location:</strong> ${service.service_location}</p>
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <span>${service.service_rating}</span>
+                </div>
+                <p class="secondary"><strong>Phone:</strong> ${service.service_phone}</p>
+                <p class="secondary"><strong>Website:</strong> 
+                    <a href="${service.service_website}" target="_blank" rel="noopener noreferrer">
+                        ${service.service_website}
+                    </a>
+                </p>
+            </div>
+            <div class="service-actions">
+                <button class="view-items-btn" onclick="fetchServiceItems(${service.service_id})">View Items</button>
+            </div>
+        </div>
+    </div>
+`;
+}).join('');
 
                 localStorage.removeItem("highlightedService");
             } else {

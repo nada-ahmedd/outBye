@@ -30,6 +30,8 @@ main {
     transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease; /* إضافة انيميشن العتامة */
     display: flex;
     flex-direction: column;
+    background-color: #fff; /* خلفية بيضاء للكارد */
+    color: #000000; /* لون نصوص داكن عشان يتناسب مع الخلفية البيضاء */
     animation: fadeIn 0.8s ease-in-out; /* انيميشن ظهور */
 }
 
@@ -67,7 +69,8 @@ main {
 h3 {
     color: #F26B0A;
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 22px; /* زيادة الحجم عشان يفرق عن التفاصيل */
+    font-weight: bold; /* جعل العنوان أكثر وضوحًا */
     transition: color 0.3s ease; /* انيميشن لون العنوان */
 }
 
@@ -77,7 +80,7 @@ h3 {
 
 /* الوصف */
 .service-description {
-    color: black;
+    color: #666; /* لون رمادي داكن عشان يتناسب مع الخلفية البيضاء */
     font-size: 14px;
     line-height: 1.6;
     margin: 10px 0;
@@ -97,7 +100,7 @@ h3 {
 
 /* النصوص الثانوية */
 .secondary {
-    color: gray;
+    color: #555; /* لون رمادي داكن عشان يظهر بوضوح على الخلفية البيضاء */
     font-size: 14px;
     margin: 5px 0;
 }
@@ -106,7 +109,12 @@ h3 {
     color: #F26B0A;
     text-decoration: none;
     font-weight: bold;
+    font-size: 14px; /* تقليل الحجم عشان يظهر داخل الكارد */
+    padding: 2px 5px; /* إضافة مسافات داخلية */
+    display: inline-block; /* لضبط الحجم */
     transition: color 0.3s ease; /* انيميشن لون الرابط */
+    word-break: break-all; /* عشان يتكسر الرابط لو طويل */
+    max-width: 100%; /* عشان يظل داخل الكارد */
 }
 
 .secondary a:hover {
@@ -151,7 +159,7 @@ h3 {
 .favorite-btn {
     background: none;
     border: none;
-    color: #fff;
+    color: #333; /* لون داكن يناسب الخلفية البيضاء */
     font-size: 30px;
     cursor: pointer;
     transition: color 0.3s ease, transform 0.3s ease; /* انيميشن لون وحركة */
@@ -196,7 +204,7 @@ h3 {
 }
 
 .view-items-btn:hover {
-    background-color: #000;
+    background-color: #333; /* لون داكن يناسب الخلفية البيضاء */
     transform: translateY(-3px); /* رفع الزر */
     box-shadow: 0 5px 15px rgba(242, 107, 10, 0.5); /* ظل أقوى */
 }
@@ -213,12 +221,11 @@ h3 {
 
 /* تأثير التمييز للخدمة المحددة */
 .service-item.highlight {
-    background-color: #ffeeba;
+    background-color: #fff9e6; /* خلفية بيضاء بألوان دافئة */
     border: 2px solid #ffc107;
     transition: all 0.3s ease-in-out;
 }
 
-/* تأثير Hover عند الدخول على الخدمة المحددة */
 .service-item.highlight:hover {
     transform: scale(1.02);
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
@@ -273,5 +280,9 @@ h3 {
     .view-items-btn {
         padding: 8px 12px;
         font-size: 14px;
+    }
+
+    .secondary a {
+        font-size: 12px; /* تقليل الحجم أكتر في الشاشات الصغيرة */
     }
 }

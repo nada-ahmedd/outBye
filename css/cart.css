@@ -1,6 +1,6 @@
 body {
-  padding-top: 100px; /* نفس ارتفاع الناف بار */
-  background: #f9f9f9; /* خلفية فاتحة للنظافة */
+  padding-top: 100px;
+  background: #f9f9f9;
   font-family: 'Arial', sans-serif;
 }
 
@@ -80,7 +80,7 @@ body {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
-  flex-wrap: wrap; /* للسماح بلف الأزرار في الشاشات الصغيرة */
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -91,7 +91,7 @@ body {
   border-radius: 5px;
   font-weight: 600;
   transition: all 0.3s;
-  width: 48%; /* توزيع متساوي في الشاشات الصغيرة */
+  width: 48%;
 }
 
 .btn-primary {
@@ -121,12 +121,12 @@ body {
   justify-content: space-between;
   align-items: flex-start;
   gap: 20px;
-  flex-wrap: wrap; /* للسماح بلف العناصر في الشاشات الصغيرة */
+  flex-wrap: wrap;
 }
 
 .coupon {
   flex: 1;
-  min-width: 250px; /* حد أدنى للعرض */
+  min-width: 250px;
 }
 
 .coupon input {
@@ -157,7 +157,7 @@ body {
 
 .cart-total {
   flex: 1;
-  min-width: 250px; /* حد أدنى للعرض */
+  min-width: 250px;
   border: 1px solid #ddd;
   padding: 20px;
   border-radius: 12px;
@@ -222,17 +222,23 @@ body {
 }
 
 /* استايل السعر الأصلي والخصم */
-.original-price {
+.cart-table .original-price {
   font-size: 16px;
-  color: #F26B0A;
-  text-decoration: line-through;
+  color: #ff6600 !important; /* !important عشان يطغى على تعارض */
+  text-decoration: line-through !important;
   margin-right: 8px;
+}
+
+.cart-table .discounted-price {
+  font-size: 16px;
+  color: #28a745 !important; /* !important عشان يطغى */
+  font-weight: bold !important;
 }
 
 /* Media Queries للريسبونسيف */
 @media (max-width: 768px) {
   body {
-    padding-top: 80px; /* تقليل padding عند الشاشات الصغيرة */
+    padding-top: 80px;
   }
 
   .cart-container {
