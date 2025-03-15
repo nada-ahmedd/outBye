@@ -7,210 +7,224 @@
     <title>OutBye</title>
     <link rel="icon" href="images/out bye.png" type="image/x-icon">
 
-    <!-- المكتبات الأساسية فقط -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
+    <link rel="stylesheet" href="css/style.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"rel="stylesheet">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
 </head>
 
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="navbar-container">
-            <a class="navbar-logo" href="index.html">
-                <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img" loading="lazy">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <div class="navbar-links mx-auto">
-                    <a class="nav-link" href="index.html">Home</a>
-                    <a class="nav-link" href="contact.html">Contact</a>
-                    <a class="nav-link" href="about.html">About</a>
-                    <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
-                        <i class="fas fa-user-plus"></i> Sign Up
+<body >
+
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-container">
+        <!-- Logo (شمال) -->
+        <a class="navbar-logo" href="index.html">
+            <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Links (نص) -->
+            <div class="navbar-links mx-auto"> <!-- mx-auto عشان اللينكات تبقى في النص -->
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+                <a class="nav-link" href="about.html">About</a>
+                <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            </div>
+
+            <!-- Right Section (يمين) -->
+            <div class="navbar-right ms-auto"> <!-- ms-auto عشان يتحرك لليمين -->
+                <div class="search-container">
+                    <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                    <button class="search-btn">Search</button>
+                </div>
+                <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
+                <div class="dropdown">
+                    <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-user"></i>
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i> Addresses</a></li>
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                    </ul>
                 </div>
-                <div class="navbar-right ms-auto">
-                    <div class="search-container">
-                        <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
-                        <button class="search-btn">Search</button>
-                    </div>
-                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
-                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
-                            class="fas fa-shopping-cart"></i></a>
-                    <div class="dropdown">
-                        <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
-                                    Addresses</a></li>
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
-                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="searchResults" class="search-results">
-            <button class="close-btn" onclick="closeSearchResults()">×</button>
-        </div>
-    </nav>
-
-    <!-- Loader -->
-    <div id="loader" class="loader">
-        <div class="plate-loader">
-            <div class="plate">
-                <div class="plate-cover"></div>
-                <div class="plate-base"></div>
             </div>
         </div>
     </div>
 
-    <!-- Banner Section -->
-    <section class="banner">
-        <div class="carousel">
-            <div class="carousel-item">
-                <img src="images/pexels-photo-260922.webp" alt="Slide 1" loading="lazy">
-                <div class="carousel-overlay"></div>
-            </div>
-            <div class="carousel-item">
-                <img src="images/lanscape-empty-restaurant.jpg" alt="Slide 2" loading="lazy">
-                <div class="carousel-overlay"></div>
-            </div>
-            <div class="carousel-item">
-                <img src="images/pexels-photo-338504.jpeg" alt="Slide 3" loading="lazy">
-                <div class="carousel-overlay"></div>
-            </div>
+    <!-- Search Results -->
+    <div id="searchResults" class="search-results">
+        <button class="close-btn" onclick="closeSearchResults()">×</button>
+    </div>
+</nav>
+<!-- Loader -->
+<div id="loader" class="loader">
+    <div class="plate-loader">
+        <div class="plate">
+            <div class="plate-cover"></div>
+            <div class="plate-base"></div>
         </div>
-        <div class="dots">
-            <span class="dot"></span>
-            <span class="dot"></span>
-            <span class="dot"></span>
+        <span class="aroma aroma1"></span>
+        <span class="aroma aroma2"></span>
+        <span class="aroma aroma3"></span>
+    </div>
+</div>
+<!-- Banner Section -->
+<section class="banner">
+    <div class="carousel">
+        <div class="carousel-item">
+            <img src="images/pexels-photo-260922.webp" alt="Slide 1">
+            <div class="carousel-overlay"></div>
         </div>
-        <div class="banner-text">Welcome to <span>OutBye</span></div>
-    </section>
+        <div class="carousel-item">
+            <img src="images/lanscape-empty-restaurant.jpg" alt="Slide 2">
+            <div class="carousel-overlay"></div>
+        </div>
+        <div class="carousel-item">
+            <img src="images/pexels-photo-338504.jpeg" alt="Slide 3">
+            <div class="carousel-overlay"></div>
+        </div>
+    </div>
+    <div class="dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+    <div class="banner-text">Welcome to <span>OutBye</span></div>
+</section>
 
-    <!-- Categories Section -->
+
+<!-- start categories -->
+<div class="container">
+    <h2 class="title">Categories</h2>
+    <div class="categories">
+        <div class="category-items-wrapper" id="category-items"></div>
+    </div>
+</div>
+
+<section class="discount-section">
+    <h2 class="section-title">Our discount</h2>
+    <div class="glide discount-glide">
+        <div class="glide__track" data-glide-el="track">
+            <div class="glide__slides" id="discount-items-container"></div>
+        </div>
+        <div class="glide__arrows" data-glide-el="controls">
+            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+        </div>
+    </div>
+</section>
+<section class="top-selling-section">
+    <h2 class="section-title">Top Selling</h2>
+    <div class="glide top-selling-glide">
+        <div class="glide__track" data-glide-el="track">
+            <div class="glide__slides" id="top-selling-container"></div>
+        </div>
+        <div class="glide__arrows" data-glide-el="controls">
+            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+        </div>
+    </div>
+</section>
+<footer class="site-footer bg-dark text-white py-5">
     <div class="container">
-        <h2 class="title">Categories</h2>
-        <div class="categories">
-            <div class="category-items-wrapper" id="category-items"></div>
+        <div class="row">
+            <!-- Logo and Socials -->
+            <div class="col-lg-2 col-md-6 ">
+                <div class="footer-logo">
+                    <img src="images/out bye.png" alt="Logo" class="footer-logo-img ">
+                    <p>Your go-to place for restaurants, cafes, and hotels.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Important Links -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5>Important Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Home</a></li>
+                    <li><a href="#" class="text-white">About Us</a></li>
+                    <li><a href="#" class="text-white">Best Offers</a></li>
+                    <li><a href="#" class="text-white">Contact Us</a></li>
+                    <li><a href="#" class="text-white">FAQ</a></li>
+                    <li><a href="#" class="text-white">Privacy Policy</a></li>
+                    <li><a href="#" class="text-white">Terms & Conditions</a></li>
+                </ul>
+            </div>
+            <!-- Our Services -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5>Our Services</h5>
+                <ul class="list-unstyled">
+                    <li><a href="#" class="text-white">Restaurants</a></li>
+                    <li><a href="#" class="text-white">Cafes</a></li>
+                    <li><a href="#" class="text-white">Hotels</a></li>
+                    <li><a href="#" class="text-white">Delivery</a></li>
+                    <li><a href="#" class="text-white">Visitor Ratings</a></li>
+                    <li><a href="#" class="text-white">Bookings</a></li>
+                </ul>
+            </div>
+            <!-- Newsletter -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h4>Subscribe</h4>
+                <p>Get the latest offers<br> and updates directly in your inbox!</p>
+        <div class="input-group mb-3">
+            <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
+            <button class="btn submit" type="submit">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+
+
+            </div>
+            <!-- Contact Information -->
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5>Contact Information</h5>
+                <p><strong>Phone:</strong> 0123456789</p>
+                <p><strong>Email:</strong> contact@restaurant.com</p>
+                <p><strong>Address:</strong> 123 Example St., City, Country</p>
+            </div>
         </div>
     </div>
+<div class="footer-bottom text-center">
+    <p>&copy; 2024 All Rights Reserved. Designed and developed by our team.</p>
+</div>
 
-    <!-- Discount Section -->
-    <section class="discount-section">
-        <h2 class="section-title">Our Discount</h2>
-        <div class="glide discount-glide">
-            <div class="glide__track" data-glide-el="track">
-                <div class="glide__slides" id="discount-items-container"></div>
-            </div>
-            <div class="glide__arrows" data-glide-el="controls">
-                <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-                <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-            </div>
-        </div>
-    </section>
+</footer>
 
-    <!-- Top Selling Section -->
-    <section class="top-selling-section">
-        <h2 class="section-title">Top Selling</h2>
-        <div class="glide top-selling-glide">
-            <div class="glide__track" data-glide-el="track">
-                <div class="glide__slides" id="top-selling-container"></div>
-            </div>
-            <div class="glide__arrows" data-glide-el="controls">
-                <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
-                <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
-            </div>
-        </div>
-    </section>
 
-    <!-- Footer -->
-    <footer class="site-footer bg-dark text-white py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-2 col-md-6">
-                    <div class="footer-logo">
-                        <img src="images/out bye.png" alt="Logo" class="footer-logo-img" loading="lazy">
-                        <p>Your go-to place for restaurants, cafes, and hotels.</p>
-                        <div class="footer-socials">
-                            <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
-                            <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Important Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="#" class="text-white">About Us</a></li>
-                        <li><a href="#" class="text-white">Best Offers</a></li>
-                        <li><a href="#" class="text-white">Contact Us</a></li>
-                        <li><a href="#" class="text-white">FAQ</a></li>
-                        <li><a href="#" class="text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="text-white">Terms & Conditions</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Our Services</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Restaurants</a></li>
-                        <li><a href="#" class="text-white">Cafes</a></li>
-                        <li><a href="#" class="text-white">Hotels</a></li>
-                        <li><a href="#" class="text-white">Delivery</a></li>
-                        <li><a href="#" class="text-white">Visitor Ratings</a></li>
-                        <li><a href="#" class="text-white">Bookings</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h4>Subscribe</h4>
-                    <p>Get the latest offers<br> and updates directly in your inbox!</p>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email"
-                            required>
-                        <button class="btn submit" type="submit">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5>Contact Information</h5>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Email:</strong> contact@restaurant.com</p>
-                    <p><strong>Address:</strong> 123 Example St., City, Country</p>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom text-center">
-            <p>© 2024 All Rights Reserved. Designed and developed by our team.</p>
-        </div>
-    </footer>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="js/jquery-3.7.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/script.js"></script>
+<script src="js/navbar.js"></script>
+<script src="js/search.js"></script>
+<script src="js/item.js"></script>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@glidejs/glide"></script>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" defer></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/@glidejs/glide" defer></script>
-    <script src="js/script.js" defer></script>
-    <script src="js/navbar.js" defer></script>
-    <script src="js/search.js" defer></script>
-    <script src="js/item.js" defer></script>
-    <script src="js/cart.js" defer></script>
-    
+
 </body>
 
 </html>
