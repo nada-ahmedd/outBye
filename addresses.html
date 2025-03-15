@@ -323,11 +323,9 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             <div class="plate-cover"></div>
             <div class="plate-base"></div>
         </div>
-        <span class="aroma aroma1"></span>
-        <span class="aroma aroma2"></span>
-        <span class="aroma aroma3"></span>
     </div>
 </div>
+
     <!-- Content -->
     <h1>Manage Your Addresses</h1>
     <div class="container-wrapper">
@@ -612,8 +610,21 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             }
         }
 
-        async function deleteAddress(addressId) {
-            if (!confirm("هل أنت متأكد من حذف العنوان؟")) return;
+      async function deleteAddress(addressId) {
+            // استبدال confirm بـ SweetAlert مع خيارين (تأكيد أو إلغاء)
+            const result = await Swal.fire({
+                title: "هل أنت متأكد؟",
+                text: "هل تريد حذف هذا العنوان؟",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "نعم، احذف",
+                cancelButtonText: "إلغاء",
+                confirmButtonColor: "#F26B0A",
+                cancelButtonColor: "#6c757d"
+            });
+
+            // لو اليوزر ضغط "إلغاء"، نوقف العملية
+            if (!result.isConfirmed) return;
 
             const userId = localStorage.getItem("userId");
             try {
