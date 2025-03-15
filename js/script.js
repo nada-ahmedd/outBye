@@ -1,4 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // دالة لإظهار الـ Loader
+    function showLoader() {
+        const loader = document.getElementById("loader");
+        if (loader) {
+            loader.classList.remove("hidden");
+        }
+    }
+
+    // دالة لإخفاء الـ Loader
+    function hideLoader() {
+        const loader = document.getElementById("loader");
+        if (loader) {
+            loader.classList.add("hidden");
+        }
+    }
+
     // الـ Carousel الأول
     let currentSlide = 0;
     const slides = document.querySelectorAll('.carousel-item');
@@ -115,9 +131,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const apiUrl = "https://abdulrahmanantar.com/outbye/home.php";
     const categoryWrapper = document.getElementById("category-items");
 
+    showLoader(); // إظهار الـ Loader قبل جلب البيانات
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
+            hideLoader(); // إخفاء الـ Loader بعد جلب البيانات
             if (data.status === "success" && data.categories && Array.isArray(data.categories.data)) {
                 let categoryHTML = "";
                 data.categories.data.forEach(category => {
@@ -141,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         })
         .catch(error => {
+            hideLoader(); // إخفاء الـ Loader في حالة الخطأ
             console.error("Error fetching categories:", error);
             categoryWrapper.innerHTML = "<p>Error loading categories</p>";
         });
@@ -208,9 +227,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // جلب بيانات الـ Discount Items
+    showLoader(); // إظهار الـ Loader قبل جلب البيانات
     fetch('https://abdulrahmanantar.com/outbye/home.php')
         .then(response => response.json())
         .then(data => {
+            hideLoader(); // إخفاء الـ Loader بعد جلب البيانات
             const container = document.getElementById('discount-items-container');
             const discountedItems = data.items.data.filter(item => item.items_discount);
 
@@ -228,10 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 slide.className = 'glide__slide';
                 slide.id = `item-${item.items_id}`;
                 slide.innerHTML = `
-                                    <h5>${item.service_name}</h5>
+                    <h5 class="service-name">${item.service_name}</h5>
                     <img src="${item.items_image}" alt="${item.items_name}">
                     <h3>${item.items_name}</h3>
-                    <h5>${item.service_name}</h5>
                     <p>${item.items_des}</p>
                     <p class="price">
                         ${item.items_discount ? `<span class="old-price">${item.items_price} EGP</span> <span class="new-price">${item.items_discount} EGP</span>` : `<span class="regular-price">${item.items_price} EGP</span>`}
@@ -267,225 +287,252 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            checkInitialFavorites();
+            checkInitialFavorites(); // تحديث المفضلة بعد تحميل العناصر
         })
-        .catch(error => console.error('Error fetching discount items:', error));
+        .catch(error => {
+            hideLoader(); // إخفاء الـ Loader في حالة الخطأ
+            console.error('Error fetching discount items:', error);
+        });
 
     // جلب بيانات الـ Top Selling
-// جلب بيانات الـ Top Selling
-fetch('https://abdulrahmanantar.com/outbye/topselling.php')
-    .then(response => response.json())
-    .then(data => {
-        const container = document.getElementById('top-selling-container'); // تغيير الـ ID
-        if (!container) {
-            console.error("Top selling items container not found!");
-            return;
-        }
-        if (!data.items.data.length) {
-            container.innerHTML = "<p>No top selling items available.</p>";
-            return;
-        }
-
-        container.innerHTML = ''; // مسح الـ container قبل الإضافة
-        data.items.data.forEach(item => {
-            const slide = document.createElement('div');
-            slide.className = 'glide__slide';
-            slide.id = `item-${item.items_id}`;
-            slide.innerHTML = `
-                <img src="${item.items_image}" alt="${item.items_name}">
-                <h3>${item.items_name}</h3>
-                <p>${item.items_des}</p>
-                <p class="price">
-                    ${item.itemspricedisount ? `<span class="old-price">${item.items_price} EGP</span> <span class="new-price">${item.itemspricedisount} EGP</span>` : `<span class="regular-price">${item.items_price} EGP</span>`}
-                </p>
-                <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-                    <button class="addItem-to-cart" data-itemid="${item.items_id}">Add to Cart</button>
-                    <button class="favorite-btn" data-itemid="${item.items_id}">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                </div>
-            `;
-            container.appendChild(slide);
-        });
-
-        const glideTopSelling = new Glide('.top-selling-glide', {
-            type: 'carousel',
-            perView: 4,
-            gap: 20,
-            breakpoints: { 768: { perView: 2 }, 480: { perView: 1 } },
-            peek: 0,
-            rewind: false,
-            swipeThreshold: false,
-            dragThreshold: false,
-        });
-
-        glideTopSelling.mount();
-        setupEventListeners(glideTopSelling, '.top-selling-glide');
-
-        document.querySelector('.top-selling-glide').addEventListener('click', (e) => {
-            if (!e.target.closest('.glide__arrow')) {
-                e.preventDefault();
-                e.stopPropagation();
-            }
-        });
-
-        checkInitialFavorites();
-    })
-    .catch(error => console.error('Error fetching top selling items:', error));
-
-// دالة للتحقق من الـ Favorites الابتدائية
-function checkInitialFavorites() {
-    const userId = localStorage.getItem("userId");
-    if (userId) {
-        fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ id: userId }).toString()
-        })
+    showLoader(); // إظهار الـ Loader قبل جلب البيانات
+    fetch('https://abdulrahmanantar.com/outbye/topselling.php')
         .then(response => response.json())
         .then(data => {
-            if (data.status === "success" && Array.isArray(data.data)) {
-                data.data.forEach(fav => {
-                    updateFavoriteUI(fav.favorite_itemsid, true, fav.favorite_id);
-                });
+            hideLoader(); // إخفاء الـ Loader بعد جلب البيانات
+            const container = document.getElementById('top-selling-container');
+            if (!container) {
+                console.error("Top selling items container not found!");
+                return;
             }
-        })
-        .catch(error => console.error('Error fetching initial favorites:', error));
-    }
-}
-
-// Favorite Functions
-function toggleFavorite(itemId, button, glide) {
-    const userId = localStorage.getItem("userId");
-    if (!userId) {
-        glide.disable();
-        Swal.fire({
-            icon: "warning",
-            title: "⚠️ خطأ",
-            text: "يجب تسجيل الدخول أولًا لإضافة المنتجات إلى المفضلة.",
-            confirmButtonText: "حسنًا"
-        }).then(() => glide.enable());
-        return;
-    }
-
-    const icon = button.querySelector("i");
-    const isFavorited = icon.classList.contains("fa-solid");
-
-    if (!isFavorited) {
-        updateFavoriteUI(itemId, true);
-        glide.disable();
-        fetch("https://abdulrahmanantar.com/outbye/favorite/add.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
-        })
-        .then(response => {
-            console.log("Add Favorite Raw Response:", response);
-            if (!response.ok) throw new Error("Network response was not ok");
-            return response.text();
-        })
-        .then(text => {
-            console.log("Add Favorite Text:", text);
-            let data = text.trim() === "" ? { status: "success" } : JSON.parse(text) || { status: "error", message: text };
-            if (data.status === "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "✅ تمت الإضافة!",
-                    text: "تمت إضافة المنتج إلى المفضلة.",
-                    confirmButtonText: "حسنًا"
-                }).then(() => glide.enable());
-                updateFavoriteUI(itemId, true, data.favorite_id || null);
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "❌ خطأ",
-                    text: data.message || "لم يتمكن السيرفر من إضافة المنتج.",
-                    confirmButtonText: "حسنًا"
-                }).then(() => {
-                    glide.enable();
-                    updateFavoriteUI(itemId, false);
-                });
+            if (!data.items || !data.items.data || !data.items.data.length) {
+                container.innerHTML = "<p>No top selling items available.</p>";
+                return;
             }
+
+            container.innerHTML = '';
+            data.items.data.forEach(item => {
+                const slide = document.createElement('div');
+                slide.className = 'glide__slide';
+                slide.id = `item-${item.items_id}`;
+                slide.innerHTML = `
+                    <img src="${item.items_image}" alt="${item.items_name}">
+                    <h3>${item.items_name}</h3>
+                    <p>${item.items_des}</p>
+                    <p class="price">
+                        ${item.itemspricedisount && parseFloat(item.itemspricedisount) > 0 ? `
+                            <span class="old-price text-muted text-decoration-line-through">${item.items_price} EGP</span>
+                            <span class="new-price text-success">${item.itemspricedisount} EGP</span>
+                        ` : `
+                            <span class="regular-price">${item.items_price} EGP</span>
+                        `}
+                    </p>
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 10px;">
+                        <button class="addItem-to-cart" data-itemid="${item.items_id}">Add to Cart</button>
+                        <button class="favorite-btn" data-itemid="${item.items_id}">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(slide);
+            });
+
+            const glideTopSelling = new Glide('.top-selling-glide', {
+                type: 'carousel',
+                perView: 4,
+                gap: 20,
+                breakpoints: { 768: { perView: 2 }, 480: { perView: 1 } },
+                peek: 0,
+                rewind: false,
+                swipeThreshold: false,
+                dragThreshold: false,
+            });
+
+            glideTopSelling.mount();
+            setupEventListeners(glideTopSelling, '.top-selling-glide');
+
+            document.querySelector('.top-selling-glide').addEventListener('click', (e) => {
+                if (!e.target.closest('.glide__arrow')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            });
+
+            checkInitialFavorites(); // تحديث المفضلة بعد تحميل العناصر
         })
         .catch(error => {
-            console.error("Error adding favorite:", error);
-            Swal.fire({
-                icon: "error",
-                title: "❌ خطأ",
-                text: "حدث خطأ أثناء الإضافة.",
-                confirmButtonText: "حسنًا"
-            }).then(() => {
-                glide.enable();
-                updateFavoriteUI(itemId, false);
-            });
+            hideLoader(); // إخفاء الـ Loader في حالة الخطأ
+            console.error('Error fetching top selling items:', error);
         });
-    } else {
-        updateFavoriteUI(itemId, false);
-        glide.disable();
-        fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
-            method: "POST",
-            headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
-        })
-        .then(response => {
-            console.log("Remove Favorite Raw Response:", response);
-            if (!response.ok) throw new Error("Network response was not ok");
-            return response.text();
-        })
-        .then(text => {
-            console.log("Remove Favorite Text:", text);
-            let data = text.trim() === "" ? { status: "success" } : JSON.parse(text) || { status: "error", message: text };
-            if (data.status === "success") {
-                Swal.fire({
-                    icon: "success",
-                    title: "✅ تمت الإزالة!",
-                    text: "تمت إزالة المنتج من المفضلة.",
-                    confirmButtonText: "حسنًا"
-                }).then(() => glide.enable());
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "❌ خطأ",
-                    text: data.message || "لم يتمكن السيرفر من حذف المنتج.",
-                    confirmButtonText: "حسنًا"
-                }).then(() => {
-                    glide.enable();
-                    updateFavoriteUI(itemId, true);
-                });
-            }
-        })
-        .catch(error => {
-            console.error("Error removing favorite:", error);
-            Swal.fire({
-                icon: "error",
-                title: "❌ خطأ",
-                text: "حدث خطأ أثناء الإزالة.",
-                confirmButtonText: "حسنًا"
-            }).then(() => {
-                glide.enable();
-                updateFavoriteUI(itemId, true);
-            });
-        });
-    }
-}
 
-function updateFavoriteUI(itemId, isFavorited, favId = null) {
-    const button = document.querySelector(`.favorite-btn[data-itemid="${itemId}"]`);
-    if (button) {
-        const icon = button.querySelector("i");
-        if (isFavorited) {
-            icon.classList.remove("fa-regular");
-            icon.classList.add("fa-solid");
-            icon.style.color = "#F26B0A";
-            if (favId) button.dataset.favid = favId;
-        } else {
-            icon.classList.remove("fa-solid");
-            icon.classList.add("fa-regular");
-            icon.style.color = "";
-            delete button.dataset.favid;
+    // دالة للتحقق من الـ Favorites الابتدائية
+    function checkInitialFavorites() {
+        const userId = localStorage.getItem("userId");
+        if (userId) {
+            fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ id: userId }).toString()
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success" && Array.isArray(data.data)) {
+                    data.data.forEach(fav => {
+                        updateFavoriteUI(fav.favorite_itemsid, true, fav.favorite_id);
+                    });
+                }
+            })
+            .catch(error => console.error('Error fetching initial favorites:', error));
         }
     }
-}
+
+    // Favorite Functions
+    function toggleFavorite(itemId, button, glide) {
+        const userId = localStorage.getItem("userId");
+        if (!userId) {
+            glide.disable();
+            Swal.fire({
+                icon: "warning",
+                title: "⚠️ خطأ",
+                text: "يجب تسجيل الدخول أولًا لإضافة المنتجات إلى المفضلة.",
+                confirmButtonText: "حسنًا"
+            }).then(() => glide.enable());
+            return;
+        }
+
+        const isFavorited = button.querySelector("i").classList.contains("fa-solid");
+
+        if (!isFavorited) {
+            // تحديث الـ UI فورًا بشكل مؤقت
+            updateFavoriteUI(itemId, true);
+            glide.disable();
+            fetch("https://abdulrahmanantar.com/outbye/favorite/add.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.text();
+            })
+            .then(text => {
+                console.log("Add Favorite Raw Response:", text); // Log الـ Response الخام
+                let data;
+                try {
+                    data = text.trim() === "" ? { status: "success" } : JSON.parse(text);
+                } catch (e) {
+                    console.error("Error parsing JSON:", e, "Raw Response:", text);
+                    data = { status: "error", message: "Invalid response from server" };
+                }
+
+                if (data.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "✅ تمت الإضافة!",
+                        text: "تمت إضافة المنتج إلى المفضلة.",
+                        confirmButtonText: "حسنًا"
+                    }).then(() => glide.enable());
+                    updateFavoriteUI(itemId, true, data.favorite_id || null); // تحديث نهائي
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "❌ خطأ",
+                        text: data.message || "لم يتمكن السيرفر من إضافة المنتج.",
+                        confirmButtonText: "حسنًا"
+                    }).then(() => {
+                        glide.enable();
+                        updateFavoriteUI(itemId, false); // استرجاع الحالة إذا فشل
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error adding favorite:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "❌ خطأ",
+                    text: "حدث خطأ أثناء الإضافة: " + error.message,
+                    confirmButtonText: "حسنًا"
+                }).then(() => {
+                    glide.enable();
+                    updateFavoriteUI(itemId, false); // استرجاع الحالة إذا فشل
+                });
+            });
+        } else {
+            // تحديث الـ UI فورًا بشكل مؤقت
+            updateFavoriteUI(itemId, false);
+            glide.disable();
+            fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
+            })
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.text();
+            })
+            .then(text => {
+                console.log("Remove Favorite Raw Response:", text); // Log الـ Response الخام
+                let data;
+                try {
+                    data = text.trim() === "" ? { status: "success" } : JSON.parse(text);
+                } catch (e) {
+                    console.error("Error parsing JSON:", e, "Raw Response:", text);
+                    data = { status: "error", message: "Invalid response from server" };
+                }
+
+                if (data.status === "success") {
+                    Swal.fire({
+                        icon: "success",
+                        title: "✅ تمت الإزالة!",
+                        text: "تمت إزالة المنتج من المفضلة.",
+                        confirmButtonText: "حسنًا"
+                    }).then(() => glide.enable());
+                    updateFavoriteUI(itemId, false); // تحديث نهائي
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "❌ خطأ",
+                        text: data.message || "لم يتمكن السيرفر من حذف المنتج.",
+                        confirmButtonText: "حسنًا"
+                    }).then(() => {
+                        glide.enable();
+                        updateFavoriteUI(itemId, true); // استرجاع الحالة إذا فشل
+                    });
+                }
+            })
+            .catch(error => {
+                console.error("Error removing favorite:", error);
+                Swal.fire({
+                    icon: "error",
+                    title: "❌ خطأ",
+                    text: "حدث خطأ أثناء الإزالة: " + error.message,
+                    confirmButtonText: "حسنًا"
+                }).then(() => {
+                    glide.enable();
+                    updateFavoriteUI(itemId, true); // استرجاع الحالة إذا فشل
+                });
+            });
+        }
+    }
+
+    function updateFavoriteUI(itemId, isFavorited, favId = null) {
+        const buttons = document.querySelectorAll(`.favorite-btn[data-itemid="${itemId}"]`);
+        buttons.forEach(button => {
+            const icon = button.querySelector("i");
+            if (isFavorited) {
+                icon.classList.remove("fa-regular");
+                icon.classList.add("fa-solid");
+                icon.style.color = "#F26B0A";
+                if (favId) button.dataset.favid = favId;
+            } else {
+                icon.classList.remove("fa-solid");
+                icon.classList.add("fa-regular");
+                icon.style.color = "";
+                delete button.dataset.favid;
+            }
+        });
+    }
+
     function isLoggedIn() {
         return !!localStorage.getItem("userId");
     }

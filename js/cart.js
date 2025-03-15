@@ -11,7 +11,7 @@ const MESSAGES = {
   ERROR_FETCH: "⚠️ خطأ في جلب البيانات."
 };
 
-let appliedCouponDiscount = 0; // هنا بيحتفظ بالنسبة المئوية الديناميكية
+let appliedCouponDiscount = 0;
 
 function isLoggedIn() {
   return !!localStorage.getItem("userId");
@@ -88,10 +88,10 @@ async function loadCart() {
     const data = await response.json();
     console.log("Cart API Response:", data);
 
-    if (data.status === "success" && Array.isArray(data.datacart) && data.datacart.length > 0) {
+    if (data.status === "success") {
       updateCartUI(data);
       addCartEventListeners();
-      updateCartTotals();
+      updateCartTotals(data);
     } else {
       showEmptyCartMessage();
     }
@@ -103,55 +103,120 @@ async function loadCart() {
 }
 
 function updateCartUI(data) {
-  const totalPrice = document.getElementById("total-price");
-  const cartCount = document.getElementById("cart-count");
   const cartItems = document.getElementById("cart-items");
+  const cartCount = document.getElementById("cart-count");
+  const totalPrice = document.getElementById("total-price");
 
-  if (!totalPrice || !cartCount || !cartItems) {
-    console.error("❌ One or more cart UI elements not found:", {
-      totalPrice: totalPrice,
-      cartCount: cartCount,
-      cartItems: cartItems
-    });
+  if (!cartItems || !cartCount || !totalPrice) {
+    console.error("❌ One or more cart UI elements not found");
     return;
   }
 
-  cartCount.textContent = data.countprice.totalcount || '0';
+  let cartHTML = "";
 
-  cartItems.innerHTML = data.datacart.map(item => {
-    const originalPrice = parseFloat(item.items_price) || 0;
-    const discount = parseFloat(item.items_discount) || 0;
-    const discountedPrice = discount > 0 ? (originalPrice - (originalPrice * discount / 100)) : originalPrice;
-    const quantity = parseInt(item.cart_quantity) || 0;
-    const totalPriceAfterDiscount = discountedPrice * quantity;
+  // قسم Restaurants & Cafes
+  if (data.rest_cafe.datacart.length > 0) {
+    cartHTML += `
+      <tr class="section-divider">
+        <td colspan="5" class="section-title">Restaurants & Cafes</td>
+      </tr>
+      ${data.rest_cafe.datacart.map(item => {
+        const originalPrice = parseFloat(item.items_price) || 0;
+        const discount = parseFloat(item.items_discount) || 0;
+        const discountedPrice = discount > 0 ? (originalPrice - (originalPrice * discount / 100)) : originalPrice;
+        const quantity = parseInt(item.cart_quantity) || 0;
+        const totalPriceAfterDiscount = discountedPrice * quantity;
 
-    console.log("Item:", item.items_name, "Original Price:", originalPrice, "Discount (%):", discount, "Discounted Price:", discountedPrice);
-
-    return `
-      <tr id="cart-item-${item.cart_itemsid}" data-price="${originalPrice}" data-discount="${discount}">
-        <td><img src="${item.items_image}" alt="${item.items_name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
-        <td>${item.items_name}</td>
-        <td>
-          ${discount > 0 ? `
-            <span class="original-price text-muted text-decoration-line-through me-2">${originalPrice} EGP</span>
-            <span class="discounted-price text-success">${discountedPrice.toFixed(2)} EGP</span>
-          ` : `
-            <span>${originalPrice} EGP</span>
-          `}
-        </td>
-        <td class="d-flex align-items-center gap-2">
-          <button class="btn btn-danger btn-sm decrease-item-btn" data-itemid="${item.cart_itemsid}">
-            <i class="fas fa-minus"></i>
-          </button>
-          <span id="quantity-${item.cart_itemsid}" class="fs-5 fw-bold">${item.cart_quantity || '0'}</span>
-          <button class="btn btn-success btn-sm increase-item-btn" data-itemid="${item.cart_itemsid}">
-            <i class="fas fa-plus"></i>
-          </button>
-        </td>
-        <td id="total-${item.cart_itemsid}">${totalPriceAfterDiscount.toFixed(2)} EGP</td>
+        return `
+          <tr id="cart-item-${item.cart_itemsid}" data-price="${originalPrice}" data-discount="${discount}">
+            <td><img src="${item.items_image}" alt="${item.items_name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
+            <td>${item.items_name}</td>
+            <td>
+              ${discount > 0 ? `
+                <span class="original-price text-muted text-decoration-line-through me-2">${originalPrice} EGP</span>
+                <span class="discounted-price text-success">${discountedPrice.toFixed(2)} EGP</span>
+              ` : `
+                <span>${originalPrice} EGP</span>
+              `}
+            </td>
+            <td class="d-flex align-items-center gap-2">
+              <button class="btn btn-danger btn-sm decrease-item-btn" data-itemid="${item.cart_itemsid}">
+                <i class="fas fa-minus"></i>
+              </button>
+              <span id="quantity-${item.cart_itemsid}" class="fs-5 fw-bold">${item.cart_quantity || '0'}</span>
+              <button class="btn btn-success btn-sm increase-item-btn" data-itemid="${item.cart_itemsid}">
+                <i class="fas fa-plus"></i>
+              </button>
+            </td>
+            <td id="total-${item.cart_itemsid}">${totalPriceAfterDiscount.toFixed(2)} EGP</td>
+          </tr>
+        `;
+      }).join("")}
+    `;
+  } else {
+    cartHTML += `
+      <tr class="section-divider">
+        <td colspan="5" class="section-title">Restaurants & Cafes</td>
+      </tr>
+      <tr>
+        <td colspan="5" class="empty-section">No items in this section.</td>
       </tr>
     `;
-  }).join("");
+  }
+
+  // قسم Hotels & Tourist Places
+  if (data.hotel_tourist.datacart.length > 0) {
+    cartHTML += `
+      <tr class="section-divider">
+        <td colspan="5" class="section-title">Hotels & Tourist Places</td>
+      </tr>
+      ${data.hotel_tourist.datacart.map(item => {
+        const originalPrice = parseFloat(item.items_price) || 0;
+        const discount = parseFloat(item.items_discount) || 0;
+        const discountedPrice = discount > 0 ? (originalPrice - (originalPrice * discount / 100)) : originalPrice;
+        const quantity = parseInt(item.cart_quantity) || 0;
+        const totalPriceAfterDiscount = discountedPrice * quantity;
+
+        return `
+          <tr id="cart-item-${item.cart_itemsid}" data-price="${originalPrice}" data-discount="${discount}">
+            <td><img src="${item.items_image}" alt="${item.items_name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
+            <td>${item.items_name}</td>
+            <td>
+              ${discount > 0 ? `
+                <span class="original-price text-muted text-decoration-line-through me-2">${originalPrice} EGP</span>
+                <span class="discounted-price text-success">${discountedPrice.toFixed(2)} EGP</span>
+              ` : `
+                <span>${originalPrice} EGP</span>
+              `}
+            </td>
+            <td class="d-flex align-items-center gap-2">
+              <button class="btn btn-danger btn-sm decrease-item-btn" data-itemid="${item.cart_itemsid}">
+                <i class="fas fa-minus"></i>
+              </button>
+              <span id="quantity-${item.cart_itemsid}" class="fs-5 fw-bold">${item.cart_quantity || '0'}</span>
+              <button class="btn btn-success btn-sm increase-item-btn" data-itemid="${item.cart_itemsid}">
+                <i class="fas fa-plus"></i>
+              </button>
+            </td>
+            <td id="total-${item.cart_itemsid}">${totalPriceAfterDiscount.toFixed(2)} EGP</td>
+          </tr>
+        `;
+      }).join("")}
+    `;
+  } else {
+    cartHTML += `
+      <tr class="section-divider">
+        <td colspan="5" class="section-title">Hotels & Tourist Places</td>
+      </tr>
+      <tr>
+        <td colspan="5" class="empty-section">No items in this section.</td>
+      </tr>
+    `;
+  }
+
+  cartItems.innerHTML = cartHTML;
+
+  cartCount.textContent = (parseInt(data.rest_cafe.countprice.totalcount) || 0) + (parseInt(data.hotel_tourist.countprice.totalcount) || 0);
 }
 
 function showEmptyCartMessage() {
@@ -159,7 +224,22 @@ function showEmptyCartMessage() {
   const cartCount = document.getElementById("cart-count");
   const totalPrice = document.getElementById("total-price");
 
-  if (cartItems) cartItems.innerHTML = `<tr><td colspan='5'>${MESSAGES.CART_EMPTY}</td></tr>`;
+  if (cartItems) {
+    cartItems.innerHTML = `
+      <tr class="section-divider">
+        <td colspan="5" class="section-title">Restaurants & Cafes</td>
+      </tr>
+      <tr>
+        <td colspan="5" class="empty-section">${MESSAGES.CART_EMPTY}</td>
+      </tr>
+      <tr class="section-divider">
+        <td colspan="5" class="section-title">Hotels & Tourist Places</td>
+      </tr>
+      <tr>
+        <td colspan="5" class="empty-section">${MESSAGES.CART_EMPTY}</td>
+      </tr>
+    `;
+  }
   if (cartCount) cartCount.textContent = "0";
   if (totalPrice) totalPrice.textContent = "0 EGP";
 }
@@ -253,16 +333,13 @@ function updateCartItemLocally(itemId, action) {
   updateCartTotals();
 }
 
-function updateCartTotals() {
-  const cartItems = document.querySelectorAll("#cart-items tr");
+function updateCartTotals(data) {
+  const cartItems = document.querySelectorAll("#cart-items tr[id^='cart-item-']");
   const totalPriceElement = document.getElementById("total-price");
   const cartCountElement = document.getElementById("cart-count");
 
   if (!totalPriceElement || !cartCountElement) {
-    console.error("❌ Total price or cart count element not found:", {
-      totalPriceElement: totalPriceElement,
-      cartCountElement: cartCountElement
-    });
+    console.error("❌ Total price or cart count element not found");
     return;
   }
 
@@ -279,7 +356,6 @@ function updateCartTotals() {
     totalCount += quantity;
   });
 
-  // حساب الخصم بناءً على النسبة المئوية الديناميكية من الـ API
   const calculatedCouponDiscount = (totalPrice * appliedCouponDiscount) / 100;
   const finalPrice = totalPrice - calculatedCouponDiscount > 0 ? totalPrice - calculatedCouponDiscount : 0;
 
@@ -311,10 +387,10 @@ async function applyCoupon() {
       body: new URLSearchParams({ couponname: couponInput, usersid: userId }).toString()
     });
     const data = await response.json();
-    console.log("Coupon API Response:", data); // للتحقق من الـ Response
+    console.log("Coupon API Response:", data);
 
     if (data.status === "success" && data.data) {
-      const discountPercentage = parseFloat(data.data.coupon_discount) || 0; // النسبة المئوية (مثل 50)
+      const discountPercentage = parseFloat(data.data.coupon_discount) || 0;
       const expireDate = new Date(data.data.coupon_expiredate);
       const now = new Date();
       const remainingCount = parseInt(data.data.coupon_count) || 0;
@@ -326,11 +402,10 @@ async function applyCoupon() {
         showAlert({ icon: "error", title: "خطأ", text: "كود الخصم مستخدم بالكامل!" });
         appliedCouponDiscount = 0;
       } else {
-        appliedCouponDiscount = discountPercentage; // احتفظ بالنسبة المئوية الديناميكية
+        appliedCouponDiscount = discountPercentage;
         showAlert({
           icon: "success",
-          title: "نجاح",
-          text: `تم تطبيق كود الخصم "${data.data.coupon_name}" بنسبة ${discountPercentage}%! باقي ${remainingCount} استخدامات حتى ${data.data.coupon_expiredate}`
+          title: "success",
         });
       }
     } else {

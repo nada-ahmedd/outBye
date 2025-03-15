@@ -58,6 +58,8 @@
                         <i class="fas fa-user"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
+                                Addresses</a></li>
                         <li><a class="dropdown-item" href="#">Profile</a></li>
                         <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
                     </ul>
@@ -71,7 +73,18 @@
         <button class="close-btn" onclick="closeSearchResults()">×</button>
     </div>
 </nav>
-
+<!-- Loader -->
+<div id="loader" class="loader">
+    <div class="plate-loader">
+        <div class="plate">
+            <div class="plate-cover"></div>
+            <div class="plate-base"></div>
+        </div>
+        <span class="aroma aroma1"></span>
+        <span class="aroma aroma2"></span>
+        <span class="aroma aroma3"></span>
+    </div>
+</div>
 <div class="cart-container">
     <div class="breadcrumb">
         <a href="index.html">Home</a> <span>></span> <a href="cart.html">Cart</a>
@@ -89,9 +102,7 @@
         <tbody id="cart-items"></tbody>
     </table>
     <div class="cart-actions">
-        <button class="btn btn-primary">Continue Shopping</button>
-        <button class="btn btn-secondary">Update Cart</button>
-    </div>
+<a href="index.html" class="btn btn-primary">Continue Shopping</a>    </div>
     <div class="cart-footer">
         <div class="coupon">
             <input type="text" id="coupon-input" placeholder="Enter Coupon Code">

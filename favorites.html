@@ -19,41 +19,61 @@
             font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 30px;
-            background-color: #f9f9f9;
+background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
+            min-height: 100vh;
         }
 
         h1 {
-            color: #F26B0A;
+            color: #333;
             text-align: center;
             font-weight: 700;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        #favorites-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         .favorite-item {
-            display: flex;
-            align-items: center;
-            background-color: white;
+            background-color: #fff;
+            border-radius: 15px;
             padding: 20px;
-            margin: 15px 0;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
         .favorite-item:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
         .favorite-item img {
-            width: 100px;
-            height: 100px;
+            width: 100%;
+            max-width: 200px;
+            height: 150px;
             object-fit: cover;
-            border-radius: 8px;
-            margin-right: 20px;
-            border: 1px solid #eee;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #F26B0A;
+            transition: transform 0.3s ease;
+        }
+
+        .favorite-item img:hover {
+            transform: scale(1.05);
         }
 
         .favorite-info {
@@ -61,33 +81,36 @@
         }
 
         .favorite-info h3 {
-            margin: 0;
-            font-size: 20px;
+            margin: 0 0 10px;
+            font-size: 1.3rem;
             font-weight: 600;
             color: #333;
+            text-transform: capitalize;
         }
 
         .favorite-info p {
-            margin: 8px 0;
-            color: #777;
-            font-size: 16px;
+            margin: 5px 0;
+            color: #666;
+            font-size: 0.9rem;
         }
 
         .price-container {
             display: flex;
             align-items: center;
             gap: 10px;
+            margin: 10px 0;
         }
 
         .original-price {
             text-decoration: line-through;
             color: #999;
+            font-size: 0.9rem;
         }
 
         .discount-price {
             color: #e63946;
             font-weight: 700;
-            font-size: 18px;
+            font-size: 1.1rem;
         }
 
         .discount-badge {
@@ -95,23 +118,83 @@
             color: white;
             padding: 4px 8px;
             border-radius: 12px;
-            font-size: 12px;
-            margin-left: 10px;
+            font-size: 0.8rem;
+            position: absolute;
+            top: 10px;
+            right: 10px;
         }
 
         .remove-favorite-btn {
             background-color: #F26B0A;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 15px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
+            font-size: 0.9rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .remove-favorite-btn:hover {
             background-color: #d35400;
+            transform: scale(1.05);
+        }
+
+        .remove-favorite-btn:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2rem;
+                margin-bottom: 30px;
+            }
+
+            #favorites-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .favorite-item {
+                padding: 15px;
+            }
+
+            .favorite-item img {
+                max-width: 150px;
+                height: 120px;
+            }
+
+            .favorite-info h3 {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            .favorite-item img {
+                max-width: 120px;
+                height: 100px;
+            }
+
+            .favorite-info h3 {
+                font-size: 1rem;
+            }
+
+            .remove-favorite-btn {
+                font-size: 0.8rem;
+                padding: 6px 12px;
+            }
         }
     </style>
 </head>
@@ -156,6 +239,8 @@
                             <i class="fas fa-user"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
+                                    Addresses</a></li>
                             <li><a class="dropdown-item" href="#">Profile</a></li>
                             <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
                         </ul>
@@ -169,7 +254,18 @@
             <button class="close-btn" onclick="closeSearchResults()">×</button>
         </div>
     </nav>
-
+   <!-- Loader -->
+<div id="loader" class="loader">
+    <div class="plate-loader">
+        <div class="plate">
+            <div class="plate-cover"></div>
+            <div class="plate-base"></div>
+        </div>
+        <span class="aroma aroma1"></span>
+        <span class="aroma aroma2"></span>
+        <span class="aroma aroma3"></span>
+    </div>
+</div>
     <h1>Your Favorites</h1>
     <div id="favorites-container"></div>
 
@@ -211,6 +307,7 @@
 
                             return `
                             <div class="favorite-item" id="fav-${item.favorite_id}" data-itemid="${item.favorite_itemsid}">
+                                ${discount > 0 ? `<span class="discount-badge">${discount}% OFF</span>` : ""}
                                 <img src="${item.items_image}" alt="${item.items_name}">
                                 <div class="favorite-info">
                                     <h3>${item.items_name}</h3>
@@ -218,7 +315,6 @@
                                         ${discount > 0 ? `
                                             <p class="original-price">${price} EGP</p>
                                             <p class="discount-price">${discountedPrice} EGP</p>
-                                            <span class="discount-badge">${discount}% OFF</span>
                                         ` : `
                                             <p>${price} EGP</p>
                                         `}
@@ -232,12 +328,12 @@
                         }).join("");
                         addRemoveListeners();
                     } else {
-                        container.innerHTML = "<p>لا توجد منتجات مفضلة.</p>";
+                        container.innerHTML = "<p style='text-align: center; color: #666; font-size: 1.2rem;'>لا توجد منتجات مفضلة.</p>";
                     }
                 })
                 .catch(error => {
                     console.error("❌ Error fetching favorites:", error);
-                    document.getElementById("favorites-container").innerHTML = "<p>⚠️ حدث خطأ أثناء تحميل المفضلة.</p>";
+                    document.getElementById("favorites-container").innerHTML = "<p style='text-align: center; color: #666; font-size: 1.2rem;'>⚠️ حدث خطأ أثناء تحميل المفضلة.</p>";
                 });
         }
 
