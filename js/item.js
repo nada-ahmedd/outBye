@@ -1,4 +1,31 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // دالة لإظهار الـ Loader
+    function showLoader() {
+        const loader = document.getElementById("loader");
+        if (loader) {
+            loader.classList.remove("hidden");
+        }
+    }
+
+    // دالة لإخفاء الـ Loader
+    function hideLoader() {
+        const loader = document.getElementById("loader");
+        if (loader) {
+            loader.classList.add("hidden");
+        }
+    }
+
+    // متغير لتتبع تحميل البيانات
+    let dataLoaded = 0;
+    const totalSections = 2; // Service Details + Items
+
+    function checkAllDataLoaded() {
+        dataLoaded++;
+        if (dataLoaded === totalSections) {
+            hideLoader();
+        }
+    }
+
     const urlParams = new URLSearchParams(window.location.search);
     const serviceId = urlParams.get("service_id");
     const itemId = urlParams.get("id");
@@ -23,9 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!serviceId) {
         console.error("❌ No service ID found!");
+        hideLoader(); // إخفاء الـ Loader لو الـ Service ID مش موجود
         return;
     }
 
+    showLoader(); // إظهار الـ Loader من البداية
     let apiUrl = "https://abdulrahmanantar.com/outbye/items/items.php";
     if (serviceId) {
         apiUrl += `?id=${serviceId}&t=${new Date().getTime()}`;
@@ -46,6 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
             const service = data.data[0];
             displayServiceDetails(service);
+            checkAllDataLoaded(); // زيادة العداد بعد تحميل Service Details
 
             itemsContainer.innerHTML = '';
 
@@ -55,6 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (items.length === 0) {
                 itemsContainer.innerHTML = "<p>🚫 No items found for this service.</p>";
+                checkAllDataLoaded(); // زيادة العداد لو مفيش Items
                 return;
             }
 
@@ -86,13 +117,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
             fetchFavorites(userId);
             addEventListeners();
+            checkAllDataLoaded(); // زيادة العداد بعد تحميل الـ Items
         } else {
             itemsContainer.innerHTML = "<p>🚫 No items found.</p>";
+            checkAllDataLoaded(); // زيادة العداد لو مفيش بيانات
         }
     })
     .catch(error => {
         console.error("❌ Error fetching items:", error);
         document.getElementById("items-container").innerHTML = "<p>⚠️ Error loading items.</p>";
+        checkAllDataLoaded(); // زيادة العداد حتى لو فيه خطأ
     });
 });
 

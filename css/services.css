@@ -1,13 +1,23 @@
-body {
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
     background-color: black;
     color: white;
     font-family: 'Poppins', sans-serif;
-    padding-top: 80px; /* تقليل ليتناسب مع ارتفاع الناف بار (100px) */
-    height: 100%;
-    overflow-x: hidden; /* عشان نمنع التمرير الأفقي */
+    overflow-x: hidden;
 }
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* يضمن إن الـ Body ياخد الطول الكامل */
+    padding-top: 80px; /* تقليل ليتناسب مع ارتفاع الناف بار */
+}
+
+/* الـ Main ياخد المساحة المتاحة ويدفع الـ Footer لتحت */
 main {
-    flex: 1; /* بيخلي المحتوى يتمدد ويدفع الفوتر لتحت */
+    flex: 1 0 auto; /* يتمدد ليملأ الفراغ */
 }
 /* Container للسيرفسز */
 #services-container {
@@ -16,7 +26,8 @@ main {
     justify-content: center;
     gap: 30px;
     padding: 20px;
-    padding-top: 20px; /* بدل margin-top عشان يتناسب مع الناف بار */
+    min-height: 60vh; /* ارتفاع أدنى عشان الـ Footer ما يطلعش لفوق أثناء التحميل */
+    padding-top: 20px;
 }
 
 /* عنصر السيرفس */
@@ -285,4 +296,11 @@ h3 {
     .secondary a {
         font-size: 12px; /* تقليل الحجم أكتر في الشاشات الصغيرة */
     }
+}
+/* الـ Footer يفضل في أسفل دايمًا */
+footer {
+    flex-shrink: 0; /* يمنع الـ Footer من التصغير */
+    width: 100%;
+    position: relative;
+    bottom: 0;
 }
