@@ -18,26 +18,13 @@
             margin: 0;
             padding: 0;
             padding-top: 80px;
-            /* لتجنب تداخل الـ Navbar مع الـ h1 */
-background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
-            /* خلفية متدرجة أكتر وضوحًا */
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
         }
-/* 
-        .container-wrapper {
-            max-width: 90%px;
-            margin: 20px auto;
-            flex: 1 0 auto;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        } */
 
-        /* العنوان الرئيسي */
         h1 {
             color: #F26B0A;
             text-align: center;
@@ -69,7 +56,6 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             justify-content: center;
         }
 
-        /* قسم الـ Form */
         .address-form-container {
             flex: 1;
             max-width: 450px;
@@ -159,7 +145,6 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
         }
 
-        /* قسم قائمة العناوين */
         .address-list-container {
             flex: 1;
             max-width: 550px;
@@ -248,13 +233,32 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             color: #c0392b;
         }
 
-        /* إزالة أي فراغ زايد تحت الـ Footer */
+        .checkout-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(90deg, #28a745, #34ce57);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .checkout-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.4);
+        }
+
         .site-footer {
             flex-shrink: 0;
             width: 100%;
         }
 
-        /* Responsive Design */
         @media (max-width: 768px) {
             .content-wrapper {
                 flex-direction: column;
@@ -270,7 +274,6 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="navbar-container">
             <a class="navbar-logo" href="index.html">
@@ -294,9 +297,8 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
                         <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
                         <button class="search-btn">Search</button>
                     </div>
-                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
-                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
-                            class="fas fa-shopping-cart"></i></a>
+                    <span id="userName" class="nav-link"
+                        style="display: none; color: #F26B0A; font-weight: 600;"></span>
                     <div class="dropdown">
                         <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -305,10 +307,13 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
                             <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
                                     Addresses</a></li>
-                            <li><a class="dropdown-item" href="#">Profile</a></li>
+                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
                             <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
                         </ul>
                     </div>
+                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
+                            class="fas fa-shopping-cart"></i></a>
                 </div>
             </div>
         </div>
@@ -316,21 +321,18 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             <button class="close-btn" onclick="closeSearchResults()">×</button>
         </div>
     </nav>
-<!-- Loader -->
-<div id="loader" class="loader">
-    <div class="plate-loader">
-        <div class="plate">
-            <div class="plate-cover"></div>
-            <div class="plate-base"></div>
+    <div id="loader" class="loader">
+        <div class="plate-loader">
+            <div class="plate">
+                <div class="plate-cover"></div>
+                <div class="plate-base"></div>
+            </div>
         </div>
     </div>
-</div>
 
-    <!-- Content -->
     <h1>Manage Your Addresses</h1>
     <div class="container-wrapper">
         <div class="content-wrapper">
-            <!-- Address Form -->
             <div class="address-form-container">
                 <h3>Add New Address</h3>
                 <div class="address-form">
@@ -357,18 +359,16 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
                     </div>
                 </div>
             </div>
-
-            <!-- Address List -->
             <div class="address-list-container">
                 <h3>Your Saved Addresses</h3>
                 <div class="address-list" id="addressList">
                     <!-- العناوين هتظهر هنا -->
                 </div>
+                <button class="checkout-button" onclick="goToCheckout()">Go to Checkout</button>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="site-footer bg-dark text-white py-5">
         <div class="container">
             <div class="row">
@@ -440,6 +440,8 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
     <script src="js/item.js"></script>
     <script src="js/signin.js"></script>
     <script src="js/signup.js"></script>
+    <script src="js/search.js"></script>
+
     <script>
         const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
         const ENDPOINTS = {
@@ -460,6 +462,10 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
                 text: text,
                 confirmButtonText: confirmText
             });
+        }
+
+        function saveAddressesToLocalStorage(addresses) {
+            localStorage.setItem("userAddresses", JSON.stringify(addresses));
         }
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -489,25 +495,29 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
                         let addressHTML = "";
                         data.data.forEach(address => {
                             addressHTML += `
-                                <div class="address-item" data-address-id="${address.address_id}">
-                                    <span><i class="fas fa-map-marker-alt"></i> ${address.address_name}, ${address.address_city}, ${address.address_street}, ${address.address_phone}</span>
-                                    <div class="actions">
-                                        <button class="edit-btn" onclick="editAddressForm('${address.address_id}', '${address.address_name}', '${address.address_city}', '${address.address_street}', '${address.address_phone}')"><i class="fas fa-edit"></i></button>
-                                        <button class="delete-btn" onclick="deleteAddress('${address.address_id}')"><i class="fas fa-trash-alt"></i></button>
-                                    </div>
+                            <div class="address-item" data-address-id="${address.address_id}">
+                                <span><i class="fas fa-map-marker-alt"></i> ${address.address_name}, ${address.address_city}, ${address.address_street}, ${address.address_phone}</span>
+                                <div class="actions">
+                                    <button class="edit-btn" onclick="editAddressForm('${address.address_id}', '${address.address_name}', '${address.address_city}', '${address.address_street}', '${address.address_phone}')"><i class="fas fa-edit"></i></button>
+                                    <button class="delete-btn" onclick="deleteAddress('${address.address_id}')"><i class="fas fa-trash-alt"></i></button>
                                 </div>
-                            `;
+                            </div>
+                        `;
                         });
                         addressList.innerHTML = addressHTML;
+                        saveAddressesToLocalStorage(data.data);
                     } else {
                         addressList.innerHTML = "<p style='text-align: center; color: #666;'>لا توجد عناوين محفوظة.</p>";
+                        saveAddressesToLocalStorage([]);
                     }
                 } else {
                     addressList.innerHTML = "<p style='text-align: center; color: #666;'>لا توجد عناوين محفوظة.</p>";
+                    saveAddressesToLocalStorage([]);
                 }
             } catch (error) {
                 console.error("Error fetching addresses:", error);
                 addressList.innerHTML = "<p style='text-align: center; color: #666;'>حدث خطأ أثناء تحميل العناوين.</p>";
+                saveAddressesToLocalStorage([]);
             }
         }
 
@@ -606,12 +616,11 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
                 }
             } catch (error) {
                 console.error("Error editing address:", error);
-                showAlert("error", "❌ خطأ", "حدث خطأ أثناء التعديل.");
+                showAlert("error", "❌ خطأ", "حدث خطأ أثناء التعديل: " + error.message);
             }
         }
 
-      async function deleteAddress(addressId) {
-            // استبدال confirm بـ SweetAlert مع خيارين (تأكيد أو إلغاء)
+        async function deleteAddress(addressId) {
             const result = await Swal.fire({
                 title: "هل أنت متأكد؟",
                 text: "هل تريد حذف هذا العنوان؟",
@@ -623,7 +632,6 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
                 cancelButtonColor: "#6c757d"
             });
 
-            // لو اليوزر ضغط "إلغاء"، نوقف العملية
             if (!result.isConfirmed) return;
 
             const userId = localStorage.getItem("userId");
@@ -656,6 +664,10 @@ background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             document.getElementById("editBtn").style.display = "none";
             document.querySelector("button[onclick='addAddress()']").style.display = "inline-block";
             document.querySelector(".clear-btn").style.display = "inline-block";
+        }
+
+        function goToCheckout() {
+            window.location.href = "checkout.html";
         }
     </script>
 </body>

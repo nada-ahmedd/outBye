@@ -10,9 +10,6 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
     const data = {};
     formData.forEach((value, key) => (data[key] = value));
 
-    // إزالة تشفير SHA1، إرسال كلمة المرور كنص عادي
-    // data.password = sha1(data.password); // تم تعليق التشفير
-
     fetch(form.action, {
         method: form.method,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -55,3 +52,4 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
         submitButton.textContent = "Log In";
     });
 });
+

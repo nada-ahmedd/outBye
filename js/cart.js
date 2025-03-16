@@ -67,6 +67,40 @@ document.addEventListener("DOMContentLoaded", () => {
     applyCouponBtn.addEventListener("click", applyCoupon);
   }
 
+  // إضافة حدث لزر الـ Checkout
+  const checkoutBtn = document.getElementById("checkout-btn");
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener("click", () => {
+      if (!isLoggedIn()) {
+        showAlert({
+          icon: "warning",
+          title: "غير مسجل الدخول",
+          text: MESSAGES.ACCESS_DENIED,
+          confirmText: "تسجيل الدخول",
+          cancelText: "إلغاء",
+          onConfirm: () => window.location.href = "signin.html"
+        });
+        return;
+      }
+
+      const totalPrice = document.getElementById("total-price").textContent.replace(" EGP", "").trim();
+      const couponInput = document.getElementById("coupon-input").value.trim();
+      const cartCount = document.getElementById("cart-count").textContent;
+
+      if (parseInt(cartCount) === 0) {
+        showAlert({
+          icon: "warning",
+          title: "السلة فارغة",
+          text: "يرجى إضافة منتجات إلى السلة أولاً!"
+        });
+        return;
+      }
+
+      // تمرير الداتا لصفحة الـ Checkout عبر الـ URL
+      window.location.href = `checkout.html?totalPrice=${totalPrice}&coupon=${couponInput}&discount=${appliedCouponDiscount}`;
+    });
+  }
+
   const updateCartBtn = document.querySelector(".cart-actions .btn-secondary");
   if (updateCartBtn) {
     updateCartBtn.addEventListener("click", () => {

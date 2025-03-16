@@ -321,7 +321,6 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
 
                         observer.unobserve(entry.target);
-                        checkInitialFavorites(); // تحديث المفضلة بعد تحميل العناصر
                     }
                 });
             }, { threshold: 0.1 });
@@ -395,7 +394,6 @@ document.addEventListener("DOMContentLoaded", () => {
                                 });
 
                                 observer.unobserve(entry.target);
-                                checkInitialFavorites(); // تحديث المفضلة بعد تحميل العناصر
                             })
                             .catch(error => {
                                 console.error('Error fetching top selling data:', error);
@@ -425,34 +423,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ id: userId }).toString()
             })
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 if (data.status === "success" && Array.isArray(data.data)) {
-                    // مسح أي حالة قديمة للمفضلة في الـ UI
-                    document.querySelectorAll('.favorite-btn').forEach(btn => {
-                        const icon = btn.querySelector("i");
-                        icon.classList.remove("fa-solid");
-                        icon.classList.add("fa-regular");
-                        icon.style.color = "";
-                        delete btn.dataset.favid;
-                    });
-
-                    // تحديث الـ UI بناءً على البيانات اللي رجعت من السيرفر
                     data.data.forEach(fav => {
-                        if (fav.favorite_itemsid) {
-                            updateFavoriteUI(fav.favorite_itemsid, true, fav.favorite_id);
-                        }
+                        updateFavoriteUI(fav.favorite_itemsid, true, fav.favorite_id);
                     });
-                } else {
-                    console.error("Failed to fetch favorites:", data.message || "No favorites found");
                 }
             })
-            .catch(error => {
-                console.error('Error fetching initial favorites:', error);
-            });
+            .catch(error => console.error('Error fetching initial favorites:', error));
         }
     }
 
@@ -587,18 +566,16 @@ document.addEventListener("DOMContentLoaded", () => {
         const buttons = document.querySelectorAll(`.favorite-btn[data-itemid="${itemId}"]`);
         buttons.forEach(button => {
             const icon = button.querySelector("i");
-            if (icon) {
-                if (isFavorited) {
-                    icon.classList.remove("fa-regular");
-                    icon.classList.add("fa-solid");
-                    icon.style.color = "#F26B0A";
-                    if (favId) button.dataset.favid = favId;
-                } else {
-                    icon.classList.remove("fa-solid");
-                    icon.classList.add("fa-regular");
-                    icon.style.color = "";
-                    delete button.dataset.favid;
-                }
+            if (isFavorited) {
+                icon.classList.remove("fa-regular");
+                icon.classList.add("fa-solid");
+                icon.style.color = "#F26B0A";
+                if (favId) button.dataset.favid = favId;
+            } else {
+                icon.classList.remove("fa-solid");
+                icon.classList.add("fa-regular");
+                icon.style.color = "";
+                delete button.dataset.favid;
             }
         });
     }

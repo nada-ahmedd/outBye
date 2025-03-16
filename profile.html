@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="icon" href="images/out bye.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Profile Styles فقط */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: #F26B0A;
+            text-align: center;
+            font-weight: 700;
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            margin: 80px 0 40px;
+            text-shadow: 2px 2px 8px rgba(242, 107, 10, 0.3);
+        }
+
+        .profile-card {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(242, 107, 10, 0.2);
+            border: 1px solid #F26B0A;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 94, 98, 0.1) 0%, rgba(242, 107, 10, 0.05) 70%);
+            animation: rotate 15s linear infinite;
+            z-index: 0;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .profile-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(242, 107, 10, 0.3);
+        }
+
+        .profile-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .profile-item {
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            border-left: 5px solid #F26B0A;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .profile-item:hover {
+            transform: translateX(10px);
+        }
+
+        .profile-item i {
+            color: #F26B0A;
+            font-size: 1.7rem;
+        }
+
+        .profile-item span {
+            color: #333;
+        }
+
+        .edit-container {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(242, 107, 10, 0.2);
+            border: 1px solid #F26B0A;
+            position: relative;
+            z-index: 1;
+        }
+
+        .edit-container .form-group {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .edit-container .form-group i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #F26B0A;
+            font-size: 1.5rem;
+        }
+
+        .edit-container input {
+            width: 100%;
+            padding: 18px 20px 18px 60px;
+            border: 2px solid #f0f0f0;
+            border-radius: 15px;
+            background: #f9f9f9;
+            font-size: 1.2rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .edit-container input:focus {
+            border-color: #ff5e62;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 94, 98, 0.3);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #F26B0A, #ff5e62);
+            color: white;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.4s ease;
+            z-index: 2;
+            pointer-events: auto;
+        }
+
+        .btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(242, 107, 10, 0.4);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .site-footer {
+            flex-shrink: 0;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .profile-card,
+            .edit-container {
+                padding: 30px;
+            }
+
+            .profile-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="navbar-container">
+            <!-- Logo (شمال) -->
+            <a class="navbar-logo" href="index.html">
+                <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+            </a>
+
+            <!-- Toggler -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navbar Content -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <!-- Links (نص) -->
+                <div class="navbar-links mx-auto">
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="contact.html">Contact</a>
+                    <a class="nav-link" href="about.html">About</a>
+                    <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                </div>
+
+                <!-- Right Section (يمين) -->
+                <div class="navbar-right ms-auto">
+                    <div class="search-container">
+                        <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                        <button class="search-btn">Search</button>
+                    </div>
+                                    <span id="userName" class="nav-link" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+
+                    <div class="dropdown">
+                        <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
+                                    Addresses</a></li>
+                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                        </ul>
+                    </div>
+                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
+                            class="fas fa-shopping-cart"></i></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div id="searchResults" class="search-results">
+            <button class="close-btn" onclick="closeSearchResults()">×</button>
+        </div>
+    </nav>
+
+    <!-- Profile View Section -->
+    <h1>Your Profile</h1>
+    <div class="profile-card" id="profile-container">
+        <div class="profile-content">
+            <div class="profile-item"><i class="fas fa-user"></i> <span id="view-name"></span></div>
+            <div class="profile-item"><i class="fas fa-envelope"></i> <span id="view-email"></span></div>
+            <div class="profile-item"><i class="fas fa-phone"></i> <span id="view-phone"></span></div>
+            <div class="profile-item"><i class="fas fa-calendar"></i> <span id="view-create"></span></div>
+        </div>
+        <div class="action-buttons">
+            <button class="btn" id="editProfileBtn">Edit Profile</button>
+            <button class="btn" id="favoritesBtn">Favorites</button>
+            <button class="btn" id="cartBtn">Cart</button>
+        </div>
+    </div>
+
+    <!-- Edit Profile Form -->
+    <div class="edit-container" id="edit-container">
+        <form id="profileForm">
+            <div class="form-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="edit-name" name="new_name" placeholder="Name">
+            </div>
+            <div class="form-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" id="edit-email" name="new_email" placeholder="Email">
+            </div>
+            <div class="form-group">
+                <i class="fas fa-phone"></i>
+                <input type="text" id="edit-phone" name="new_phone" placeholder="Phone">
+            </div>
+        </form>
+        <div class="action-buttons">
+            <button class="btn" id="saveChangesBtn">Save Changes</button>
+            <button class="btn" id="cancelEditBtn">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer bg-dark text-white py-5">
+        <div class="container">
+            <div class="footer-bottom text-center">
+                <p>© 2025 All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="js/navbar.js"></script>
+        <script src="js/search.js"></script>
+
+    <script>
+        const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
+        const ENDPOINTS = {
+            VIEW: `${API_BASE_URL}profile/view.php`,
+            EDIT: `${API_BASE_URL}profile/edit_profile.php`
+        };
+
+        // Helper Functions
+        const showAlert = (icon, title, text) => {
+            return Swal.fire({ icon, title, text, confirmButtonText: "OK" });
+        };
+
+        const goTo = (page) => {
+            console.log("Navigating to:", page);
+            window.location.href = page;
+        };
+
+        const closeSearchResults = () => {
+            document.getElementById("searchResults").style.display = "none";
+        };
+
+        // Check if user is logged in
+        const isLoggedIn = () => {
+            const loggedIn = !!localStorage.getItem("userId");
+            console.log("Is logged in:", loggedIn);
+            return loggedIn;
+        };
+
+        // Load Profile Data
+        const loadProfile = async () => {
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                showAlert("warning", "⚠️ Error", "Please log in to view your profile").then(() => {
+                    window.location.href = "signin.html";
+                });
+                return;
+            }
+            console.log("Loading profile for userId:", userId);
+
+            try {
+                const response = await fetch(ENDPOINTS.VIEW, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ users_id: userId }).toString()
+                });
+
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+                const data = await response.json();
+                console.log("Profile Data:", data);
+
+                if (data.status === "success") {
+                    document.getElementById("view-name").textContent = data.data.users_name || "Not provided";
+                    document.getElementById("view-email").textContent = data.data.users_email || "Not provided";
+                    document.getElementById("view-phone").textContent = data.data.users_phone || "Not provided";
+                    document.getElementById("view-create").textContent = data.data.users_create || "Not provided";
+
+                    localStorage.setItem("profileData", JSON.stringify(data.data));
+                } else {
+                    showAlert("error", "❌ Error", data.message || "Failed to load profile");
+                }
+            } catch (error) {
+                console.error("Error fetching profile:", error);
+                showAlert("error", "❌ Error", "Error fetching profile: " + error.message);
+            }
+        };
+
+        // Show Edit Form
+        const showEditForm = () => {
+            console.log("Show Edit Form clicked");
+            const profileData = JSON.parse(localStorage.getItem("profileData") || "{}");
+            document.getElementById("edit-name").value = profileData.users_name || "";
+            document.getElementById("edit-email").value = profileData.users_email || "";
+            document.getElementById("edit-phone").value = profileData.users_phone || "";
+
+            document.getElementById("profile-container").style.display = "none";
+            document.getElementById("edit-container").style.display = "block";
+        };
+
+        // Cancel Edit
+        const cancelEdit = () => {
+            console.log("Cancel Edit clicked");
+            document.getElementById("edit-container").style.display = "none";
+            document.getElementById("profile-container").style.display = "block";
+        };
+
+        // Edit Profile
+        const editProfile = async () => {
+            console.log("Edit Profile clicked");
+            const userId = localStorage.getItem("userId");
+            if (!userId) {
+                showAlert("error", "❌ Error", "User ID not found").then(() => { });
+                return;
+            }
+
+            const name = document.getElementById("edit-name").value;
+            const email = document.getElementById("edit-email").value;
+            const phone = document.getElementById("edit-phone").value;
+
+            if (!name || !email || !phone) {
+                showAlert("warning", "⚠️ Error", "Please fill all required fields").then(() => { });
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("users_id", userId);
+            formData.append("new_name", name);
+            formData.append("new_email", email);
+            formData.append("new_phone", phone);
+
+            try {
+                const response = await fetch(ENDPOINTS.EDIT, {
+                    method: "POST",
+                    body: formData
+                });
+
+                const text = await response.text();
+                console.log("Raw Edit Response:", text);
+
+                const jsonStrings = text.trim().split('}{').map((str, index) => {
+                    if (index === 0) return str + '}';
+                    if (index === 1) return '{' + str;
+                    return str;
+                });
+
+                let success = false;
+                let updatedData = null;
+                for (let jsonStr of jsonStrings) {
+                    try {
+                        const data = JSON.parse(jsonStr);
+                        if (data.status === "success") {
+                            success = true;
+                            if (data.data) updatedData = data.data;
+                        }
+                    } catch (e) {
+                        console.error("JSON Parse Error on part:", jsonStr, e);
+                    }
+                }
+
+                if (success) {
+                    if (updatedData) {
+                        localStorage.setItem("profileData", JSON.stringify(updatedData));
+                        document.getElementById("view-name").textContent = updatedData.users_name || "Not provided";
+                        document.getElementById("view-email").textContent = updatedData.users_email || "Not provided";
+                        document.getElementById("view-phone").textContent = updatedData.users_phone || "Not provided";
+                        document.getElementById("view-create").textContent = updatedData.users_create || "Not provided";
+                    }
+                    showAlert("success", "✅ Success", "Profile updated successfully").then(() => {
+                        document.getElementById("edit-container").style.display = "none";
+                        document.getElementById("profile-container").style.display = "block";
+                    });
+                } else {
+                    showAlert("error", "❌ Error", "Failed to update profile or invalid response format").then(() => { });
+                }
+            } catch (error) {
+                console.error("Error updating profile:", error);
+                showAlert("error", "❌ Error", "Error updating profile: " + error.message).then(() => { });
+            }
+        };
+
+        // Initialize and Bind Events
+        document.addEventListener("DOMContentLoaded", () => {
+            console.log("DOM Loaded");
+
+            if (!isLoggedIn()) {
+                showAlert("warning", "⚠️ Error", "Please log in to view your profile").then(() => {
+                    window.location.href = "signin.html";
+                });
+                return;
+            }
+
+            // Bind events to buttons
+            const editProfileBtn = document.getElementById("editProfileBtn");
+            const favoritesBtn = document.getElementById("favoritesBtn");
+            const cartBtn = document.getElementById("cartBtn");
+            const saveChangesBtn = document.getElementById("saveChangesBtn");
+            const cancelEditBtn = document.getElementById("cancelEditBtn");
+
+            if (editProfileBtn) {
+                editProfileBtn.addEventListener("click", showEditForm);
+            } else {
+                console.error("Edit Profile button not found");
+            }
+
+            if (favoritesBtn) {
+                favoritesBtn.addEventListener("click", () => goTo("favorites.html"));
+            } else {
+                console.error("Favorites button not found");
+            }
+
+            if (cartBtn) {
+                cartBtn.addEventListener("click", () => goTo("cart.html"));
+            } else {
+                console.error("Cart button not found");
+            }
+
+            if (saveChangesBtn) {
+                saveChangesBtn.addEventListener("click", editProfile);
+            } else {
+                console.error("Save Changes button not found");
+            }
+
+            if (cancelEditBtn) {
+                cancelEditBtn.addEventListener("click", cancelEdit);
+            } else {
+                console.error("Cancel Edit button not found");
+            }
+
+            loadProfile();
+        });
+    </script>
+</body>
+
+</html>

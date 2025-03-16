@@ -2,16 +2,24 @@
 function updateNavbar() {
     const isLoggedIn = localStorage.getItem('isLoggedIn');
     const signupBtn = document.getElementById('signupBtn');
-    const signinBtn = document.getElementById('signinBtn');
+    const userNameSpan = document.getElementById('userName');
     const logoutBtn = document.getElementById('logoutBtn');
     const cartIcon = document.getElementById('cartIcon');
 
-    // التأكد من وجود العناصر قبل محاولة تعديلها
+    // التأكد من وجود العناصر
     if (signupBtn) signupBtn.style.display = isLoggedIn === 'true' ? 'none' : 'block';
-    if (signinBtn) signinBtn.style.display = isLoggedIn === 'true' ? 'none' : 'block';
     if (logoutBtn) logoutBtn.style.display = isLoggedIn === 'true' ? 'block' : 'none';
-    // زرار السلة دايماً ظاهر، بس المنطق بيتحكم فيه
-    if (cartIcon) cartIcon.style.display = 'block'; // أيقونة السلة مرئية دايماً
+    if (cartIcon) cartIcon.style.display = 'block';
+
+    // عرض اسم المستخدم لو مسجل دخول
+    if (isLoggedIn === 'true' && userNameSpan) {
+        const profileData = JSON.parse(localStorage.getItem('profileData') || '{}');
+        const userName = profileData.users_name || 'User';
+        userNameSpan.textContent = `Welcome, ${userName}`;
+        userNameSpan.style.display = 'block';
+    } else if (userNameSpan) {
+        userNameSpan.style.display = 'none';
+    }
 }
 
 // تحديث الناف بار عند تحميل الصفحة
@@ -22,12 +30,12 @@ window.addEventListener('load', () => {
     const cartIcon = document.getElementById('cartIcon');
     if (cartIcon) {
         cartIcon.addEventListener('click', (event) => {
-            event.preventDefault(); // منع الانتقال الافتراضي لـ cart.html
+            event.preventDefault();
             if (localStorage.getItem('isLoggedIn') !== 'true') {
                 Swal.fire({
                     icon: 'warning',
                     title: 'غير مسجل الدخول',
-                    text: 'يجب تسجيل الدخول أولاً لعرض السلة أو إضافة منتجات!',
+                    text: 'يجب تسجيل الدخول أولاً لعرض السلة!',
                     confirmButtonText: 'تسجيل الدخول',
                     showCancelButton: true,
                     cancelButtonText: 'إلغاء'
@@ -37,7 +45,7 @@ window.addEventListener('load', () => {
                     }
                 });
             } else {
-                window.location.href = 'cart.html'; // الانتقال لصفحة السلة لو مسجل دخول
+                window.location.href = 'cart.html';
             }
         });
     } else {

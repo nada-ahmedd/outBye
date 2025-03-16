@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Details</title>
+    <link rel="icon" href="images/out bye.png" type="image/x-icon">
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            color: #F26B0A;
+            text-align: center;
+            font-weight: 700;
+            font-size: 3rem;
+            text-transform: uppercase;
+            margin: 60px 0 40px;
+            text-shadow: 2px 2px 8px rgba(242, 107, 10, 0.3);
+        }
+
+        .order-details-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto 60px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(242, 107, 10, 0.2);
+            border: 1px solid #F26B0A;
+        }
+
+        .order-details-container p {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .order-details-container p strong {
+            color: #F26B0A;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #F26B0A, #ff5e62);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: block;
+            margin: 20px auto;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(242, 107, 10, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .order-details-container {
+                padding: 20px;
+            }
+
+            .order-details-container p {
+                font-size: 1rem;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="navbar-container">
+            <a class="navbar-logo" href="index.html">
+                <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <div class="navbar-links mx-auto">
+                    <a class="nav-link" href="index.html">Home</a>
+                    <a class="nav-link" href="contact.html">Contact</a>
+                    <a class="nav-link" href="about.html">About</a>
+                    <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                        <i class="fas fa-user-plus"></i> Sign Up
+                    </a>
+                </div>
+                <div class="navbar-right ms-auto">
+                    <div class="search-container">
+                        <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                        <button class="search-btn">Search</button>
+                    </div>
+                    <span id="userName" class="nav-link" style="display: none; color: white; font-weight: 600;"></span>
+                    <div class="dropdown">
+                        <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
+                            aria-expanded="false">
+                            <i class="fas fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
+                                    Addresses</a></li>
+                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
+                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                        </ul>
+                    </div>
+                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
+                            class="fas fa-shopping-cart"></i></a>
+                </div>
+            </div>
+        </div>
+        <div id="searchResults" class="search-results">
+            <button class="close-btn" onclick="closeSearchResults()">×</button>
+        </div>
+    </nav>
+
+    <!-- Order Details -->
+    <h1>Order Details</h1>
+    <div class="order-details-container" id="order-details">
+        <!-- التفاصيل هتتعبى هنا ديناميكيًا -->
+    </div>
+    <a href="pending-orders.html" class="btn">Back to Pending Orders</a>
+
+    <!-- Footer -->
+    <footer class="site-footer bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-logo">
+                        <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
+                        <p>Your go-to place for restaurants, cafes, and hotels.</p>
+                        <div class="footer-socials">
+                            <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Important Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Home</a></li>
+                        <li><a href="#" class="text-white">About Us</a></li>
+                        <li><a href="#" class="text-white">Best Offers</a></li>
+                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-white">FAQ</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-white">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Our Services</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white">Restaurants</a></li>
+                        <li><a href="#" class="text-white">Cafes</a></li>
+                        <li><a href="#" class="text-white">Hotels</a></li>
+                        <li><a href="#" class="text-white">Delivery</a></li>
+                        <li><a href="#" class="text-white">Visitor Ratings</a></li>
+                        <li><a href="#" class="text-white">Bookings</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h4>Subscribe</h4>
+                    <p>Get the latest offers<br> and updates directly in your inbox!</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email"
+                            required>
+                        <button class="btn submit" type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Contact Information</h5>
+                    <p><strong>Phone:</strong> 0123456789</p>
+                    <p><strong>Email:</strong> contact@restaurant.com</p>
+                    <p><strong>Address:</strong> 123 Example St., City, Country</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom text-center">
+            <p>© 2024 All Rights Reserved. Designed and developed by our team.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="js/navbar.js"></script>
+    <script>
+        const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
+        const ENDPOINTS = {
+            DETAILS: `${API_BASE_URL}orders/details.php`
+        };
+
+        function isLoggedIn() {
+            return !!localStorage.getItem("userId");
+        }
+
+        function showAlert({ icon, title, text, confirmText, cancelText, onConfirm }) {
+            Swal.fire({
+                icon,
+                title,
+                text,
+                confirmButtonText: confirmText || "موافق",
+                showCancelButton: !!cancelText,
+                cancelButtonText: cancelText || "إلغاء"
+            }).then((result) => {
+                if (result.isConfirmed && onConfirm) onConfirm();
+            });
+        }
+
+        async function loadOrderDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get("ordersid");
+            if (!orderId) {
+                showAlert({
+                    icon: "error",
+                    title: "خطأ",
+                    text: "لم يتم العثور على معرف الطلب!",
+                    onConfirm: () => window.location.href = "pending-orders.html"
+                });
+                return;
+            }
+
+            try {
+                const response = await fetch(ENDPOINTS.DETAILS, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: new URLSearchParams({ ordersid: orderId }).toString()
+                });
+                const data = await response.json();
+                console.log("Order Details API Response:", data);
+
+                const orderDetails = document.getElementById("order-details");
+                if (data.status === "success" && data.data) {
+                    const order = data.data;
+                    orderDetails.innerHTML = `
+                        <p><strong>Order ID:</strong> ${order.orders_id}</p>
+                        <p><strong>Order Type:</strong> ${order.orders_type == 1 ? "Restaurants & Cafes" : "Hotels & Tourist Places"}</p>
+                        <p><strong>Total Price:</strong> ${order.orders_price} EGP</p>
+                        <p><strong>Payment Method:</strong> ${order.orders_paymentmethod == 1 ? "Payment Card" : "Cash"}</p>
+                        <p><strong>Coupon Discount:</strong> ${order.orders_coupondiscount}%</p>
+                    `;
+                } else {
+                    orderDetails.innerHTML = `<p>لا توجد تفاصيل متاحة لهذا الطلب.</p>`;
+                }
+            } catch (error) {
+                console.error("❌ Error fetching order details:", error);
+                showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء جلب تفاصيل الطلب!" });
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!isLoggedIn()) {
+                showAlert({
+                    icon: "warning",
+                    title: "غير مسجل الدخول",
+                    text: "يجب تسجيل الدخول أولاً لعرض تفاصيل الطلب!",
+                    confirmText: "تسجيل الدخول",
+                    cancelText: "إلغاء",
+                    onConfirm: () => window.location.href = "signin.html"
+                });
+                return;
+            }
+            loadOrderDetails();
+        });
+    </script>
+</body>
+
+</html>

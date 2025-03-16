@@ -51,19 +51,21 @@
                     <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
                     <button class="search-btn">Search</button>
                 </div>
-                <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
-                <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
+                                    <span id="userName" class="nav-link" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+
                 <div class="dropdown">
-                    <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
-                        aria-expanded="false">
+                    <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fas fa-user"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i> Addresses</a></li>
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
                         <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
                     </ul>
                 </div>
+                <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
+               
             </div>
         </div>
     </div>
@@ -187,14 +189,12 @@
             <div class="col-lg-3 col-md-6 mb-4">
                 <h4>Subscribe</h4>
                 <p>Get the latest offers<br> and updates directly in your inbox!</p>
-        <div class="input-group mb-3">
-            <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
-            <button class="btn submit" type="submit">
-                <i class="fas fa-paper-plane"></i>
-            </button>
-        </div>
-
-
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
+                    <button class="btn submit" type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
             <!-- Contact Information -->
             <div class="col-lg-3 col-md-6 mb-4">
@@ -205,10 +205,9 @@
             </div>
         </div>
     </div>
-<div class="footer-bottom text-center">
-    <p>&copy; 2024 All Rights Reserved. Designed and developed by our team.</p>
-</div>
-
+    <div class="footer-bottom text-center">
+        <p>© 2024 All Rights Reserved. Designed and developed by our team.</p>
+    </div>
 </footer>
 
 
