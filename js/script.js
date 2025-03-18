@@ -1,4 +1,27 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // دالة مساعدة لإضافة الـ token
+    function fetchWithToken(url, options = {}) {
+        const token = localStorage.getItem('token');
+        const excludedAPIs = [
+            "offers.php",
+            "categories.php",
+            "topselling.php",
+            "services.php",
+            "items.php",
+            "search.php"
+        ];
+
+        // التحقق إذا كان الـ URL يحتوي على أي من الـ APIs المستثناة
+        const isExcluded = excludedAPIs.some(api => url.includes(api));
+
+        options.headers = {
+            ...options.headers,
+            ...(isExcluded ? {} : { 'Authorization': `Bearer ${token}` }),
+            "Content-Type": "application/x-www-form-urlencoded"
+        };
+        return fetch(url, options);
+    }
+
     // دالة لإظهار الـ Loader
     function showLoader() {
         const loader = document.getElementById("loader");
@@ -152,9 +175,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 } else {
                     const userId = localStorage.getItem("userId");
                     glide.disable();
-                    fetch("https://abdulrahmanantar.com/outbye/cart/add.php", {
+                    fetchWithToken("https://abdulrahmanantar.com/outbye/cart/add.php", {
                         method: "POST",
-                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
                         body: new URLSearchParams({ usersid: userId, itemsid: itemId, quantity: 1 }).toString()
                     })
                     .then(response => response.json())
@@ -221,7 +243,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return cachedData;
         }
 
-        const response = await fetch(url);
+        const response = await fetchWithToken(url);
         const data = await response.json();
         setCachedData(cacheKey, data);
         return data;
@@ -258,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 categoryWrapper.innerHTML = "<p>Failed to load categories</p>";
             }
 
-            hideLoader(); // إخفاء الـ Loader بعد تحميل الـ Categories
+            hideLoader();
 
             // Lazy Load لـ Discount
             const discountObserver = new IntersectionObserver((entries, observer) => {
@@ -418,9 +440,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function checkInitialFavorites() {
         const userId = localStorage.getItem("userId");
         if (userId) {
-            fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
+            fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/view.php", {
                 method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ id: userId }).toString()
             })
             .then(response => response.json())
@@ -454,9 +475,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!isFavorited) {
             updateFavoriteUI(itemId, true);
             glide.disable();
-            fetch("https://abdulrahmanantar.com/outbye/favorite/add.php", {
+            fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/add.php", {
                 method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
             })
             .then(response => {
@@ -508,9 +528,8 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
             updateFavoriteUI(itemId, false);
             glide.disable();
-            fetch("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
+            fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
                 method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
             })
             .then(response => {

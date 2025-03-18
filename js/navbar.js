@@ -6,19 +6,37 @@ function updateNavbar() {
     const logoutBtn = document.getElementById('logoutBtn');
     const cartIcon = document.getElementById('cartIcon');
 
-    // التأكد من وجود العناصر
-    if (signupBtn) signupBtn.style.display = isLoggedIn === 'true' ? 'none' : 'block';
-    if (logoutBtn) logoutBtn.style.display = isLoggedIn === 'true' ? 'block' : 'none';
-    if (cartIcon) cartIcon.style.display = 'block';
+    // التأكد من وجود العناصر وتحديث الـ display
+    if (signupBtn) {
+        signupBtn.style.display = isLoggedIn === 'true' ? 'none' : 'block';
+    } else {
+        console.warn("⚠️ Signup button (#signupBtn) not found in the DOM");
+    }
 
-    // عرض اسم المستخدم لو مسجل دخول
-    if (isLoggedIn === 'true' && userNameSpan) {
-        const profileData = JSON.parse(localStorage.getItem('profileData') || '{}');
-        const userName = profileData.users_name || 'User';
-        userNameSpan.textContent = `Welcome, ${userName}`;
-        userNameSpan.style.display = 'block';
-    } else if (userNameSpan) {
-        userNameSpan.style.display = 'none';
+    if (logoutBtn) {
+        logoutBtn.style.display = isLoggedIn === 'true' ? 'block' : 'none';
+    } else {
+        console.warn("⚠️ Logout button (#logoutBtn) not found in the DOM");
+    }
+
+    if (cartIcon) {
+        cartIcon.style.display = 'block'; // دائمًا مرئية
+    } else {
+        console.warn("⚠️ Cart icon (#cartIcon) not found in the DOM");
+    }
+
+    // عرض اسم المستخدم لو مسجل الدخول
+    if (userNameSpan) {
+        if (isLoggedIn === 'true') {
+            const profileData = JSON.parse(localStorage.getItem('profileData') || '{}');
+            const userName = profileData.users_name || 'User';
+            userNameSpan.textContent = `Welcome, ${userName}`;
+            userNameSpan.style.display = 'block';
+        } else {
+            userNameSpan.style.display = 'none';
+        }
+    } else {
+        console.warn("⚠️ User name span (#userName) not found in the DOM");
     }
 }
 
@@ -55,9 +73,25 @@ window.addEventListener('load', () => {
 
 // دالة تسجيل الخروج
 document.getElementById('logoutBtn')?.addEventListener('click', function() {
-    localStorage.clear();
+    // إزالة البيانات من localStorage
+    localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('email');
+    localStorage.removeItem('token'); // إزالة التوكن
+    localStorage.removeItem('profileData');
+    localStorage.removeItem('resetEmail');
+    
+    // تحديث الناف بار
     updateNavbar();
-    setTimeout(() => {
+
+    // عرض رسالة تسجيل الخروج
+    Swal.fire({
+        icon: 'success',
+        title: 'تم تسجيل الخروج',
+        text: 'تم تسجيل خروجك بنجاح. سيتم توجيهك إلى صفحة تسجيل الدخول.',
+        showConfirmButton: false,
+        timer: 1500
+    }).then(() => {
         window.location.href = 'signin.html';
-    }, 100);
+    });
 });

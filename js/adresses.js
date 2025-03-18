@@ -14,6 +14,16 @@ function isLoggedIn() {
   return !!localStorage.getItem("userId");
 }
 
+// دالة مساعدة لإضافة الـ token
+function fetchWithToken(url, options = {}) {
+  const token = localStorage.getItem('token');
+  options.headers = {
+    ...options.headers,
+    'Authorization': `Bearer ${token}`,
+  };
+  return fetch(url, options);
+}
+
 function showAlert({ icon, title, text, confirmText, cancelText, onConfirm }) {
   Swal.fire({
     icon,
@@ -44,7 +54,7 @@ async function loadAddresses() {
   }
 
   try {
-    const response = await fetch(ADDRESS_ENDPOINTS.VIEW, {
+    const response = await fetchWithToken(ADDRESS_ENDPOINTS.VIEW, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ usersid: userId }).toString()
@@ -86,7 +96,7 @@ async function addAddress() {
   }
 
   try {
-    const response = await fetch(ADDRESS_ENDPOINTS.ADD, {
+    const response = await fetchWithToken(ADDRESS_ENDPOINTS.ADD, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ usersid: userId, name, city, street, lat }).toString()
@@ -115,7 +125,7 @@ async function deleteAddress(addressId) {
     cancelText: "Cancel",
     onConfirm: async () => {
       try {
-        const response = await fetch(ADDRESS_ENDPOINTS.DELETE, {
+        const response = await fetchWithToken(ADDRESS_ENDPOINTS.DELETE, {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: new URLSearchParams({ usersid: userId, addressid: addressId }).toString()
@@ -147,7 +157,8 @@ async function editAddress(addressId) {
   }
 
   try {
-const response = await fetch(ADDRESS_ENDPOINTS.EDIT, {      method: "POST",
+    const response = await fetchWithToken(ADDRESS_ENDPOINTS.EDIT, {
+      method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ usersid: userId, addressid: addressId, name, city, street, lat }).toString()
     });
@@ -190,16 +201,28 @@ function addAddressEventListeners() {
 
 function logout() {
   localStorage.clear();
-  window.location.href = "login.html";
+  showAlert({
+    icon: "success",
+    title: "Logged Out",
+    text: "You have been logged out successfully.",
+    onConfirm: () => {
+      window.location.href = "login.html";
+    }
+  });
 }
 
 function updateNavbar() {
   const isLoggedInUser = localStorage.getItem('isLoggedIn');
   const logoutBtn = document.getElementById('logout-btn');
-  if (isLoggedInUser === 'true') {
-    logoutBtn.style.display = 'block';
+  if (logoutBtn) {
+    if (isLoggedInUser === 'true') {
+      logoutBtn.style.display = 'block';
+    } else {
+      logoutBtn.style.display = 'none';
+      const cartCount = document.querySelector(".cart-count");
+      if (cartCount) cartCount.textContent = "0";
+    }
   } else {
-    logoutBtn.style.display = 'none';
-    document.querySelector(".cart-count").textContent = "0";
+    console.warn("⚠️ Logout button (#logout-btn) not found in the DOM");
   }
 }

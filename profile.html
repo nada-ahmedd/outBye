@@ -248,7 +248,8 @@
                         <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
                         <button class="search-btn">Search</button>
                     </div>
-                                    <span id="userName" class="nav-link" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+                    <span id="userName" class="nav-link"
+                        style="display: none; color: #F26B0A; font-weight: 600;"></span>
 
                     <div class="dropdown">
                         <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
@@ -325,7 +326,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script src="js/navbar.js"></script>
-        <script src="js/search.js"></script>
+    <script src="js/search.js"></script>
 
     <script>
         const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
@@ -334,48 +335,83 @@
             EDIT: `${API_BASE_URL}profile/edit_profile.php`
         };
 
-        // Helper Functions
-        const showAlert = (icon, title, text) => {
-            return Swal.fire({ icon, title, text, confirmButtonText: "OK" });
+        // دالة مساعدة لإضافة الـ token مع معالجة الأخطاء
+        async function fetchWithToken(url, options = {}) {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('No authentication token found. Please log in again.');
+                }
+
+                options.headers = {
+                    ...options.headers,
+                    'Authorization': `Bearer ${token}`,
+                };
+
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error(`Unauthorized: ${response.statusText}. Please log in again.`);
+                    }
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                if (error.message.includes('Failed to fetch')) {
+                    throw new Error('Network error: Unable to connect to the server. This might be due to CORS or network issues.');
+                }
+                throw error;
+            }
+        }
+
+        // دالة لعرض الرسائل باستخدام SweetAlert
+        const showAlert = (icon, title, text, redirectUrl = null) => {
+            return Swal.fire({
+                icon,
+                title,
+                text,
+                confirmButtonText: 'OK'
+            }).then(() => {
+                if (redirectUrl) window.location.href = redirectUrl;
+            });
         };
 
+        // دالة للتوجيه إلى صفحة أخرى
         const goTo = (page) => {
             console.log("Navigating to:", page);
             window.location.href = page;
         };
 
+        // دالة لإغلاق نتائج البحث
         const closeSearchResults = () => {
             document.getElementById("searchResults").style.display = "none";
         };
 
-        // Check if user is logged in
+        // التحقق من تسجيل الدخول
         const isLoggedIn = () => {
             const loggedIn = !!localStorage.getItem("userId");
             console.log("Is logged in:", loggedIn);
             return loggedIn;
         };
 
-        // Load Profile Data
+        // جلب بيانات الملف الشخصي
         const loadProfile = async () => {
             const userId = localStorage.getItem("userId");
             if (!userId) {
-                showAlert("warning", "⚠️ Error", "Please log in to view your profile").then(() => {
-                    window.location.href = "signin.html";
-                });
+                showAlert("warning", "⚠️ Error", "Please log in to view your profile", "signin.html");
                 return;
             }
             console.log("Loading profile for userId:", userId);
 
             try {
-                const response = await fetch(ENDPOINTS.VIEW, {
+                const data = await fetchWithToken(ENDPOINTS.VIEW, {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams({ users_id: userId }).toString()
                 });
 
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-                const data = await response.json();
                 console.log("Profile Data:", data);
 
                 if (data.status === "success") {
@@ -390,11 +426,17 @@
                 }
             } catch (error) {
                 console.error("Error fetching profile:", error);
-                showAlert("error", "❌ Error", "Error fetching profile: " + error.message);
+                if (error.message.includes('Network error')) {
+                    showAlert("error", "❌ Connection Error", "Unable to connect to the server. This might be due to CORS or network issues.");
+                } else if (error.message.includes('Unauthorized')) {
+                    showAlert("error", "❌ Authentication Error", error.message, "signin.html");
+                } else {
+                    showAlert("error", "❌ Error", "Error fetching profile: " + error.message);
+                }
             }
         };
 
-        // Show Edit Form
+        // إظهار نموذج التعديل
         const showEditForm = () => {
             console.log("Show Edit Form clicked");
             const profileData = JSON.parse(localStorage.getItem("profileData") || "{}");
@@ -406,19 +448,19 @@
             document.getElementById("edit-container").style.display = "block";
         };
 
-        // Cancel Edit
+        // إلغاء التعديل
         const cancelEdit = () => {
             console.log("Cancel Edit clicked");
             document.getElementById("edit-container").style.display = "none";
             document.getElementById("profile-container").style.display = "block";
         };
 
-        // Edit Profile
+        // تعديل الملف الشخصي
         const editProfile = async () => {
             console.log("Edit Profile clicked");
             const userId = localStorage.getItem("userId");
             if (!userId) {
-                showAlert("error", "❌ Error", "User ID not found").then(() => { });
+                showAlert("error", "❌ Error", "User ID not found", "signin.html");
                 return;
             }
 
@@ -427,7 +469,7 @@
             const phone = document.getElementById("edit-phone").value;
 
             if (!name || !email || !phone) {
-                showAlert("warning", "⚠️ Error", "Please fill all required fields").then(() => { });
+                showAlert("warning", "⚠️ Error", "Please fill all required fields");
                 return;
             }
 
@@ -438,67 +480,49 @@
             formData.append("new_phone", phone);
 
             try {
-                const response = await fetch(ENDPOINTS.EDIT, {
+                const response = await fetchWithToken(ENDPOINTS.EDIT, {
                     method: "POST",
                     body: formData
                 });
 
-                const text = await response.text();
-                console.log("Raw Edit Response:", text);
+                console.log("Edit Profile Response:", response);
 
-                const jsonStrings = text.trim().split('}{').map((str, index) => {
-                    if (index === 0) return str + '}';
-                    if (index === 1) return '{' + str;
-                    return str;
-                });
+                if (response.status === "success") {
+                    const updatedData = response.data;
+                    localStorage.setItem("profileData", JSON.stringify(updatedData));
+                    document.getElementById("view-name").textContent = updatedData.users_name || "Not provided";
+                    document.getElementById("view-email").textContent = updatedData.users_email || "Not provided";
+                    document.getElementById("view-phone").textContent = updatedData.users_phone || "Not provided";
+                    document.getElementById("view-create").textContent = updatedData.users_create || "Not provided";
 
-                let success = false;
-                let updatedData = null;
-                for (let jsonStr of jsonStrings) {
-                    try {
-                        const data = JSON.parse(jsonStr);
-                        if (data.status === "success") {
-                            success = true;
-                            if (data.data) updatedData = data.data;
-                        }
-                    } catch (e) {
-                        console.error("JSON Parse Error on part:", jsonStr, e);
-                    }
-                }
-
-                if (success) {
-                    if (updatedData) {
-                        localStorage.setItem("profileData", JSON.stringify(updatedData));
-                        document.getElementById("view-name").textContent = updatedData.users_name || "Not provided";
-                        document.getElementById("view-email").textContent = updatedData.users_email || "Not provided";
-                        document.getElementById("view-phone").textContent = updatedData.users_phone || "Not provided";
-                        document.getElementById("view-create").textContent = updatedData.users_create || "Not provided";
-                    }
-                    showAlert("success", "✅ Success", "Profile updated successfully").then(() => {
-                        document.getElementById("edit-container").style.display = "none";
-                        document.getElementById("profile-container").style.display = "block";
-                    });
+                    showAlert("success", "✅ Success", "Profile updated successfully");
+                    document.getElementById("edit-container").style.display = "none";
+                    document.getElementById("profile-container").style.display = "block";
                 } else {
-                    showAlert("error", "❌ Error", "Failed to update profile or invalid response format").then(() => { });
+                    showAlert("error", "❌ Error", response.message || "Failed to update profile");
                 }
             } catch (error) {
                 console.error("Error updating profile:", error);
-                showAlert("error", "❌ Error", "Error updating profile: " + error.message).then(() => { });
+                if (error.message.includes('Network error')) {
+                    showAlert("error", "❌ Connection Error", "Unable to connect to the server. This might be due to CORS or network issues.");
+                } else if (error.message.includes('Unauthorized')) {
+                    showAlert("error", "❌ Authentication Error", error.message, "signin.html");
+                } else {
+                    showAlert("error", "❌ Error", "Error updating profile: " + error.message);
+                }
             }
         };
 
-        // Initialize and Bind Events
+        // تهيئة الصفحة وربط الأحداث
         document.addEventListener("DOMContentLoaded", () => {
             console.log("DOM Loaded");
 
             if (!isLoggedIn()) {
-                showAlert("warning", "⚠️ Error", "Please log in to view your profile").then(() => {
-                    window.location.href = "signin.html";
-                });
+                showAlert("warning", "⚠️ Error", "Please log in to view your profile", "signin.html");
                 return;
             }
 
-            // Bind events to buttons
+            // ربط الأحداث بالأزرار
             const editProfileBtn = document.getElementById("editProfileBtn");
             const favoritesBtn = document.getElementById("favoritesBtn");
             const cartBtn = document.getElementById("cartBtn");

@@ -17,6 +17,16 @@ function isLoggedIn() {
   return !!localStorage.getItem("userId");
 }
 
+// دالة مساعدة لإضافة الـ token
+function fetchWithToken(url, options = {}) {
+  const token = localStorage.getItem('token');
+  options.headers = {
+    ...options.headers,
+    'Authorization': `Bearer ${token}`,
+  };
+  return fetch(url, options);
+}
+
 function showAlert({ icon, title, text, confirmText, cancelText, onConfirm }) {
   Swal.fire({
     icon,
@@ -114,7 +124,7 @@ async function loadCart() {
   if (!userId) return;
 
   try {
-    const response = await fetch(ENDPOINTS.VIEW, {
+    const response = await fetchWithToken(ENDPOINTS.VIEW, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ usersid: userId }).toString()
@@ -302,7 +312,7 @@ async function handleIncrease(event) {
 
 async function decreaseItemQuantity(userId, itemId) {
   try {
-    const response = await fetch(ENDPOINTS.DELETE, {
+    const response = await fetchWithToken(ENDPOINTS.DELETE, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
@@ -322,7 +332,7 @@ async function decreaseItemQuantity(userId, itemId) {
 
 async function increaseItemQuantity(userId, itemId) {
   try {
-    const response = await fetch(ENDPOINTS.ADD, {
+    const response = await fetchWithToken(ENDPOINTS.ADD, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
@@ -415,7 +425,7 @@ async function applyCoupon() {
   }
 
   try {
-    const response = await fetch(ENDPOINTS.COUPON, {
+    const response = await fetchWithToken(ENDPOINTS.COUPON, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ couponname: couponInput, usersid: userId }).toString()
@@ -439,7 +449,8 @@ async function applyCoupon() {
         appliedCouponDiscount = discountPercentage;
         showAlert({
           icon: "success",
-          title: "success",
+          title: "نجاح",
+          text: `تم تطبيق الخصم بنجاح! ${discountPercentage}% خصم`
         });
       }
     } else {
@@ -458,8 +469,14 @@ async function applyCoupon() {
 
 function logout() {
   localStorage.clear();
-  window.location.reload();
-  window.location.href = "login.html";
+  showAlert({
+    icon: "success",
+    title: "تم تسجيل الخروج",
+    text: "تم تسجيل خروجك بنجاح.",
+    onConfirm: () => {
+      window.location.href = "login.html";
+    }
+  });
 }
 
 function updateNavbar() {

@@ -1,3 +1,14 @@
+// دالة مساعدة لإضافة الـ token
+function fetchWithToken(url, options = {}) {
+    const token = localStorage.getItem('token');
+    options.headers = {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`,
+    };
+    return fetch(url, options);
+}
+
+// الساين إن
 document.getElementById("loginForm").addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -10,14 +21,23 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
     const data = {};
     formData.forEach((value, key) => (data[key] = value));
 
-    fetch(form.action, {
+    fetchWithToken(form.action, {
         method: form.method,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams(data).toString(),
     })
     .then((response) => response.json())
     .then((data) => {
+        console.log("Signin API Response:", data);
         if (data.status === "success") {
+            const userId = data.data?.users_id || '';
+            console.log("User ID to be stored:", userId);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userId', userId);
+            localStorage.setItem('email', data.data?.users_email || data.email || '');
+            localStorage.setItem('token', data.token); // حفظ الـ token
+            localStorage.removeItem('resetEmail');
+            console.log("User ID stored in localStorage:", localStorage.getItem("userId"));
             Swal.fire({
                 icon: 'success',
                 title: 'Login Successful!',
@@ -25,10 +45,6 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
                 showConfirmButton: false,
                 timer: 2000
             }).then(() => {
-                localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('userId', data.data?.users_id || '');
-                localStorage.setItem('email', data.data?.users_email || data.email || '');
-                localStorage.removeItem('resetEmail'); // تنظيف resetEmail
                 window.location.href = "index.html";
             });
         } else {
@@ -52,4 +68,3 @@ document.getElementById("loginForm").addEventListener("submit", function (event)
         submitButton.textContent = "Log In";
     });
 });
-

@@ -86,16 +86,12 @@
             text-decoration: none;
             font-weight: bold;
             pointer-events: none;
-            /* تعطيل النقر في البداية */
             opacity: 0.6;
-            /* لإظهار أنه معطل */
         }
 
         #resendCodeLink.enabled {
             pointer-events: auto;
-            /* تفعيل النقر بعد 30 ثانية */
             opacity: 1;
-            /* إعادة الشفافية الطبيعية */
         }
 
         #resendCodeLink:hover {
@@ -131,169 +127,224 @@
             <button type="submit">Verify</button>
         </form>
         <p>Didn't receive a code? <a href="#" id="resendCodeLink">Resend Code</a></p>
-        <div id="timer" class="timer"></div> <!-- إضافة عداد الثواني -->
+        <div id="timer" class="timer"></div>
         <div id="codeError" class="error-message"></div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        let lastResendTime = Date.now(); // بدء التايمر بمجرد تحميل الصفحة
+        let lastResendTime = Date.now();
+        const RESEND_COOLDOWN = 30000; // 30 ثانية
 
-        document.addEventListener("DOMContentLoaded", function () {
-            const email = localStorage.getItem('resetEmail');
-            if (!email) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'No Email Found',
-                    text: 'Please start the password reset process again.',
-                }).then(() => {
-                    window.location.href = "signin.html";
-                });
-                return;
-            }
-            startResendTimer(); // بدء التايمر عند تحميل الصفحة
-            updateTimer(); // بدء تحديث العداد
-        });
+        // دالة مساعدة لإضافة الـ token مع معالجة الأخطاء
+        async function fetchWithToken(url, options = {}) {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('No authentication token found. Please log in again.');
+                }
 
-        document.getElementById('verifyForm').addEventListener('submit', function (event) {
-            event.preventDefault();
+                options.headers = {
+                    ...options.headers,
+                    'Authorization': `Bearer ${token}`,
+                };
 
-            let verifyCode = '';
-            const fields = document.querySelectorAll('.verify-code-field');
-            fields.forEach(field => {
-                verifyCode += field.value.trim();
-            });
-
-            if (verifyCode.length !== 5) {
-                document.getElementById('codeError').textContent = 'Please enter all five digits.';
-                return;
-            }
-
-            const email = localStorage.getItem('resetEmail');
-            if (!email) {
-                document.getElementById('codeError').textContent = 'Email not found in storage.';
-                return;
-            }
-
-            fetch('https://abdulrahmanantar.com/outbye/forgetpassword/verifycode.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ email, verifycode: verifyCode })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Code Verified!',
-                            text: 'Your code is correct. Redirecting to reset password...',
-                        }).then(() => {
-                            window.location.href = 'signin.html?reset=true';
-                        });
-                    } else {
-                        document.getElementById('codeError').textContent = data.message || 'Verification code is incorrect.';
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error(`Unauthorized: ${response.statusText}. Please log in again.`);
                     }
-                })
-                .catch(error => document.getElementById('codeError').textContent = 'Error occurred: ' + error.message);
-        });
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                }
 
-        document.getElementById('resendCodeLink').addEventListener('click', function (event) {
-            event.preventDefault();
-
-            const email = localStorage.getItem('resetEmail');
-            if (!email) {
-                document.getElementById('codeError').textContent = 'Email not found in storage.';
-                return;
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                if (error.message.includes('Failed to fetch')) {
+                    throw new Error('Network error: Unable to connect to the server. This might be due to CORS or network issues.');
+                }
+                throw error;
             }
-
-            if (!this.classList.contains('enabled')) {
-                const timeLeft = Math.ceil((lastResendTime + 30000 - Date.now()) / 1000);
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Wait Required',
-                    text: `Try again after ${timeLeft} second${timeLeft > 1 ? 's' : ''}.`,
-                });
-                return;
-            }
-
-            fetch('https://abdulrahmanantar.com/outbye/auth/resend.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ email })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Code Resent!',
-                            text: 'The code has been sent again.',
-                        });
-                        // مسح الحقول بعد إعادة الإرسال
-                        document.querySelectorAll('.verify-code-field').forEach(field => {
-                            field.value = '';
-                        });
-                        document.getElementById('verifyCodeField1').focus();
-                        this.classList.remove('enabled'); // تعطيل الزر بعد الضغط
-                        lastResendTime = Date.now(); // تحديث وقت الإرسال الأخير
-                        startResendTimer(); // إعادة تشغيل التايمر
-                        updateTimer(); // إعادة تحديث العداد
-                    } else {
-                        document.getElementById('codeError').textContent = data.message || 'Failed to resend the code.';
-                    }
-                })
-                .catch(error => document.getElementById('codeError').textContent = 'Error occurred: ' + error.message);
-        });
-
-        // التنقل بين الحقول تلقائيًا
-        document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
-            input.addEventListener('input', function () {
-                if (this.value.length === 1 && index < fields.length - 1) {
-                    fields[index + 1].focus();
-                }
-            });
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
-                    fields[index - 1].focus();
-                }
-            });
-        });
-
-        // إعادة إضافة خاصية اللصق
-        document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
-            input.addEventListener('paste', function (e) {
-                const pastedData = e.clipboardData.getData('text');
-                if (pastedData.length === 5) {
-                    pastedData.split('').forEach((char, i) => {
-                        fields[i].value = char;
-                    });
-                    fields[fields.length - 1].focus();
-                    e.preventDefault();
-                }
-            });
-        });
-
-        function startResendTimer() {
-            const resendLink = document.getElementById('resendCodeLink');
-            resendLink.classList.remove('enabled'); // تعطيل الزر في البداية
-            setTimeout(() => {
-                resendLink.classList.add('enabled'); // تفعيل الزر بعد 30 ثانية
-                document.getElementById('timer').textContent = ''; // إخفاء العداد عند الانتهاء
-            }, 30000); // 30 ثانية
         }
 
+        // دالة لعرض رسائل الخطأ
+        function showError(message) {
+            const errorElement = document.getElementById('codeError');
+            errorElement.textContent = message;
+        }
+
+        // دالة لعرض رسائل النجاح
+        function showSuccess(message, redirectUrl = null) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: message,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                if (redirectUrl) window.location.href = redirectUrl;
+            });
+        }
+
+        // دالة للتحقق من وجود البريد الإلكتروني
+        function getEmail() {
+            const email = localStorage.getItem('resetEmail');
+            if (!email) {
+                showError('Email not found in storage. Please start the password reset process again.');
+                setTimeout(() => window.location.href = 'signin.html', 2000);
+                return null;
+            }
+            return email;
+        }
+
+        // دالة للتحقق من الكود
+        async function verifyCode(email, verifyCode) {
+            try {
+                const response = await fetchWithToken('https://abdulrahmanantar.com/outbye/forgetpassword/verifycode.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ email, verifycode: verifyCode })
+                });
+
+                if (response.status === "success") {
+                    showSuccess('Your code is correct. Redirecting to reset password...', 'signin.html?reset=true');
+                } else {
+                    showError(response.message || 'Verification code is incorrect.');
+                }
+            } catch (error) {
+                console.error('Error in verifyCode:', error);
+                if (error.message.includes('Network error')) {
+                    showError('Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
+                } else if (error.message.includes('Unauthorized')) {
+                    showError(error.message);
+                    setTimeout(() => window.location.href = 'signin.html', 2000);
+                } else {
+                    showError('Error occurred during verification: ' + error.message);
+                }
+            }
+        }
+
+        // دالة لإعادة إرسال الكود
+        async function resendCode(email) {
+            try {
+                const response = await fetchWithToken('https://abdulrahmanantar.com/outbye/auth/resend.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ email })
+                });
+
+                if (response.status === "success") {
+                    showSuccess('The code has been sent again.');
+                    document.querySelectorAll('.verify-code-field').forEach(field => field.value = '');
+                    document.getElementById('verifyCodeField1').focus();
+                    lastResendTime = Date.now();
+                    startResendTimer();
+                    updateTimer();
+                } else {
+                    showError(response.message || 'Failed to resend the code.');
+                }
+            } catch (error) {
+                console.error('Error in resendCode:', error);
+                if (error.message.includes('Network error')) {
+                    showError('Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
+                } else if (error.message.includes('Unauthorized')) {
+                    showError(error.message);
+                    setTimeout(() => window.location.href = 'signin.html', 2000);
+                } else {
+                    showError('Error occurred while resending the code: ' + error.message);
+                }
+            }
+        }
+
+        // دالة لبدء المؤقت
+        function startResendTimer() {
+            const resendLink = document.getElementById('resendCodeLink');
+            resendLink.classList.remove('enabled');
+            setTimeout(() => {
+                resendLink.classList.add('enabled');
+                document.getElementById('timer').textContent = '';
+            }, RESEND_COOLDOWN);
+        }
+
+        // دالة لتحديث المؤقت
         function updateTimer() {
             const timerElement = document.getElementById('timer');
             const interval = setInterval(() => {
-                const timeLeft = Math.ceil((lastResendTime + 30000 - Date.now()) / 1000);
+                const timeLeft = Math.ceil((lastResendTime + RESEND_COOLDOWN - Date.now()) / 1000);
                 if (timeLeft > 0) {
                     timerElement.textContent = `Resend available in ${timeLeft} second${timeLeft > 1 ? 's' : ''}`;
                 } else {
                     timerElement.textContent = '';
                     clearInterval(interval);
                 }
-            }, 1000); // تحديث كل ثانية
+            }, 1000);
         }
+
+        // حدث تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            const email = getEmail();
+            if (email) {
+                startResendTimer();
+                updateTimer();
+            }
+        });
+
+        // حدث إرسال النموذج
+        document.getElementById('verifyForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            let verifyCode = '';
+            const fields = document.querySelectorAll('.verify-code-field');
+            fields.forEach(field => verifyCode += field.value.trim());
+
+            if (verifyCode.length !== 5) {
+                showError('Please enter all five digits.');
+                return;
+            }
+
+            const email = getEmail();
+            if (email) await verifyCode(email, verifyCode);
+        });
+
+        // حدث النقر على رابط Resend
+        document.getElementById('resendCodeLink').addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const email = getEmail();
+            if (!email) return;
+
+            if (!this.classList.contains('enabled')) {
+                const timeLeft = Math.ceil((lastResendTime + RESEND_COOLDOWN - Date.now()) / 1000);
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Wait Required',
+                    text: `Try again after ${timeLeft} second${timeLeft > 1 ? 's' : ''}.`
+                });
+                return;
+            }
+
+            await resendCode(email);
+        });
+
+        // أحداث تحسين تجربة المستخدم
+        document.querySelectorAll('.verify-code-field').forEach((input, index, fields) => {
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && index < fields.length - 1) fields[index + 1].focus();
+            });
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Backspace' && input.value.length === 0 && index > 0) fields[index - 1].focus();
+            });
+
+            input.addEventListener('paste', (e) => {
+                const pastedData = e.clipboardData.getData('text');
+                if (pastedData.length === 5) {
+                    pastedData.split('').forEach((char, i) => fields[i].value = char);
+                    fields[fields.length - 1].focus();
+                    e.preventDefault();
+                }
+            });
+        });
     </script>
 </body>
 

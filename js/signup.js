@@ -1,3 +1,13 @@
+// دالة مساعدة لإضافة الـ token
+function fetchWithToken(url, options = {}) {
+    const token = localStorage.getItem('token');
+    options.headers = {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`,
+    };
+    return fetch(url, options);
+}
+
 document.getElementById('signupForm').addEventListener('submit', function (event) {
     event.preventDefault();
 
@@ -12,7 +22,6 @@ document.getElementById('signupForm').addEventListener('submit', function (event
         return;
     }
 
-
     submitButton.disabled = true;
     submitButton.textContent = 'Processing...';
 
@@ -22,17 +31,18 @@ document.getElementById('signupForm').addEventListener('submit', function (event
     formData.append('phone', phone);
     formData.append('password', password);
 
-    fetch('https://abdulrahmanantar.com/outbye/auth/signup.php', {
+    fetchWithToken('https://abdulrahmanantar.com/outbye/auth/signup.php', {
         method: 'POST',
         body: formData
     })
     .then(response => response.json())
     .then(data => {
         if (data.status === "success") {
-            localStorage.setItem('signupEmail', email); // مفتاح مختلف عن resetEmail
+            localStorage.setItem('signupEmail', email);
+            localStorage.setItem('token', data.token); // حفظ الـ token
             Swal.fire({ title: 'تم التسجيل!', text: 'تم إرسال كود التحقق إلى بريدك.', icon: 'success' })
             .then(() => {
-                window.location.href = 'verify-signup.html'; // توجيه لصفحة Verify Sign Up
+                window.location.href = 'verify-signup.html';
             });
         } else {
             Swal.fire({ title: 'خطأ', text: data.message, icon: 'error' });

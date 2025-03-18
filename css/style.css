@@ -735,7 +735,7 @@
 
 
 .glide {
-    max-width: 90%;
+    max-width: 80%;
     margin: 30px auto;
     padding: 0 20px;
     position: relative;
@@ -762,7 +762,7 @@
     border: 2px solid #F26B0A;
     border-radius: 15px;
     padding: 20px;
-    max-width: 25%;
+    max-width: 20%;
     text-align: center;
     position: relative;
     transition: transform 0.3s ease, box-shadow 0.3s ease;

@@ -15,6 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // دالة مساعدة لإضافة الـ token
+    function fetchWithToken(url, options = {}) {
+        const token = localStorage.getItem('token');
+        options.headers = {
+            ...options.headers,
+            'Authorization': `Bearer ${token}`,
+        };
+        return fetch(url, options);
+    }
+
     // متغير لتتبع تحميل البيانات
     let dataLoaded = 0;
     const totalSections = 2; // Service Details + Items
@@ -61,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     console.log("Request URL:", apiUrl);
 
+    // استخدام fetch عادي لأن هذا الـ API عام (لا يحتاج توكن)
     fetch(apiUrl, { method: "POST", cache: "no-cache" })
     .then(response => {
         console.log("Fetch Response Status:", response.status);
@@ -149,7 +160,7 @@ function displayServiceDetails(service) {
 function fetchFavorites(userId) {
     if (!userId) return;
 
-    fetch("https://abdulrahmanantar.com/outbye/favorite/view.php", {
+    fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/view.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ id: userId }).toString()
@@ -186,7 +197,7 @@ function addToCart(itemId) {
         return;
     }
 
-    fetch("https://abdulrahmanantar.com/outbye/cart/add.php", {
+    fetchWithToken("https://abdulrahmanantar.com/outbye/cart/add.php", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ usersid: userId, itemsid: itemId, quantity: 1 }).toString()
@@ -218,7 +229,7 @@ function toggleFavorite(itemId, button) {
 
     if (!isFavorited) {
         console.log("Adding to favorites with usersid:", userId, "and itemsid:", itemId);
-        fetch("https://abdulrahmanantar.com/outbye/favorite/add.php", {
+        fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/add.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
@@ -262,7 +273,7 @@ function toggleFavorite(itemId, button) {
         }
 
         console.log("Removing from favorites with favorite_id:", favId);
-        fetch("https://abdulrahmanantar.com/outbye/favorite/deletefromfavroite.php", {
+        fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/deletefromfavroite.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: new URLSearchParams({ id: favId }).toString()

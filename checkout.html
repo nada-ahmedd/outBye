@@ -183,7 +183,8 @@
                         <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
                         <button class="search-btn">Search</button>
                     </div>
-                    <span id="userName" class="nav-link" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+                    <span id="userName" class="nav-link"
+                        style="display: none; color: #F26B0A; font-weight: 600;"></span>
                     <div class="dropdown">
                         <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
                             aria-expanded="false">
@@ -197,7 +198,8 @@
                         </ul>
                     </div>
                     <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
-                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
+                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
+                            class="fas fa-shopping-cart"></i></a>
                 </div>
             </div>
         </div>
@@ -354,7 +356,6 @@
             });
         }
 
-        // دالة لحفظ بيانات الفورم في localStorage
         function saveCheckoutData(totalPrice, coupon, discount) {
             const checkoutData = {
                 totalPrice: totalPrice || "0",
@@ -365,7 +366,6 @@
             console.log("Checkout Data Saved to localStorage:", checkoutData);
         }
 
-        // دالة لتحميل بيانات الفورم من localStorage
         function loadCheckoutData() {
             const checkoutData = JSON.parse(localStorage.getItem("checkoutData") || "{}");
             console.log("Checkout Data Loaded from localStorage:", checkoutData);
@@ -400,32 +400,61 @@
                 return;
             }
 
-            // جلب الداتا من الـ URL
             const urlParams = new URLSearchParams(window.location.search);
             const totalPrice = urlParams.get("totalPrice");
             const coupon = urlParams.get("coupon");
             const discount = urlParams.get("discount");
 
-            // لو فيه داتا في الـ URL، احفظها في localStorage
             if (totalPrice || coupon || discount) {
                 saveCheckoutData(totalPrice, coupon, discount);
             }
 
-            // تحميل البيانات من localStorage
             const dataLoaded = loadCheckoutData();
             if (!dataLoaded) return;
 
-            // تحميل العناوين
             loadAddressesFromLocalStorage();
 
-            // معالجة إرسال الفورم
             const checkoutForm = document.getElementById("checkout-form");
             checkoutForm.addEventListener("submit", async (event) => {
                 event.preventDefault();
 
                 const userId = localStorage.getItem("userId");
+                if (!userId) {
+                    showAlert({
+                        icon: "error",
+                        title: "خطأ",
+                        text: "User ID غير موجود، يرجى تسجيل الدخول مرة أخرى!",
+                        onConfirm: () => window.location.href = "signin.html"
+                    });
+                    return;
+                }
+
+                console.log("User ID during checkout:", userId);
+
                 const formData = new FormData(checkoutForm);
                 formData.append("usersid", userId);
+
+                const price = document.getElementById("price").value;
+                formData.delete("price");
+                formData.append("ordersprice", price);
+                formData.append("pricedelivery", "10");
+
+                const couponId = document.getElementById("coupon-id").value;
+                if (couponId && !isNaN(couponId)) {
+                    formData.set("couponid", couponId);
+                } else {
+                    formData.set("couponid", "0");
+                }
+
+                const addressId = document.getElementById("address").value;
+                if (!addressId) {
+                    showAlert({
+                        icon: "error",
+                        title: "خطأ",
+                        text: "يرجى اختيار عنوان صحيح!"
+                    });
+                    return;
+                }
 
                 console.log("Form Data being sent:");
                 for (let [key, value] of formData.entries()) {
@@ -439,27 +468,28 @@
                     });
 
                     const rawResponse = await response.text();
-                    console.log("Raw Response from API:", rawResponse);
+                    console.log("Raw Response from Checkout API:", rawResponse);
 
-                    let data = { status: "error", message: "Invalid response" };
-                    if (rawResponse.trim()) {
+                    let data;
+                    if (!rawResponse.trim()) {
+                        data = { status: "error", message: "Empty response from server" };
+                    } else {
                         try {
                             data = JSON.parse(rawResponse);
                         } catch (jsonError) {
-                            console.warn("Warning: Invalid JSON, using default response:", jsonError);
+                            console.warn("Warning: Invalid JSON:", jsonError);
+                            data = { status: "error", message: "Invalid JSON response" };
                         }
                     }
 
                     console.log("Parsed Checkout API Response:", data);
 
                     if (data.status === "success") {
-                        // مسح بيانات الفورم من localStorage بعد الطلب الناجح
                         localStorage.removeItem("checkoutData");
-
                         showAlert({
                             icon: "success",
                             title: "تم الطلب بنجاح",
-                            text: "تم إرسال طلبك بنجاح، يمكنك متابعة الطلبات المعلقة!",
+                            text: "تم إرسال طلبك بنجاح، سيتم تحويلك إلى الطلبات المعلقة.",
                             onConfirm: () => window.location.href = "pending-orders.html"
                         });
                     } else {
@@ -470,7 +500,7 @@
                         });
                     }
                 } catch (error) {
-                    console.warn("Caught error (ignored as per request):", error);
+                    console.warn("Caught error:", error);
                     showAlert({
                         icon: "error",
                         title: "خطأ",

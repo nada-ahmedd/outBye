@@ -71,8 +71,6 @@
             font-size: 14px;
             margin-top: 5px;
         }
-
-        
     </style>
 </head>
 
@@ -211,117 +209,187 @@
     <script src="js/navbar.js"></script>
 
     <script>
-        // Sign In
-        document.getElementById("loginForm").addEventListener("submit", function (event) {
+        // دالة مساعدة لإضافة الـ token مع معالجة الأخطاء
+        async function fetchWithToken(url, options = {}) {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) {
+                    throw new Error('No authentication token found. Please log in again.');
+                }
+
+                options.headers = {
+                    ...options.headers,
+                    'Authorization': `Bearer ${token}`,
+                };
+
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error(`Unauthorized: ${response.statusText}. Please log in again.`);
+                    }
+                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                if (error.message.includes('Failed to fetch')) {
+                    throw new Error('Network error: Unable to connect to the server. This might be due to CORS or network issues.');
+                }
+                throw error;
+            }
+        }
+
+        // دالة لعرض رسائل الخطأ
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+        }
+
+        // دالة لعرض رسائل النجاح
+        function showSuccess(message, redirectUrl = null) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: message,
+                timer: 2000,
+                showConfirmButton: false
+            }).then(() => {
+                if (redirectUrl) window.location.href = redirectUrl;
+            });
+        }
+
+        // دالة لتسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
             event.preventDefault();
-            const form = this;
+
+            const form = event.target;
             const submitButton = form.querySelector('button[type="submit"]');
             submitButton.disabled = true;
-            submitButton.textContent = "Processing...";
+            submitButton.textContent = 'Processing...';
+
             const formData = new FormData(form);
-            const data = {};
-            formData.forEach((value, key) => (data[key] = value));
+            const data = Object.fromEntries(formData);
 
-            fetch(form.action, {
-                method: form.method,
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams(data).toString(),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.status === "success") {
-                        Swal.fire({ icon: 'success', title: 'Login Successful!', text: 'Redirecting...', showConfirmButton: false, timer: 2000 })
-                            .then(() => {
-                                localStorage.setItem('isLoggedIn', 'true');
-                                localStorage.setItem('userId', data.data?.users_id || '');
-                                localStorage.setItem('email', data.data?.users_email || data.email || '');
-
-                                // Fetch profile data to get users_name
-                                fetch("https://abdulrahmanantar.com/outbye/profile/view.php", {
-                                    method: "POST",
-                                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                                    body: new URLSearchParams({ users_id: data.data?.users_id }).toString()
-                                })
-                                    .then(res => res.json())
-                                    .then(profileData => {
-                                        if (profileData.status === "success") {
-                                            localStorage.setItem('profileData', JSON.stringify(profileData.data));
-                                        }
-                                        window.location.href = "index.html";
-                                    });
-                            });
-                    } else {
-                        Swal.fire({ icon: 'error', title: 'Login Failed', text: data.message || 'Incorrect email or password.' });
-                    }
-                })
-                .catch((error) => {
-                    Swal.fire({ icon: 'error', title: 'Network Error', text: 'Please try again later.' });
-                })
-                .finally(() => {
-                    submitButton.disabled = false;
-                    submitButton.textContent = "Log In";
+            try {
+                const response = await fetchWithToken(form.action, {
+                    method: form.method,
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams(data).toString()
                 });
+
+                if (response.status === 'success') {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userId', response.data?.users_id || '');
+                    localStorage.setItem('email', response.data?.users_email || data.email);
+                    localStorage.setItem('token', response.token);
+
+                    // جلب بيانات الملف الشخصي
+                    const profileResponse = await fetchWithToken('https://abdulrahmanantar.com/outbye/profile/view.php', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: new URLSearchParams({ users_id: response.data?.users_id }).toString()
+                    });
+
+                    if (profileResponse.status === 'success') {
+                        localStorage.setItem('profileData', JSON.stringify(profileResponse.data));
+                    }
+
+                    showSuccess('Redirecting...', 'index.html');
+                } else {
+                    showError('form-error', response.message || 'Incorrect email or password.');
+                }
+            } catch (error) {
+                console.error('Error in login:', error);
+                if (error.message.includes('Network error')) {
+                    showError('form-error', 'Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
+                } else if (error.message.includes('Unauthorized')) {
+                    showError('form-error', error.message);
+                    setTimeout(() => window.location.href = 'signin.html', 2000);
+                } else {
+                    showError('form-error', 'Error occurred during login: ' + error.message);
+                }
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Log In';
+            }
         });
 
         // Forgot Password
-        document.getElementById('forgotPasswordLink').addEventListener('click', function (e) {
+        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('forgotPasswordModal').style.display = 'flex';
         });
 
-        document.getElementById('submitEmail').addEventListener('click', function () {
+        document.getElementById('submitEmail').addEventListener('click', async () => {
             const email = document.getElementById('forgotEmail').value;
-            fetch('https://abdulrahmanantar.com/outbye/forgetpassword/checkemail.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ email })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        localStorage.setItem('resetEmail', email);
-                        document.getElementById('forgotPasswordModal').style.display = 'none';
-                        window.location.href = 'verify-code.html';
-                    } else {
-                        document.getElementById('emailError').textContent = data.message || 'Email not found.';
-                    }
-                })
-                .catch(error => document.getElementById('emailError').textContent = 'Error occurred: ' + error.message);
+
+            try {
+                const response = await fetchWithToken('https://abdulrahmanantar.com/outbye/forgetpassword/checkemail.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ email })
+                });
+
+                if (response.success) {
+                    localStorage.setItem('resetEmail', email);
+                    document.getElementById('forgotPasswordModal').style.display = 'none';
+                    window.location.href = 'verify-code.html';
+                } else {
+                    showError('emailError', response.message || 'Email not found.');
+                }
+            } catch (error) {
+                console.error('Error in checkEmail:', error);
+                if (error.message.includes('Network error')) {
+                    showError('emailError', 'Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
+                } else {
+                    showError('emailError', 'Error occurred: ' + error.message);
+                }
+            }
         });
 
-        // Reset Password Modal
+        // Reset Password
         if (window.location.search.includes('reset=true')) {
             document.getElementById('resetPasswordModal').style.display = 'flex';
         }
 
-        document.getElementById('resetPassword').addEventListener('click', function () {
+        document.getElementById('resetPassword').addEventListener('click', async () => {
             const email = localStorage.getItem('resetEmail');
             const newPassword = document.getElementById('newPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
 
             if (!email) {
-                document.getElementById('passwordError').textContent = 'Email not found in storage.';
+                showError('passwordError', 'Email not found in storage.');
                 return;
             }
 
-            fetch('https://abdulrahmanantar.com/outbye/forgetpassword/resetpassword.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({ email, password: newPassword })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        document.getElementById('resetPasswordModal').style.display = 'none';
-                        Swal.fire('Success', 'Password reset successfully', 'success');
-                        localStorage.removeItem('resetEmail');
-                    } else if (data.status === "failure") {
-                        document.getElementById('passwordError').textContent = 'Failed to reset password. Please try again.';
-                    } else {
-                        document.getElementById('passwordError').textContent = data.message || 'Email not found.';
-                    }
-                })
-                .catch(error => document.getElementById('passwordError').textContent = 'Error occurred: ' + error.message);
+            if (newPassword !== confirmPassword) {
+                showError('passwordError', 'Passwords do not match.');
+                return;
+            }
+
+            try {
+                const response = await fetchWithToken('https://abdulrahmanantar.com/outbye/forgetpassword/resetpassword.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: new URLSearchParams({ email, password: newPassword })
+                });
+
+                if (response.status === 'success') {
+                    document.getElementById('resetPasswordModal').style.display = 'none';
+                    showSuccess('Password reset successfully');
+                    localStorage.removeItem('resetEmail');
+                } else {
+                    showError('passwordError', response.message || 'Failed to reset password.');
+                }
+            } catch (error) {
+                console.error('Error in resetPassword:', error);
+                if (error.message.includes('Network error')) {
+                    showError('passwordError', 'Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
+                } else {
+                    showError('passwordError', 'Error occurred: ' + error.message);
+                }
+            }
         });
     </script>
 </body>

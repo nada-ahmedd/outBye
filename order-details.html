@@ -35,7 +35,7 @@
 
         .order-details-container {
             width: 100%;
-            max-width: 600px;
+            max-width: 900px;
             margin: 0 auto 60px;
             background: rgba(255, 255, 255, 0.95);
             padding: 30px;
@@ -44,33 +44,46 @@
             border: 1px solid #F26B0A;
         }
 
-        .order-details-container p {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #333;
+        .order-details-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
         }
 
-        .order-details-container p strong {
-            color: #F26B0A;
+        .order-details-table th,
+        .order-details-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .order-details-table th {
+            background: #F26B0A;
+            color: white;
+            font-weight: 600;
+        }
+
+        .order-details-table td {
+            color: #333;
         }
 
         .btn {
             background: linear-gradient(90deg, #F26B0A, #ff5e62);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 15px;
+            padding: 8px 15px;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 1.1rem;
             cursor: pointer;
             transition: transform 0.3s ease;
-            display: block;
-            margin: 20px auto;
         }
 
         .btn:hover {
             transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(242, 107, 10, 0.4);
+        }
+
+        .btn-danger {
+            background: #dc3545;
         }
 
         @media (max-width: 768px) {
@@ -82,13 +95,15 @@
                 padding: 20px;
             }
 
-            .order-details-container p {
-                font-size: 1rem;
+            .order-details-table th,
+            .order-details-table td {
+                padding: 10px;
+                font-size: 0.9rem;
             }
 
             .btn {
-                padding: 12px 25px;
-                font-size: 1rem;
+                padding: 6px 12px;
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -145,10 +160,21 @@
 
     <!-- Order Details -->
     <h1>Order Details</h1>
-    <div class="order-details-container" id="order-details">
-        <!-- التفاصيل هتتعبى هنا ديناميكيًا -->
+    <div class="order-details-container">
+        <table class="order-details-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Order Type</th>
+                    <th>Total Price</th>
+                    <th>Delivery Price</th>
+                    <th>Order Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="order-details"></tbody>
+        </table>
     </div>
-    <a href="pending-orders.html" class="btn">Back to Pending Orders</a>
 
     <!-- Footer -->
     <footer class="site-footer bg-dark text-white py-5">
@@ -214,12 +240,21 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/navbar.js"></script>
+    <script src="js/item.js"></script>
+    <script src="js/signin.js"></script>
+    <script src="js/signup.js"></script>
+    <script src="js/search.js"></script>
     <script src="js/navbar.js"></script>
     <script>
         const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
         const ENDPOINTS = {
-            DETAILS: `${API_BASE_URL}orders/details.php`
+            DETAILS: `${API_BASE_URL}orders/details.php`,
+            DELETE: `${API_BASE_URL}orders/delete.php`
         };
 
         function isLoggedIn() {
@@ -246,37 +281,87 @@
                 showAlert({
                     icon: "error",
                     title: "خطأ",
-                    text: "لم يتم العثور على معرف الطلب!",
-                    onConfirm: () => window.location.href = "pending-orders.html"
+                    text: "رقم الطلب غير موجود!",
+                    onConfirm: () => window.location.href = "index.html"
                 });
                 return;
             }
 
             try {
+                const formData = new FormData();
+                formData.append("ordersid", orderId);
+
                 const response = await fetch(ENDPOINTS.DETAILS, {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams({ ordersid: orderId }).toString()
+                    body: formData
                 });
-                const data = await response.json();
-                console.log("Order Details API Response:", data);
 
-                const orderDetails = document.getElementById("order-details");
+                const rawResponse = await response.text();
+                console.log("Raw Response from Details API:", rawResponse);
+
+                let data;
+                if (!rawResponse.trim()) {
+                    data = { status: "error", message: "Empty response from server" };
+                } else {
+                    try {
+                        data = JSON.parse(rawResponse);
+                    } catch (jsonError) {
+                        console.warn("Warning: Invalid JSON:", jsonError);
+                        data = { status: "error", message: "Invalid JSON response" };
+                    }
+                }
+
+                console.log("Parsed Details API Response:", data);
+
+                const orderDetailsTable = document.getElementById("order-details");
                 if (data.status === "success" && data.data) {
                     const order = data.data;
-                    orderDetails.innerHTML = `
-                        <p><strong>Order ID:</strong> ${order.orders_id}</p>
-                        <p><strong>Order Type:</strong> ${order.orders_type == 1 ? "Restaurants & Cafes" : "Hotels & Tourist Places"}</p>
-                        <p><strong>Total Price:</strong> ${order.orders_price} EGP</p>
-                        <p><strong>Payment Method:</strong> ${order.orders_paymentmethod == 1 ? "Payment Card" : "Cash"}</p>
-                        <p><strong>Coupon Discount:</strong> ${order.orders_coupondiscount}%</p>
+                    orderDetailsTable.innerHTML = `
+                        <tr>
+                            <td>${order.orders_id}</td>
+                            <td>${order.orders_type == 1 ? "Restaurants & Cafes" : "Hotels & Tourist Places"}</td>
+                            <td>${order.orders_totalprice || order.orders_price} EGP</td>
+                            <td>${order.orders_pricedelivery || "0"} EGP</td>
+                            <td>${order.orders_datetime}</td>
+                            <td>
+                                <button class="btn btn-danger" onclick="deleteOrder('${order.orders_id}')">Delete</button>
+                            </td>
+                        </tr>
                     `;
                 } else {
-                    orderDetails.innerHTML = `<p>لا توجد تفاصيل متاحة لهذا الطلب.</p>`;
+                    orderDetailsTable.innerHTML = `<tr><td colspan="6">لا توجد تفاصيل لهذا الطلب.</td></tr>`;
                 }
             } catch (error) {
                 console.error("❌ Error fetching order details:", error);
                 showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء جلب تفاصيل الطلب!" });
+            }
+        }
+
+        async function deleteOrder(orderId) {
+            try {
+                const formData = new FormData();
+                formData.append("ordersid", orderId);
+
+                const response = await fetch(ENDPOINTS.DELETE, {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                console.log("Delete Order API Response:", data);
+
+                if (data.status === "success") {
+                    showAlert({
+                        icon: "success",
+                        title: "تم الحذف",
+                        text: "تم حذف الطلب بنجاح!",
+                        onConfirm: () => window.location.href = "index.html" // تحويل للصفحة الرئيسية بعد الحذف
+                    });
+                } else {
+                    showAlert({ icon: "error", title: "خطأ", text: data.message || "فشل في حذف الطلب!" });
+                }
+            } catch (error) {
+                console.error("❌ Error deleting order:", error);
+                showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء حذف الطلب!" });
             }
         }
 
