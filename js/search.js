@@ -4,16 +4,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const searchBtn = document.querySelector(".search-btn");
   const closeBtn = document.querySelector(".close-btn");
 
-  if (!searchQueryInput || !searchResultsContainer || !searchBtn) {
-    console.error("Search elements not found!");
+  if (!searchQueryInput || !searchResultsContainer || !searchBtn || !closeBtn) {
+    console.error("Search elements not found!", { searchQueryInput, searchResultsContainer, searchBtn, closeBtn });
     return;
   }
 
-  closeBtn.addEventListener("click", () => {
+  // Function to hide search results
+  const hideSearchResults = () => {
     searchResultsContainer.classList.remove("show");
     searchQueryInput.value = "";
+  };
+
+  // Add focusout event on the input
+  searchQueryInput.addEventListener("focusout", (e) => {
+    // Ensure the click is not inside the results card
+    setTimeout(() => {
+      if (!searchResultsContainer.contains(document.activeElement)) {
+        hideSearchResults();
+      }
+    }, 100); // Small delay to ensure click on the card is registered
   });
 
+  // Add click event on the document to hide results if clicked outside the input or card
+  document.addEventListener("click", (e) => {
+    const isClickInsideInput = searchQueryInput.contains(e.target);
+    const isClickInsideResults = searchResultsContainer.contains(e.target);
+
+    if (!isClickInsideInput && !isClickInsideResults) {
+      hideSearchResults();
+    }
+  });
+
+  // Event for the close button
+  closeBtn.addEventListener("click", () => {
+    hideSearchResults();
+  });
+
+  // Rest of the code remains the same
   searchBtn.addEventListener("click", performSearch);
   searchQueryInput.addEventListener("input", debounce(performSearch, 500));
 
@@ -36,15 +63,24 @@ document.addEventListener("DOMContentLoaded", () => {
       body: JSON.stringify({ search: query })
     })
       .then(response => {
-        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
-        return response.json();
+        if (!response.ok) throw new Error(`HTTP Error! Status: ${response.status}`);
+        return response.text();
       })
-      .then(response => {
-        console.log("Search API Response:", response);
+      .then(text => {
+        console.log("Raw API Response:", text);
+        const jsonStart = text.indexOf("{");
+        const jsonEnd = text.lastIndexOf("}") + 1;
+        let response;
 
-        if (response.status !== "success" || (!response.items?.data && !response.services?.data)) {
-          searchResultsContainer.innerHTML = "<p style='color: red;'>No results found.</p>";
-          return;
+        try {
+          if (jsonStart === -1 || jsonEnd === 0) throw new Error("No valid JSON found");
+          const jsonText = text.substring(jsonStart, jsonEnd);
+          console.log("Extracted JSON:", jsonText);
+          response = JSON.parse(jsonText);
+          console.log("Parsed API Response:", response);
+        } catch (e) {
+          console.error("Error parsing response:", e);
+          throw e;
         }
 
         let itemsHTML = "<h3>Items</h3>";
@@ -53,18 +89,16 @@ document.addEventListener("DOMContentLoaded", () => {
             (item.items_name?.toLowerCase().includes(query)) || 
             (item.items_name_ar?.toLowerCase().includes(query))
           );
-          if (filteredItems.length) {
-            itemsHTML += filteredItems.map(item => `
-              <div class="search-result-item">
-                <a href="item.html?id=${item.items_id}&service_id=${item.service_id}" class="search-result-link">
-                  <img src="${item.items_image || 'default.jpg'}" alt="${item.items_name || 'Item'}" width="50">
-                  <span>${item.items_name || 'Unnamed Item'}</span>
-                </a>
-              </div>
-            `).join("");
-          } else {
-            itemsHTML += "<p>No items match your search.</p>";
-          }
+          itemsHTML += filteredItems.length
+            ? filteredItems.map(item => `
+                <div class="search-result-item">
+                  <a href="item.html?id=${item.items_id}&service_id=${item.service_id}" class="search-result-link">
+                    <img src="${item.items_image || 'default.jpg'}" alt="${item.items_name || 'Item'}" width="50">
+                    <span>${item.items_name || 'Unnamed Item'}</span>
+                  </a>
+                </div>
+              `).join("")
+            : "<p>No items match your search.</p>";
         } else {
           itemsHTML += "<p>No items available.</p>";
         }
@@ -77,18 +111,16 @@ document.addEventListener("DOMContentLoaded", () => {
             (service.service_description?.toLowerCase().includes(query)) || 
             (service.service_description_ar?.toLowerCase().includes(query))
           );
-          if (filteredServices.length) {
-            servicesHTML += filteredServices.map(service => `
-              <div class="search-result-item">
-                <a href="services.html?cat=${service.service_cat || ''}&id=${service.service_id || ''}" class="search-result-link" data-service-id="${service.service_id || ''}">
-                  <img src="${service.service_image || 'default.jpg'}" alt="${service.service_name || 'Service'}" width="50">
-                  <span>${service.service_name || 'Unnamed Service'} (${service.service_name_ar || 'غير مسمى'})</span>
-                </a>
-              </div>
-            `).join("");
-          } else {
-            servicesHTML += "<p>No services match your search.</p>";
-          }
+          servicesHTML += filteredServices.length
+            ? filteredServices.map(service => `
+                <div class="search-result-item">
+                  <a href="item.html?service_id=${service.service_id}" class="search-result-link">
+                    <img src="${service.service_image || 'default.jpg'}" alt="${service.service_name || 'Service'}" width="50">
+                    <span>${service.service_name || 'Unnamed Service'} (${service.service_name_ar || 'N/A'})</span>
+                  </a>
+                </div>
+              `).join("")
+            : "<p>No services match your search.</p>";
         } else {
           servicesHTML += "<p>No services available.</p>";
         }
@@ -100,14 +132,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.querySelectorAll(".search-result-link").forEach(link => {
           link.addEventListener("click", function () {
-            const serviceId = this.dataset.serviceId;
+            const serviceId = this.getAttribute("href").match(/service_id=(\d+)/)?.[1];
             if (serviceId) localStorage.setItem("highlightedService", serviceId);
           });
         });
       })
       .catch(error => {
         console.error("Error fetching search results:", error);
-        searchResultsContainer.innerHTML = `<p style='color: red;'>Error: ${error.message}</p>`;
+        searchResultsContainer.innerHTML = "<p style='color: red;'>Error: Server issue</p>";
       });
   }
 

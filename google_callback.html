@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirecting...</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
+        }
+
+        .loader {
+            text-align: center;
+            color: #F26B0A;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="loader">
+        <p>Redirecting...</p>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const status = urlParams.get('status') === 'true';
+        const message = urlParams.get('message');
+        const token = urlParams.get('token');
+        const userId = urlParams.get('user_id');
+        const name = urlParams.get('name');
+
+        console.log("Callback params:", { status, token, userId, name });
+
+        if (status && token && userId && name) {
+            localStorage.setItem('token', token);
+            localStorage.setItem('userId', userId);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('userName', name);
+
+            console.log("localStorage updated:", localStorage.getItem('isLoggedIn'));
+
+            setTimeout(() => {
+                if (window.opener) {
+                    console.log("Redirecting opener to profile.html");
+                    window.opener.location.href = 'profile.html';
+                    window.close();
+                } else {
+                    console.log("No opener, redirecting to profile.html");
+                    window.location.href = 'profile.html';
+                }
+            }, 1000); // زيادة التأخير لـ 1000 مللي ثانية
+        } else {
+            console.log("Sign-in failed:", message);
+            Swal.fire({
+                icon: 'error',
+                title: 'Sign-In Failed',
+                text: message || 'An error occurred during sign-in.',
+            }).then(() => {
+                if (window.opener) {
+                    window.close();
+                } else {
+                    window.location.href = 'signin.html';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

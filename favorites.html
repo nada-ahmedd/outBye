@@ -201,7 +201,7 @@
 <body>
     <nav class="navbar navbar-expand-lg">
         <div class="navbar-container">
-            <!-- Logo (شمال) -->
+            <!-- Logo -->
             <a class="navbar-logo" href="index.html">
                 <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
             </a>
@@ -226,23 +226,30 @@
 
                 <!-- Right Section (يمين) -->
                 <div class="navbar-right ms-auto">
+                    <!-- Search -->
                     <div class="search-container">
                         <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
                         <button class="search-btn">Search</button>
                     </div>
-                    <span id="userName" class="nav-link"
-                        style="display: none; color: #F26B0A; font-weight: 600;"></span>
-
+                    <!-- User Info -->
+                    <span id="userName" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+                    <!-- Dropdown -->
                     <div class="dropdown">
                         <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="pending-orders.html"><i class="fas fa-clock"></i> Pending
+                                    Orders</a></li>
                             <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
                                     Addresses</a></li>
-                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            </li>
+                            <li><a class="dropdown-item" href="archive.html"><i class="fas fa-archive"></i> Archive</a>
+                            </li>
+                            <li><button id="logoutBtn" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>
+                                    Logout</button></li>
                         </ul>
                     </div>
                     <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
@@ -279,39 +286,43 @@
     <script src="js/search.js"></script>
     <script src="js/item.js"></script>
     <script>
-        // دالة مساعدة لإضافة الـ token مع معالجة الأخطاء
+        // Helper function to add token with error handling
         async function fetchWithToken(url, options = {}) {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                throw new Error('Authentication token not found. Please log in again.');
+            }
+
+            options.headers = {
+                ...options.headers,
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': options.headers?.['Content-Type'] || 'application/x-www-form-urlencoded'
+            };
+
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    throw new Error(`Unauthorized: ${response.statusText}. Please log in again.`);
+                }
+                throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+            }
+
+            const text = await response.text();
+            const jsonStart = text.indexOf("{");
+            const jsonEnd = text.lastIndexOf("}") + 1;
+            if (jsonStart === -1 || jsonEnd === 0) {
+                throw new Error('Response from server is not valid JSON or is empty');
+            }
+            const jsonText = text.substring(jsonStart, jsonEnd);
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    throw new Error('No authentication token found. Please log in again.');
-                }
-
-                options.headers = {
-                    ...options.headers,
-                    'Authorization': `Bearer ${token}`,
-                };
-
-                const response = await fetch(url, options);
-                if (!response.ok) {
-                    if (response.status === 401 || response.status === 403) {
-                        throw new Error(`Unauthorized: ${response.statusText}. Please log in again.`);
-                    }
-                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                if (error.message.includes('Failed to fetch')) {
-                    throw new Error('Network error: Unable to connect to the server. This might be due to CORS or network issues.');
-                }
-                throw error;
+                return JSON.parse(jsonText);
+            } catch (e) {
+                throw new Error('Failed to parse JSON: ' + jsonText);
             }
         }
 
-        // دالة لعرض الرسائل باستخدام SweetAlert
-        const showAlert = (icon, title, text, redirectUrl = null) => {
+        // Function to show alerts using SweetAlert (renamed to avoid conflicts)
+        const showFavoritesAlert = (icon, title, text, redirectUrl = null) => {
             return Swal.fire({
                 icon,
                 title,
@@ -322,28 +333,37 @@
             });
         };
 
-        // دالة لإغلاق نتائج البحث
+        // Function to close search results
         const closeSearchResults = () => {
             document.getElementById("searchResults").style.display = "none";
         };
 
-        // جلب قائمة المفضلة
+        // Fetch favorites list
         async function fetchFavorites(userId) {
             try {
                 document.getElementById('loader').style.display = 'block';
 
                 const data = await fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/view.php", {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams({ id: userId }).toString()
                 });
 
-                console.log("✅ Favorites Response:", data);
+                console.log("✅ Favorites response:", data);
                 const container = document.getElementById("favorites-container");
                 document.getElementById('loader').style.display = 'none';
 
                 if (data.status === "success" && Array.isArray(data.data) && data.data.length > 0) {
-                    container.innerHTML = data.data.map(item => {
+                    // Remove duplicates based on favorite_itemsid
+                    const uniqueItems = [];
+                    const seenItems = new Set();
+                    data.data.forEach(item => {
+                        if (!seenItems.has(item.favorite_itemsid)) {
+                            seenItems.add(item.favorite_itemsid);
+                            uniqueItems.push(item);
+                        }
+                    });
+
+                    container.innerHTML = uniqueItems.map(item => {
                         const discount = parseFloat(item.items_discount) || 0;
                         const price = parseFloat(item.items_price);
                         const discountedPrice = discount > 0 ? (price - (price * discount / 100)).toFixed(2) : price;
@@ -371,57 +391,56 @@
                     }).join("");
                     addRemoveListeners();
                 } else {
-                    container.innerHTML = "<p style='text-align: center; color: #666; font-size: 1.2rem;'>لا توجد منتجات مفضلة.</p>";
+                    container.innerHTML = "<p style='text-align: center; color: #666; font-size: 1.2rem;'>No favorite items found.</p>";
                 }
             } catch (error) {
                 console.error("❌ Error fetching favorites:", error);
                 document.getElementById('loader').style.display = 'none';
-                document.getElementById("favorites-container").innerHTML = "<p style='text-align: center; color: #666; font-size: 1.2rem;'>⚠️ حدث خطأ أثناء تحميل المفضلة.</p>";
-                if (error.message.includes('Network error')) {
-                    showAlert("error", "❌ Connection Error", "Unable to connect to the server. This might be due to CORS or network issues.");
-                } else if (error.message.includes('Unauthorized')) {
-                    showAlert("error", "❌ Authentication Error", error.message, "signin.html");
+                document.getElementById("favorites-container").innerHTML = "<p style='text-align: center; color: #666; font-size: 1.2rem;'>⚠️ An error occurred while loading favorites.</p>";
+                if (error.message.includes('Unauthorized')) {
+                    showFavoritesAlert("error", "❌ Authentication Error", error.message, "signin.html");
+                } else if (error.message.includes('HTTP error')) {
+                    showFavoritesAlert("error", "❌ Server Error", error.message);
                 } else {
-                    showAlert("error", "❌ Error", "Error fetching favorites: " + error.message);
+                    showFavoritesAlert("error", "❌ Error", "An error occurred while fetching favorites: " + error.message);
                 }
             }
         }
 
-        // إزالة منتج من المفضلة
+        // Remove item from favorites
         async function removeFromFavorites(itemId) {
             const userId = localStorage.getItem("userId");
             if (!userId) {
-                showAlert("error", "❌ Error", "User ID not found", "signin.html");
+                showFavoritesAlert("error", "❌ Error", "User ID not found", "signin.html");
                 return;
             }
 
             try {
                 const data = await fetchWithToken("https://abdulrahmanantar.com/outbye/favorite/remove.php", {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: new URLSearchParams({ usersid: userId, itemsid: itemId }).toString()
                 });
 
                 if (data.status === "success") {
-                    showAlert("success", "✅ تمت الإزالة!", "تمت إزالة المنتج من المفضلة.");
-                    document.querySelector(`.favorite-item[data-itemid="${itemId}"]`).remove();
-                    fetchFavorites(userId); // تحديث القائمة بعد الإزالة
+                    showFavoritesAlert("success", "✅ Removed!", "The item has been removed from favorites.");
+                    document.querySelector(`.favorite-item[data-itemid="${itemId}"]`)?.remove();
+                    fetchFavorites(userId); // Refresh the list after removal
                 } else {
-                    showAlert("error", "❌ خطأ", data.message || "لم يتمكن السيرفر من حذف المنتج.");
+                    showFavoritesAlert("error", "❌ Error", data.message || "The server could not remove the item.");
                 }
             } catch (error) {
-                console.error("❌ Error removing favorite:", error);
-                if (error.message.includes('Network error')) {
-                    showAlert("error", "❌ Connection Error", "Unable to connect to the server. This might be due to CORS or network issues.");
-                } else if (error.message.includes('Unauthorized')) {
-                    showAlert("error", "❌ Authentication Error", error.message, "signin.html");
+                console.error("❌ Error removing item from favorites:", error);
+                if (error.message.includes('Unauthorized')) {
+                    showFavoritesAlert("error", "❌ Authentication Error", error.message, "signin.html");
+                } else if (error.message.includes('HTTP error')) {
+                    showFavoritesAlert("error", "❌ Server Error", error.message);
                 } else {
-                    showAlert("error", "❌ Error", "Error removing favorite: " + error.message);
+                    showFavoritesAlert("error", "❌ Error", "Error removing item: " + error.message);
                 }
             }
         }
 
-        // إضافة مستمعين لأزرار الإزالة
+        // Add listeners for remove buttons
         function addRemoveListeners() {
             document.querySelectorAll(".remove-favorite-btn").forEach(button => {
                 button.addEventListener("click", () => {
@@ -431,11 +450,11 @@
             });
         }
 
-        // تهيئة الصفحة عند تحميلها
+        // Initialize page on load
         document.addEventListener("DOMContentLoaded", () => {
             const userId = localStorage.getItem("userId");
             if (!userId) {
-                showAlert("warning", "⚠️ خطأ", "يرجى تسجيل الدخول لعرض المفضلة.", "signin.html");
+                showFavoritesAlert("warning", "⚠️ Error", "Please log in to view favorites.", "signin.html");
                 return;
             }
             fetchFavorites(userId);

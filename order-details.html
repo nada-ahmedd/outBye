@@ -15,75 +15,163 @@
         body {
             margin: 0;
             padding: 0;
+            padding-top: 80px;
             background: linear-gradient(135deg, #f5f7fa 0%, #ffe6d1 100%);
             font-family: 'Poppins', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow-x: hidden;
+            color: #000000;
         }
 
         h1 {
             color: #F26B0A;
             text-align: center;
+            margin: 30px 0;
             font-weight: 700;
             font-size: 3rem;
             text-transform: uppercase;
-            margin: 60px 0 40px;
-            text-shadow: 2px 2px 8px rgba(242, 107, 10, 0.3);
+            letter-spacing: 3px;
+            text-shadow: 0 0 15px rgba(242, 107, 10, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(242, 107, 10, 0.3);
+            }
+
+            to {
+                text-shadow: 0 0 20px rgba(242, 107, 10, 0.8);
+            }
         }
 
         .order-details-container {
-            width: 100%;
+            width: 90%;
             max-width: 900px;
-            margin: 0 auto 60px;
-            background: rgba(255, 255, 255, 0.95);
+            margin: 20px auto 60px;
+            background: rgba(216, 204, 204, 0.05);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(242, 107, 10, 0.2);
-            border: 1px solid #F26B0A;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 2px solid #F26B0A;
+            backdrop-filter: blur(10px);
+            animation: slideIn 0.8s ease-out;
         }
 
-        .order-details-table {
-            width: 100%;
-            border-collapse: collapse;
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .order-details-container h3 {
+            color: #F26B0A;
+            font-weight: 600;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+
+        .items-list {
             margin-top: 20px;
         }
 
-        .order-details-table th,
-        .order-details-table td {
+        .item {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
             padding: 15px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .order-details-table th {
-            background: #F26B0A;
-            color: white;
-            font-weight: 600;
+        .item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(242, 107, 10, 0.3);
         }
 
-        .order-details-table td {
-            color: #333;
+        .item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+            border: 2px solid #F26B0A;
+        }
+
+        .item-info {
+            flex: 1;
+        }
+
+        .item-info p {
+            margin: 5px 0;
+            color: #000000;
+            font-size: 1rem;
+        }
+
+        .item-info p strong {
+            color: #F26B0A;
+        }
+
+        .order-actions {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
         }
 
         .btn {
             background: linear-gradient(90deg, #F26B0A, #ff5e62);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 10px;
+            padding: 12px 30px;
+            border-radius: 50px;
             font-weight: 600;
+            font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
         }
 
         .btn:hover {
             transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(242, 107, 10, 0.5);
         }
 
-        .btn-danger {
-            background: #dc3545;
+        .btn.delete {
+            background: linear-gradient(90deg, #ff5e62, #F26B0A);
+        }
+
+        .no-items {
+            text-align: center;
+            color: #999;
+            font-size: 1.2rem;
+            margin-top: 20px;
         }
 
         @media (max-width: 768px) {
@@ -93,97 +181,112 @@
 
             .order-details-container {
                 padding: 20px;
+                width: 95%;
             }
 
-            .order-details-table th,
-            .order-details-table td {
-                padding: 10px;
-                font-size: 0.9rem;
+            .item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .item img {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+
+            .order-actions {
+                flex-direction: column;
+                gap: 10px;
             }
 
             .btn {
-                padding: 6px 12px;
-                font-size: 0.9rem;
+                width: 100%;
             }
         }
     </style>
 </head>
 
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg">
-        <div class="navbar-container">
-            <a class="navbar-logo" href="index.html">
-                <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <div class="navbar-links mx-auto">
-                    <a class="nav-link" href="index.html">Home</a>
-                    <a class="nav-link" href="contact.html">Contact</a>
-                    <a class="nav-link" href="about.html">About</a>
-                    <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
-                        <i class="fas fa-user-plus"></i> Sign Up
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-container">
+        <!-- Logo -->
+        <a class="navbar-logo" href="index.html">
+            <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Links (نص) -->
+            <div class="navbar-links mx-auto">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+                <a class="nav-link" href="about.html">About</a>
+
+                <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            </div>
+
+            <!-- Right Section (يمين) -->
+            <div class="navbar-right ms-auto">
+                <!-- Search -->
+                <div class="search-container">
+                    <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                    <button class="search-btn">Search</button>
+                </div>
+                <!-- User Info -->
+                <span id="userName" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+                <!-- Dropdown -->
+                <div class="dropdown">
+                    <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-user"></i>
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="pending-orders.html"><i class="fas fa-clock"></i> Pending
+                                Orders</a></li>
+                        <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
+                                Addresses</a></li>
+                        <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="archive.html"><i class="fas fa-archive"></i> Archive</a></li>
+                        <li><button id="logoutBtn" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>
+                                Logout</button></li>
+                    </ul>
                 </div>
-                <div class="navbar-right ms-auto">
-                    <div class="search-container">
-                        <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
-                        <button class="search-btn">Search</button>
-                    </div>
-                    <span id="userName" class="nav-link" style="display: none; color: white; font-weight: 600;"></span>
-                    <div class="dropdown">
-                        <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
-                                    Addresses</a></li>
-                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
-                        </ul>
-                    </div>
-                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
-                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
-                            class="fas fa-shopping-cart"></i></a>
-                </div>
+                <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
             </div>
         </div>
-        <div id="searchResults" class="search-results">
-            <button class="close-btn" onclick="closeSearchResults()">×</button>
-        </div>
-    </nav>
-
-    <!-- Order Details -->
-    <h1>Order Details</h1>
-    <div class="order-details-container">
-        <table class="order-details-table">
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Order Type</th>
-                    <th>Total Price</th>
-                    <th>Delivery Price</th>
-                    <th>Order Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="order-details"></tbody>
-        </table>
     </div>
 
-    <!-- Footer -->
+    <!-- Search Results -->
+    <div id="searchResults" class="search-results">
+        <button class="close-btn" onclick="closeSearchResults()">×</button>
+    </div>
+</nav>
+    <h1>Order Details</h1>
+    <div class="order-details-container" id="orderDetailsContainer">
+        <h3>Order Items</h3>
+        <div class="items-list" id="items-list"></div>
+        <div class="order-actions">
+            <a href="pending-orders.html" class="btn">Back to Orders</a>
+            <button class="btn delete" id="deleteOrderBtn">Delete Order</button>
+        </div>
+    </div>
+
     <footer class="site-footer bg-dark text-white py-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-2 col-md-6">
                     <div class="footer-logo">
                         <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
-                        <p>Your go-to place for restaurants, cafes, and hotels.</p>
+                        <p>Your go-to place for restaurants, cafes,tourist-places and hotels.</p>
                         <div class="footer-socials">
                             <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
                             <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
@@ -195,32 +298,20 @@
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5>Important Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="#" class="text-white">About Us</a></li>
-                        <li><a href="#" class="text-white">Best Offers</a></li>
-                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="about.html" class="text-white">About Us</a></li>
+                        <li><a href="contact.html" class="text-white">Contact Us</a></li>
                         <li><a href="#" class="text-white">FAQ</a></li>
                         <li><a href="#" class="text-white">Privacy Policy</a></li>
                         <li><a href="#" class="text-white">Terms & Conditions</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Our Services</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Restaurants</a></li>
-                        <li><a href="#" class="text-white">Cafes</a></li>
-                        <li><a href="#" class="text-white">Hotels</a></li>
-                        <li><a href="#" class="text-white">Delivery</a></li>
-                        <li><a href="#" class="text-white">Visitor Ratings</a></li>
-                        <li><a href="#" class="text-white">Bookings</a></li>
-                    </ul>
-                </div>
+    
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h4>Subscribe</h4>
                     <p>Get the latest offers<br> and updates directly in your inbox!</p>
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email"
-                            required>
+                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
                         <button class="btn submit" type="submit">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -228,16 +319,18 @@
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h5>Contact Information</h5>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Email:</strong> contact@restaurant.com</p>
-                    <p><strong>Address:</strong> 123 Example St., City, Country</p>
+                    <p><strong>Phone:</strong> 01069504099</p>
+                    <p><strong>Email:</strong> outbyet@gmail.com</p>
+                    <p><strong>Address:</strong> Fayoum</p>
                 </div>
             </div>
         </div>
         <div class="footer-bottom text-center">
             <p>© 2024 All Rights Reserved. Designed and developed by our team.</p>
         </div>
+      
     </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
@@ -249,137 +342,7 @@
     <script src="js/signin.js"></script>
     <script src="js/signup.js"></script>
     <script src="js/search.js"></script>
-    <script src="js/navbar.js"></script>
-    <script>
-        const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
-        const ENDPOINTS = {
-            DETAILS: `${API_BASE_URL}orders/details.php`,
-            DELETE: `${API_BASE_URL}orders/delete.php`
-        };
-
-        function isLoggedIn() {
-            return !!localStorage.getItem("userId");
-        }
-
-        function showAlert({ icon, title, text, confirmText, cancelText, onConfirm }) {
-            Swal.fire({
-                icon,
-                title,
-                text,
-                confirmButtonText: confirmText || "موافق",
-                showCancelButton: !!cancelText,
-                cancelButtonText: cancelText || "إلغاء"
-            }).then((result) => {
-                if (result.isConfirmed && onConfirm) onConfirm();
-            });
-        }
-
-        async function loadOrderDetails() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const orderId = urlParams.get("ordersid");
-            if (!orderId) {
-                showAlert({
-                    icon: "error",
-                    title: "خطأ",
-                    text: "رقم الطلب غير موجود!",
-                    onConfirm: () => window.location.href = "index.html"
-                });
-                return;
-            }
-
-            try {
-                const formData = new FormData();
-                formData.append("ordersid", orderId);
-
-                const response = await fetch(ENDPOINTS.DETAILS, {
-                    method: "POST",
-                    body: formData
-                });
-
-                const rawResponse = await response.text();
-                console.log("Raw Response from Details API:", rawResponse);
-
-                let data;
-                if (!rawResponse.trim()) {
-                    data = { status: "error", message: "Empty response from server" };
-                } else {
-                    try {
-                        data = JSON.parse(rawResponse);
-                    } catch (jsonError) {
-                        console.warn("Warning: Invalid JSON:", jsonError);
-                        data = { status: "error", message: "Invalid JSON response" };
-                    }
-                }
-
-                console.log("Parsed Details API Response:", data);
-
-                const orderDetailsTable = document.getElementById("order-details");
-                if (data.status === "success" && data.data) {
-                    const order = data.data;
-                    orderDetailsTable.innerHTML = `
-                        <tr>
-                            <td>${order.orders_id}</td>
-                            <td>${order.orders_type == 1 ? "Restaurants & Cafes" : "Hotels & Tourist Places"}</td>
-                            <td>${order.orders_totalprice || order.orders_price} EGP</td>
-                            <td>${order.orders_pricedelivery || "0"} EGP</td>
-                            <td>${order.orders_datetime}</td>
-                            <td>
-                                <button class="btn btn-danger" onclick="deleteOrder('${order.orders_id}')">Delete</button>
-                            </td>
-                        </tr>
-                    `;
-                } else {
-                    orderDetailsTable.innerHTML = `<tr><td colspan="6">لا توجد تفاصيل لهذا الطلب.</td></tr>`;
-                }
-            } catch (error) {
-                console.error("❌ Error fetching order details:", error);
-                showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء جلب تفاصيل الطلب!" });
-            }
-        }
-
-        async function deleteOrder(orderId) {
-            try {
-                const formData = new FormData();
-                formData.append("ordersid", orderId);
-
-                const response = await fetch(ENDPOINTS.DELETE, {
-                    method: "POST",
-                    body: formData
-                });
-                const data = await response.json();
-                console.log("Delete Order API Response:", data);
-
-                if (data.status === "success") {
-                    showAlert({
-                        icon: "success",
-                        title: "تم الحذف",
-                        text: "تم حذف الطلب بنجاح!",
-                        onConfirm: () => window.location.href = "index.html" // تحويل للصفحة الرئيسية بعد الحذف
-                    });
-                } else {
-                    showAlert({ icon: "error", title: "خطأ", text: data.message || "فشل في حذف الطلب!" });
-                }
-            } catch (error) {
-                console.error("❌ Error deleting order:", error);
-                showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء حذف الطلب!" });
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            if (!isLoggedIn()) {
-                showAlert({
-                    icon: "warning",
-                    title: "غير مسجل الدخول",
-                    text: "يجب تسجيل الدخول أولاً لعرض تفاصيل الطلب!",
-                    confirmText: "تسجيل الدخول",
-                    cancelText: "إلغاء",
-                    onConfirm: () => window.location.href = "signin.html"
-                });
-                return;
-            }
-            loadOrderDetails();
-        });
-    </script>
+    <script src="js/order-details.js"></script>
 </body>
 
 </html>

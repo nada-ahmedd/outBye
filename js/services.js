@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Scroll to top on page load
     window.scrollTo({
         top: 0,
         behavior: "instant"
@@ -38,36 +39,36 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
                 servicesContainer.innerHTML = data.data.map(service => {
-                    const isHighlighted = highlightedService == service.service_id ? "highlight" : ""; 
+                    const isHighlighted = highlightedService == service.service_id ? "highlight" : "";
 
-                 return `
-    <div class="service-item ${isHighlighted}" data-service-id="${service.service_id}">
-        <img src="${service.service_image}" alt="${service.service_name}" class="service-image">
-        <div class="service-content">
-            <h3 class="service-title" onclick="setHighlightedService(${service.service_id})">
-                ${service.service_name}
-            </h3>
-            <p class="service-description">${service.service_description}</p>
-            <div class="service-details">
-                <p class="secondary"><strong>Location:</strong> ${service.service_location}</p>
-                <div class="rating">
-                    <i class="fa fa-star"></i>
-                    <span>${service.service_rating}</span>
-                </div>
-                <p class="secondary"><strong>Phone:</strong> ${service.service_phone}</p>
-                <p class="secondary"><strong>Website:</strong> 
-                    <a href="${service.service_website}" target="_blank" rel="noopener noreferrer">
-                        ${service.service_website}
-                    </a>
-                </p>
-            </div>
-            <div class="service-actions">
-                <button class="view-items-btn" onclick="fetchServiceItems(${service.service_id})">View Items</button>
-            </div>
-        </div>
-    </div>
-`;
-}).join('');
+                    return `
+                        <div class="service-item ${isHighlighted}" data-service-id="${service.service_id}" onclick="fetchServiceItems(${service.service_id})">
+                            <img src="${service.service_image}" alt="${service.service_name}" class="service-image">
+                            <div class="service-content">
+                                <h3 class="service-title" onclick="setHighlightedService(${service.service_id})">
+                                    ${service.service_name}
+                                </h3>
+                                <p class="service-description">${service.service_description}</p>
+                                <div class="service-details">
+                                    <p class="secondary"><strong>Location:</strong> ${service.service_location}</p>
+                                    <div class="rating">
+                                        <i class="fa fa-star"></i>
+                                        <span>${service.service_rating}</span>
+                                    </div>
+                                    <p class="secondary"><strong>Phone:</strong> ${service.service_phone}</p>
+                                    <p class="secondary"><strong>Website:</strong> 
+                                        <a href="${service.service_website}" target="_blank" rel="noopener noreferrer">
+                                            ${service.service_website}
+                                        </a>
+                                    </p>
+                                </div>
+                                <div class="service-actions">
+                                    <button class="view-items-btn">View Items</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
 
                 localStorage.removeItem("highlightedService");
             } else {
@@ -80,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 });
 
+// Set highlighted service in localStorage
 function setHighlightedService(serviceId) {
     localStorage.setItem("highlightedService", serviceId);
     window.scrollTo({
@@ -88,6 +90,7 @@ function setHighlightedService(serviceId) {
     });
 }
 
+// Fetch service items and redirect if items exist
 function fetchServiceItems(serviceId) {
     const apiUrl = "https://abdulrahmanantar.com/outbye/items/items.php";
     fetch(apiUrl, {
@@ -107,14 +110,37 @@ function fetchServiceItems(serviceId) {
                 if (data.data && data.data.length > 0) {
                     window.location.href = `item.html?service_id=${serviceId}`;
                 } else {
-                    alert("لا توجد عناصر لهذه الخدمة.");
+                    alert("No items found for this service.");
                 }
             } else {
-                alert("حدث خطأ أثناء جلب البيانات.");
+                alert("An error occurred while fetching data.");
             }
         })
         .catch(error => {
             console.error("Error fetching service items:", error);
-            alert("حدث خطأ في الاتصال بالسيرفر.");
+            alert("An error occurred while connecting to the server.");
         });
 }
+
+// Inline CSS for clickable service card
+const style = document.createElement("style");
+style.textContent = `
+    .service-item {
+        cursor: pointer;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .service-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    .service-item .service-actions .view-items-btn {
+        pointer-events: none; /* Prevent button from intercepting clicks */
+    }
+    .service-item .service-title {
+        cursor: pointer;
+    }
+    .service-item a {
+        pointer-events: auto; /* Allow website link to remain clickable */
+    }
+`;
+document.head.appendChild(style);

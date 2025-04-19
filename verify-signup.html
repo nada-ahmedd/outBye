@@ -242,11 +242,11 @@
         }
 
         // دالة للتحقق من الكود
-        async function verifyCode(email, verifyCode) {
+        async function verifyCode(email, code) {
             try {
                 const formData = new FormData();
                 formData.append('email', email);
-                formData.append('verifycode', verifyCode);
+                formData.append('verifycode', code);
 
                 const data = await fetchWithToken('https://abdulrahmanantar.com/outbye/auth/verfiycode.php', {
                     method: 'POST',
@@ -317,18 +317,18 @@
             event.preventDefault();
 
             // جمع الكود من الحقول
-            let verifyCode = '';
+            let code = '';
             for (let i = 1; i <= 5; i++) {
                 const field = document.getElementById('verifyCodeField' + i);
                 if (!field) {
                     showError('Form Error', 'Verification field #' + i + ' is missing.');
                     return;
                 }
-                verifyCode += field.value.trim();
+                code += field.value.trim();
             }
 
             // التحقق من طول الكود
-            if (verifyCode.length !== 5) {
+            if (code.length !== 5) {
                 showError('Incomplete Code', 'Please enter all five digits.');
                 return;
             }
@@ -338,7 +338,7 @@
             if (!email) return;
 
             // إرسال الكود للتحقق
-            await verifyCode(email, verifyCode);
+            await verifyCode(email, code);
         });
 
         // حدث النقر على رابط Resend Code

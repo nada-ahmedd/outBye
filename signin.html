@@ -33,6 +33,7 @@
             width: 100%;
             max-width: 400px;
             text-align: center;
+            position: relative;
         }
 
         .modal-content h3 {
@@ -71,6 +72,71 @@
             font-size: 14px;
             margin-top: 5px;
         }
+
+        .close-modal {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            font-size: 1.8rem;
+            color: #fff;
+            background-color: #F06A0A;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background-color: #d95c00;
+            transform: rotate(90deg);
+        }
+
+        .signup-form .login-btn .btn {
+            background-color: #F06A0A;
+            color: white;
+            border: none;
+            padding: 8px 16px !important;
+            font-size: 14px !important;
+            border-radius: 5px;
+            width: auto !important;
+            display: block !important;
+            margin: 0 auto !important;
+        }
+
+        .signup-form .login-btn .btn:hover {
+            background-color: #d95c00;
+        }
+
+        .google-signin-btn {
+            background-color: #fff;
+            color: #333;
+            border: 1px solid #ccc;
+            padding: 8px 16px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: auto;
+            margin: 15px auto;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .google-signin-btn:hover {
+            background-color: #f1f1f1;
+        }
+
+        .google-signin-btn img {
+            width: 20px;
+            height: 20px;
+        }
     </style>
 </head>
 
@@ -89,7 +155,10 @@
                     <a class="nav-link" href="about.html">About</a>
                     <a id="signupBtn" class="nav-link sign-up-link" href="signup.html"><i class="fas fa-user-plus"></i>
                         Sign Up</a>
+                    <a id="signinBtn" class="nav-link sign-in-link" href="signin.html"><i
+                            class="fas fa-sign-in-alt"></i> Sign In</a>
                 </div>
+                <span id="userName" class="nav-link" style="display: none; color: #F26B0A; font-weight: 600;"></span>
             </div>
         </div>
     </nav>
@@ -98,26 +167,81 @@
         <div class="row signup-container">
             <div class="col-md-6 p-0"><img src="images/sign.jpg" alt="Login Image" class="w-100 m-1"></div>
             <div class="col-md-6">
-                <div class="signup-form">
-                    <h2>Log in to Exclusive</h2>
-                    <p class="text-muted">Enter your details below</p>
-                    <form id="loginForm" action="https://abdulrahmanantar.com/outbye/auth/login.php" method="POST">
-                        <div class="mb-3">
-                            <input type="email" name="email" class="form-control" placeholder="Email Address" required>
-                            <div class="form-error" style="color: red;"></div>
-                        </div>
-                        <div class="mb-3">
-                            <input type="password" name="password" class="form-control" placeholder="Password" required>
-                            <div class="form-error" style="color: red;"></div>
-                        </div>
-                        <div class="login-btn"><button type="submit" class="btn">Log In</button></div>
-                        <div class="forgot-password"><a href="#" id="forgotPasswordLink">Forgot Password?</a></div>
-                    </form>
-                </div>
+<div class="signup-form">
+    <h2>Log in to Exclusive</h2>
+    <p class="text-muted">Enter your details below</p>
+    <form id="loginForm" action="https://abdulrahmanantar.com/outbye/auth/login.php" method="POST">
+        <div class="mb-3">
+            <input type="text" name="email" class="form-control" placeholder="Email Address Or Phone" required>
+            <div id="form-error" class="form-error" style="color: red;"></div>
+        </div>
+        <div class="mb-3">
+            <input type="password" name="password" class="form-control" placeholder="Password" required>
+            <div id="form-error" class="form-error" style="color: red;"></div>
+        </div>
+        <div class="login-btn"><button type="submit" class="btn">Log In</button></div>
+        <div class="forgot-password"><a href="#" id="forgotPasswordLink">Forgot Password?</a></div>
+    </form>
+    <button id="googleSignupBtn" class="google-signin-btn">
+        <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+        Sign in with Google
+    </button>
+</div>
 
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal"
+            onclick="document.getElementById('forgotPasswordModal').style.display='none'">×</button>
+        <h3>Reset Password</h3>
+        <input type="email" id="forgotEmail" placeholder="Enter your email" required>
+        <button id="submitEmail">Submit</button>
+        <div id="emailError" class="error-message"></div>
+    </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div id="resetPasswordModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal"
+            onclick="document.getElementById('resetPasswordModal').style.display='none'">×</button>
+        <h3>Reset Your Password</h3>
+        <input type="password" id="newPassword" placeholder="New Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm New Password" required>
+        <button id="resetPassword">Reset Password</button>
+        <div id="passwordError" class="error-message"></div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div id="forgotPasswordModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal"
+            onclick="document.getElementById('forgotPasswordModal').style.display='none'">×</button>
+        <h3>Reset Password</h3>
+        <input type="email" id="forgotEmail" placeholder="Enter your email" required>
+        <button id="submitEmail">Submit</button>
+        <div id="emailError" class="error-message"></div>
+    </div>
+</div>
+
+<!-- Reset Password Modal -->
+<div id="resetPasswordModal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal"
+            onclick="document.getElementById('resetPasswordModal').style.display='none'">×</button>
+        <h3>Reset Your Password</h3>
+        <input type="password" id="newPassword" placeholder="New Password" required>
+        <input type="password" id="confirmPassword" placeholder="Confirm New Password" required>
+        <button id="resetPassword">Reset Password</button>
+        <div id="passwordError" class="error-message"></div>
+    </div>
+</div>
                 <!-- Forgot Password Modal -->
                 <div id="forgotPasswordModal" class="modal">
                     <div class="modal-content">
+                        <button class="close-modal"
+                            onclick="document.getElementById('forgotPasswordModal').style.display='none'">×</button>
                         <h3>Reset Password</h3>
                         <input type="email" id="forgotEmail" placeholder="Enter your email" required>
                         <button id="submitEmail">Submit</button>
@@ -145,7 +269,7 @@
                 <div class="col-lg-2 col-md-6">
                     <div class="footer-logo">
                         <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
-                        <p>Your go-to place for restaurants, cafes, and hotels.</p>
+                        <p>Your go-to place for restaurants, cafes, tourist-places and hotels.</p>
                         <div class="footer-socials">
                             <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
                             <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
@@ -157,24 +281,12 @@
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5>Important Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="#" class="text-white">About Us</a></li>
-                        <li><a href="#" class="text-white">Best Offers</a></li>
-                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="about.html" class="text-white">About Us</a></li>
+                        <li><a href="contact.html" class="text-white">Contact Us</a></li>
                         <li><a href="#" class="text-white">FAQ</a></li>
                         <li><a href="#" class="text-white">Privacy Policy</a></li>
                         <li><a href="#" class="text-white">Terms & Conditions</a></li>
-                    </ul>
-                </div>
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Our Services</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Restaurants</a></li>
-                        <li><a href="#" class="text-white">Cafes</a></li>
-                        <li><a href="#" class="text-white">Hotels</a></li>
-                        <li><a href="#" class="text-white">Delivery</a></li>
-                        <li><a href="#" class="text-white">Visitor Ratings</a></li>
-                        <li><a href="#" class="text-white">Bookings</a></li>
                     </ul>
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4">
@@ -190,9 +302,9 @@
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h5>Contact Information</h5>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Email:</strong> contact@restaurant.com</p>
-                    <p><strong>Address:</strong> 123 Example St., City, Country</p>
+                    <p><strong>Phone:</strong> 01069504099</p>
+                    <p><strong>Email:</strong> outbyet@gmail.com</p>
+                    <p><strong>Address:</strong> Fayoum</p>
                 </div>
             </div>
         </div>
@@ -207,191 +319,10 @@
     <script src="js/jquery-3.7.1.min.js"></script>
     <script src="js/script.js"></script>
     <script src="js/navbar.js"></script>
+    <script src="js/signin.js"></script>
+    <script src="js/signup.js"></script>
 
-    <script>
-        // دالة مساعدة لإضافة الـ token مع معالجة الأخطاء
-        async function fetchWithToken(url, options = {}) {
-            try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    throw new Error('No authentication token found. Please log in again.');
-                }
-
-                options.headers = {
-                    ...options.headers,
-                    'Authorization': `Bearer ${token}`,
-                };
-
-                const response = await fetch(url, options);
-                if (!response.ok) {
-                    if (response.status === 401 || response.status === 403) {
-                        throw new Error(`Unauthorized: ${response.statusText}. Please log in again.`);
-                    }
-                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                return data;
-            } catch (error) {
-                if (error.message.includes('Failed to fetch')) {
-                    throw new Error('Network error: Unable to connect to the server. This might be due to CORS or network issues.');
-                }
-                throw error;
-            }
-        }
-
-        // دالة لعرض رسائل الخطأ
-        function showError(elementId, message) {
-            const errorElement = document.getElementById(elementId);
-            errorElement.textContent = message;
-        }
-
-        // دالة لعرض رسائل النجاح
-        function showSuccess(message, redirectUrl = null) {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: message,
-                timer: 2000,
-                showConfirmButton: false
-            }).then(() => {
-                if (redirectUrl) window.location.href = redirectUrl;
-            });
-        }
-
-        // دالة لتسجيل الدخول
-        document.getElementById('loginForm').addEventListener('submit', async (event) => {
-            event.preventDefault();
-
-            const form = event.target;
-            const submitButton = form.querySelector('button[type="submit"]');
-            submitButton.disabled = true;
-            submitButton.textContent = 'Processing...';
-
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData);
-
-            try {
-                const response = await fetchWithToken(form.action, {
-                    method: form.method,
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams(data).toString()
-                });
-
-                if (response.status === 'success') {
-                    localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('userId', response.data?.users_id || '');
-                    localStorage.setItem('email', response.data?.users_email || data.email);
-                    localStorage.setItem('token', response.token);
-
-                    // جلب بيانات الملف الشخصي
-                    const profileResponse = await fetchWithToken('https://abdulrahmanantar.com/outbye/profile/view.php', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                        body: new URLSearchParams({ users_id: response.data?.users_id }).toString()
-                    });
-
-                    if (profileResponse.status === 'success') {
-                        localStorage.setItem('profileData', JSON.stringify(profileResponse.data));
-                    }
-
-                    showSuccess('Redirecting...', 'index.html');
-                } else {
-                    showError('form-error', response.message || 'Incorrect email or password.');
-                }
-            } catch (error) {
-                console.error('Error in login:', error);
-                if (error.message.includes('Network error')) {
-                    showError('form-error', 'Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
-                } else if (error.message.includes('Unauthorized')) {
-                    showError('form-error', error.message);
-                    setTimeout(() => window.location.href = 'signin.html', 2000);
-                } else {
-                    showError('form-error', 'Error occurred during login: ' + error.message);
-                }
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Log In';
-            }
-        });
-
-        // Forgot Password
-        document.getElementById('forgotPasswordLink').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('forgotPasswordModal').style.display = 'flex';
-        });
-
-        document.getElementById('submitEmail').addEventListener('click', async () => {
-            const email = document.getElementById('forgotEmail').value;
-
-            try {
-                const response = await fetchWithToken('https://abdulrahmanantar.com/outbye/forgetpassword/checkemail.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({ email })
-                });
-
-                if (response.success) {
-                    localStorage.setItem('resetEmail', email);
-                    document.getElementById('forgotPasswordModal').style.display = 'none';
-                    window.location.href = 'verify-code.html';
-                } else {
-                    showError('emailError', response.message || 'Email not found.');
-                }
-            } catch (error) {
-                console.error('Error in checkEmail:', error);
-                if (error.message.includes('Network error')) {
-                    showError('emailError', 'Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
-                } else {
-                    showError('emailError', 'Error occurred: ' + error.message);
-                }
-            }
-        });
-
-        // Reset Password
-        if (window.location.search.includes('reset=true')) {
-            document.getElementById('resetPasswordModal').style.display = 'flex';
-        }
-
-        document.getElementById('resetPassword').addEventListener('click', async () => {
-            const email = localStorage.getItem('resetEmail');
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-
-            if (!email) {
-                showError('passwordError', 'Email not found in storage.');
-                return;
-            }
-
-            if (newPassword !== confirmPassword) {
-                showError('passwordError', 'Passwords do not match.');
-                return;
-            }
-
-            try {
-                const response = await fetchWithToken('https://abdulrahmanantar.com/outbye/forgetpassword/resetpassword.php', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: new URLSearchParams({ email, password: newPassword })
-                });
-
-                if (response.status === 'success') {
-                    document.getElementById('resetPasswordModal').style.display = 'none';
-                    showSuccess('Password reset successfully');
-                    localStorage.removeItem('resetEmail');
-                } else {
-                    showError('passwordError', response.message || 'Failed to reset password.');
-                }
-            } catch (error) {
-                console.error('Error in resetPassword:', error);
-                if (error.message.includes('Network error')) {
-                    showError('passwordError', 'Connection Error: Unable to connect to the server. This might be due to CORS or network issues.');
-                } else {
-                    showError('passwordError', 'Error occurred: ' + error.message);
-                }
-            }
-        });
-    </script>
+    <!-- حذف الكود القديم بتاع الـ callback واعتماد على google_callback.html -->
 </body>
 
 </html>

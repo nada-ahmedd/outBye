@@ -23,7 +23,7 @@
 <body>
 <nav class="navbar navbar-expand-lg">
     <div class="navbar-container">
-        <!-- Logo (شمال) -->
+        <!-- Logo -->
         <a class="navbar-logo" href="index.html">
             <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
         </a>
@@ -37,38 +37,44 @@
         <!-- Navbar Content -->
         <div class="collapse navbar-collapse" id="navbarContent">
             <!-- Links (نص) -->
-            <div class="navbar-links mx-auto"> <!-- mx-auto عشان اللينكات تبقى في النص -->
+            <div class="navbar-links mx-auto">
                 <a class="nav-link" href="index.html">Home</a>
                 <a class="nav-link" href="contact.html">Contact</a>
                 <a class="nav-link" href="about.html">About</a>
+
                 <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
                     <i class="fas fa-user-plus"></i> Sign Up
                 </a>
             </div>
 
             <!-- Right Section (يمين) -->
-            <div class="navbar-right ms-auto"> <!-- ms-auto عشان يتحرك لليمين -->
+            <div class="navbar-right ms-auto">
+                <!-- Search -->
                 <div class="search-container">
                     <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
                     <button class="search-btn">Search</button>
                 </div>
-                                    <span id="userName" class="nav-link" style="display: none; color: #F26B0A; font-weight: 600;"></span>
-
+                <!-- User Info -->
+                <span id="userName" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+                <!-- Dropdown -->
                 <div class="dropdown">
                     <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="fas fa-user"></i>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="pending-orders.html"><i class="fas fa-clock"></i> Pending
+                                Orders</a></li>
                         <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
                                 Addresses</a></li>
-                        <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                        <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                        <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="archive.html"><i class="fas fa-archive"></i> Archive</a></li>
+                        <li><button id="logoutBtn" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>
+                                Logout</button></li>
                     </ul>
                 </div>
                 <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
                 <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
-
             </div>
         </div>
     </div>
@@ -93,75 +99,57 @@
     <div id="services-container"></div>
 </main>
    
-
-    <footer class="site-footer bg-dark text-white py-5">
-        <div class="container">
-            <div class="row">
-                <!-- Logo and Socials -->
-                <div class="col-lg-2 col-md-6 ">
-                    <div class="footer-logo">
-                        <img src="images/out bye.png" alt="Logo" class="footer-logo-img ">
-                        <p>Your go-to place for restaurants, cafes, and hotels.</p>
-                        <div class="footer-socials">
-                            <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
-                            <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
-                            <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
-                            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
-                        </div>
+<footer class="site-footer bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 col-md-6">
+                <div class="footer-logo">
+                    <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
+                    <p>Your go-to place for restaurants, cafes,tourist-places and hotels.</p>
+                    <div class="footer-socials">
+                        <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
                     </div>
-                </div>
-                <!-- Important Links -->
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Important Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="#" class="text-white">About Us</a></li>
-                        <li><a href="#" class="text-white">Best Offers</a></li>
-                        <li><a href="#" class="text-white">Contact Us</a></li>
-                        <li><a href="#" class="text-white">FAQ</a></li>
-                        <li><a href="#" class="text-white">Privacy Policy</a></li>
-                        <li><a href="#" class="text-white">Terms & Conditions</a></li>
-                    </ul>
-                </div>
-                <!-- Our Services -->
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Our Services</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Restaurants</a></li>
-                        <li><a href="#" class="text-white">Cafes</a></li>
-                        <li><a href="#" class="text-white">Hotels</a></li>
-                        <li><a href="#" class="text-white">Delivery</a></li>
-                        <li><a href="#" class="text-white">Visitor Ratings</a></li>
-                        <li><a href="#" class="text-white">Bookings</a></li>
-                    </ul>
-                </div>
-                <!-- Newsletter -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h4>Subscribe</h4>
-                    <p>Get the latest offers<br> and updates directly in your inbox!</p>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
-                        <button class="btn submit" type="submit">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-    
-    
-                </div>
-                <!-- Contact Information -->
-                <div class="col-lg-3 col-md-6 mb-4">
-                    <h5>Contact Information</h5>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Email:</strong> contact@restaurant.com</p>
-                    <p><strong>Address:</strong> 123 Example St., City, Country</p>
                 </div>
             </div>
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h5>Important Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="index.html" class="text-white">Home</a></li>
+                    <li><a href="about.html" class="text-white">About Us</a></li>
+                    <li><a href="contact.html" class="text-white">Contact Us</a></li>
+                    <li><a href="#" class="text-white">FAQ</a></li>
+                    <li><a href="#" class="text-white">Privacy Policy</a></li>
+                    <li><a href="#" class="text-white">Terms & Conditions</a></li>
+                </ul>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h4>Subscribe</h4>
+                <p>Get the latest offers<br> and updates directly in your inbox!</p>
+                <div class="input-group mb-3">
+                    <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
+                    <button class="btn submit" type="submit">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <h5>Contact Information</h5>
+                <p><strong>Phone:</strong> 01069504099</p>
+                <p><strong>Email:</strong> outbyet@gmail.com</p>
+                <p><strong>Address:</strong> Fayoum</p>
+            </div>
         </div>
-        <div class="footer-bottom text-center">
-            <p>&copy; 2024 All Rights Reserved. Designed and developed by our team.</p>
-        </div>
-    
-    </footer>
+    </div>
+    <div class="footer-bottom text-center">
+        <p>© 2024 All Rights Reserved. Designed and developed by our team.</p>
+    </div>
+   
+</footer>
+
   
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>

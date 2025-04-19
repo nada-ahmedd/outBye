@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -130,6 +131,38 @@
             margin-top: 30px;
         }
 
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #F26B0A;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
         @media (max-width: 768px) {
             h1 {
                 font-size: 2rem;
@@ -160,71 +193,76 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg">
-        <div class="navbar-container">
-            <a class="navbar-logo" href="index.html">
-                <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
-                aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <div class="navbar-links mx-auto">
-                    <a class="nav-link" href="index.html">Home</a>
-                    <a class="nav-link" href="contact.html">Contact</a>
-                    <a class="nav-link" href="about.html">About</a>
-                    <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
-                        <i class="fas fa-user-plus"></i> Sign Up
+<nav class="navbar navbar-expand-lg">
+    <div class="navbar-container">
+        <!-- Logo -->
+        <a class="navbar-logo" href="index.html">
+            <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
+        </a>
+
+        <!-- Toggler -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Navbar Content -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <!-- Links (نص) -->
+            <div class="navbar-links mx-auto">
+                <a class="nav-link" href="index.html">Home</a>
+                <a class="nav-link" href="contact.html">Contact</a>
+                <a class="nav-link" href="about.html">About</a>
+
+                <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
+                    <i class="fas fa-user-plus"></i> Sign Up
+                </a>
+            </div>
+
+            <!-- Right Section (يمين) -->
+            <div class="navbar-right ms-auto">
+                <!-- Search -->
+                <div class="search-container">
+                    <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
+                    <button class="search-btn">Search</button>
+                </div>
+                <!-- User Info -->
+                <span id="userName" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+                <!-- Dropdown -->
+                <div class="dropdown">
+                    <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="fas fa-user"></i>
                     </a>
+                    <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                        <li><a class="dropdown-item" href="pending-orders.html"><i class="fas fa-clock"></i> Pending
+                                Orders</a></li>
+                        <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
+                                Addresses</a></li>
+                        <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="archive.html"><i class="fas fa-archive"></i> Archive</a></li>
+                        <li><button id="logoutBtn" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>
+                                Logout</button></li>
+                    </ul>
                 </div>
-                <div class="navbar-right ms-auto">
-                    <div class="search-container">
-                        <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
-                        <button class="search-btn">Search</button>
-                    </div>
-                    <span id="userName" class="nav-link"
-                        style="display: none; color: #F26B0A; font-weight: 600;"></span>
-                    <div class="dropdown">
-                        <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <i class="fas fa-user"></i>
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
-                                    Addresses</a></li>
-                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
-                        </ul>
-                    </div>
-                    <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
-                    <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i
-                            class="fas fa-shopping-cart"></i></a>
-                </div>
+                <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
+                <a class="nav-icon cart-icon" href="cart.html" id="cartIcon"><i class="fas fa-shopping-cart"></i></a>
             </div>
         </div>
-        <div id="searchResults" class="search-results">
-            <button class="close-btn" onclick="closeSearchResults()">×</button>
-        </div>
-    </nav>
+    </div>
+
+    <!-- Search Results -->
+    <div id="searchResults" class="search-results">
+        <button class="close-btn" onclick="closeSearchResults()">×</button>
+    </div>
+</nav>
 
     <h1>Checkout</h1>
     <div class="checkout-container">
         <form id="checkout-form">
             <div class="form-group">
-                <label for="order-type">Order Type</label>
-                <select id="order-type" name="ordertype" required>
-                    <option value="1">Restaurants & Cafes</option>
-                    <option value="0">Hotels & Tourist Places</option>
-                </select>
-            </div>
-            <div class="form-group">
                 <label for="price">Total Price (EGP)</label>
                 <input type="text" id="price" name="price" readonly>
-            </div>
-            <div class="form-group">
-                <label for="coupon-id">Coupon ID</label>
-                <input type="text" id="coupon-id" name="couponid" readonly>
             </div>
             <div class="form-group">
                 <label for="payment-method">Payment Method</label>
@@ -250,13 +288,14 @@
         </form>
     </div>
 
+  
     <footer class="site-footer bg-dark text-white py-5">
         <div class="container">
             <div class="row">
                 <div class="col-lg-2 col-md-6">
                     <div class="footer-logo">
                         <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
-                        <p>Your go-to place for restaurants, cafes, and hotels.</p>
+                        <p>Your go-to place for restaurants, cafes,tourist-places and hotels.</p>
                         <div class="footer-socials">
                             <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
                             <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
@@ -268,32 +307,20 @@
                 <div class="col-lg-2 col-md-6 mb-4">
                     <h5>Important Links</h5>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Home</a></li>
-                        <li><a href="#" class="text-white">About Us</a></li>
-                        <li><a href="#" class="text-white">Best Offers</a></li>
-                        <li><a href="#" class="text-white">Contact Us</a></li>
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="about.html" class="text-white">About Us</a></li>
+                        <li><a href="contact.html" class="text-white">Contact Us</a></li>
                         <li><a href="#" class="text-white">FAQ</a></li>
                         <li><a href="#" class="text-white">Privacy Policy</a></li>
                         <li><a href="#" class="text-white">Terms & Conditions</a></li>
                     </ul>
                 </div>
-                <div class="col-lg-2 col-md-6 mb-4">
-                    <h5>Our Services</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Restaurants</a></li>
-                        <li><a href="#" class="text-white">Cafes</a></li>
-                        <li><a href="#" class="text-white">Hotels</a></li>
-                        <li><a href="#" class="text-white">Delivery</a></li>
-                        <li><a href="#" class="text-white">Visitor Ratings</a></li>
-                        <li><a href="#" class="text-white">Bookings</a></li>
-                    </ul>
-                </div>
+    
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h4>Subscribe</h4>
                     <p>Get the latest offers<br> and updates directly in your inbox!</p>
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email"
-                            required>
+                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
                         <button class="btn submit" type="submit">
                             <i class="fas fa-paper-plane"></i>
                         </button>
@@ -301,15 +328,16 @@
                 </div>
                 <div class="col-lg-3 col-md-6 mb-4">
                     <h5>Contact Information</h5>
-                    <p><strong>Phone:</strong> 0123456789</p>
-                    <p><strong>Email:</strong> contact@restaurant.com</p>
-                    <p><strong>Address:</strong> 123 Example St., City, Country</p>
+                    <p><strong>Phone:</strong> 01069504099</p>
+                    <p><strong>Email:</strong> outbyet@gmail.com</p>
+                    <p><strong>Address:</strong> Fayoum</p>
                 </div>
             </div>
         </div>
         <div class="footer-bottom text-center">
             <p>© 2024 All Rights Reserved. Designed and developed by our team.</p>
         </div>
+       
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -322,194 +350,7 @@
     <script src="js/signin.js"></script>
     <script src="js/signup.js"></script>
     <script src="js/search.js"></script>
-    <script src="js/navbar.js"></script>
-    <script>
-        const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
-        const ENDPOINTS = {
-            CHECKOUT: `${API_BASE_URL}orders/checkout.php`
-        };
-
-        function isLoggedIn() {
-            return !!localStorage.getItem("userId");
-        }
-
-        function showAlert({ icon, title, text, confirmText, cancelText, onConfirm }) {
-            Swal.fire({
-                icon,
-                title,
-                text,
-                confirmButtonText: confirmText || "موافق",
-                showCancelButton: !!cancelText,
-                cancelButtonText: cancelText || "إلغاء"
-            }).then((result) => {
-                if (result.isConfirmed && onConfirm) onConfirm();
-            });
-        }
-
-        function loadAddressesFromLocalStorage() {
-            const addresses = JSON.parse(localStorage.getItem("userAddresses") || "[]");
-            const addressSelect = document.getElementById("address");
-            addressSelect.innerHTML = '<option value="">Select an address</option>';
-            addresses.forEach(address => {
-                const fullAddress = `${address.address_name}, ${address.address_city}, ${address.address_street}, ${address.address_phone}`;
-                addressSelect.innerHTML += `<option value="${address.address_id}">${fullAddress}</option>`;
-            });
-        }
-
-        function saveCheckoutData(totalPrice, coupon, discount) {
-            const checkoutData = {
-                totalPrice: totalPrice || "0",
-                coupon: coupon || "N/A",
-                discount: discount || "0"
-            };
-            localStorage.setItem("checkoutData", JSON.stringify(checkoutData));
-            console.log("Checkout Data Saved to localStorage:", checkoutData);
-        }
-
-        function loadCheckoutData() {
-            const checkoutData = JSON.parse(localStorage.getItem("checkoutData") || "{}");
-            console.log("Checkout Data Loaded from localStorage:", checkoutData);
-
-            if (!checkoutData.totalPrice && !checkoutData.coupon && !checkoutData.discount) {
-                showAlert({
-                    icon: "warning",
-                    title: "بيانات الطلب مفقودة",
-                    text: "لم يتم العثور على بيانات الطلب، يرجى العودة إلى صفحة السلة وإعادة المحاولة.",
-                    confirmText: "الذهاب إلى السلة",
-                    onConfirm: () => window.location.href = "cart.html"
-                });
-                return false;
-            }
-
-            document.getElementById("price").value = checkoutData.totalPrice || "0";
-            document.getElementById("coupon-id").value = checkoutData.coupon || "N/A";
-            document.getElementById("coupon-discount").value = checkoutData.discount || "0";
-            return true;
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            if (!isLoggedIn()) {
-                showAlert({
-                    icon: "warning",
-                    title: "غير مسجل الدخول",
-                    text: "يجب تسجيل الدخول أولاً لإكمال الطلب!",
-                    confirmText: "تسجيل الدخول",
-                    cancelText: "إلغاء",
-                    onConfirm: () => window.location.href = "signin.html"
-                });
-                return;
-            }
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const totalPrice = urlParams.get("totalPrice");
-            const coupon = urlParams.get("coupon");
-            const discount = urlParams.get("discount");
-
-            if (totalPrice || coupon || discount) {
-                saveCheckoutData(totalPrice, coupon, discount);
-            }
-
-            const dataLoaded = loadCheckoutData();
-            if (!dataLoaded) return;
-
-            loadAddressesFromLocalStorage();
-
-            const checkoutForm = document.getElementById("checkout-form");
-            checkoutForm.addEventListener("submit", async (event) => {
-                event.preventDefault();
-
-                const userId = localStorage.getItem("userId");
-                if (!userId) {
-                    showAlert({
-                        icon: "error",
-                        title: "خطأ",
-                        text: "User ID غير موجود، يرجى تسجيل الدخول مرة أخرى!",
-                        onConfirm: () => window.location.href = "signin.html"
-                    });
-                    return;
-                }
-
-                console.log("User ID during checkout:", userId);
-
-                const formData = new FormData(checkoutForm);
-                formData.append("usersid", userId);
-
-                const price = document.getElementById("price").value;
-                formData.delete("price");
-                formData.append("ordersprice", price);
-                formData.append("pricedelivery", "10");
-
-                const couponId = document.getElementById("coupon-id").value;
-                if (couponId && !isNaN(couponId)) {
-                    formData.set("couponid", couponId);
-                } else {
-                    formData.set("couponid", "0");
-                }
-
-                const addressId = document.getElementById("address").value;
-                if (!addressId) {
-                    showAlert({
-                        icon: "error",
-                        title: "خطأ",
-                        text: "يرجى اختيار عنوان صحيح!"
-                    });
-                    return;
-                }
-
-                console.log("Form Data being sent:");
-                for (let [key, value] of formData.entries()) {
-                    console.log(`${key}: ${value}`);
-                }
-
-                try {
-                    const response = await fetch(ENDPOINTS.CHECKOUT, {
-                        method: "POST",
-                        body: formData
-                    });
-
-                    const rawResponse = await response.text();
-                    console.log("Raw Response from Checkout API:", rawResponse);
-
-                    let data;
-                    if (!rawResponse.trim()) {
-                        data = { status: "error", message: "Empty response from server" };
-                    } else {
-                        try {
-                            data = JSON.parse(rawResponse);
-                        } catch (jsonError) {
-                            console.warn("Warning: Invalid JSON:", jsonError);
-                            data = { status: "error", message: "Invalid JSON response" };
-                        }
-                    }
-
-                    console.log("Parsed Checkout API Response:", data);
-
-                    if (data.status === "success") {
-                        localStorage.removeItem("checkoutData");
-                        showAlert({
-                            icon: "success",
-                            title: "تم الطلب بنجاح",
-                            text: "تم إرسال طلبك بنجاح، سيتم تحويلك إلى الطلبات المعلقة.",
-                            onConfirm: () => window.location.href = "pending-orders.html"
-                        });
-                    } else {
-                        showAlert({
-                            icon: "error",
-                            title: "خطأ",
-                            text: data.message || "فشل في إكمال الطلب! تحقق من البيانات المرسلة."
-                        });
-                    }
-                } catch (error) {
-                    console.warn("Caught error:", error);
-                    showAlert({
-                        icon: "error",
-                        title: "خطأ",
-                        text: "حدث خطأ غير متوقع، يرجى المحاولة لاحقًا."
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="js/checkout.js"></script>
 </body>
 
 </html>

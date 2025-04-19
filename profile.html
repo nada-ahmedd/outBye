@@ -8,11 +8,16 @@
     <link rel="icon" href="images/out bye.png" type="image/x-icon">
     <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto+Slab:wght@300;400;700&display=swap"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@glidejs/glide/dist/css/glide.core.min.css">
     <style>
-        /* Profile Styles فقط */
         body {
             margin: 0;
             padding: 0;
@@ -24,22 +29,18 @@
             overflow-x: hidden;
         }
 
-        h1 {
-            color: #F26B0A;
-            text-align: center;
-            font-weight: 700;
-            font-size: 3.5rem;
-            text-transform: uppercase;
-            margin: 80px 0 40px;
-            text-shadow: 2px 2px 8px rgba(242, 107, 10, 0.3);
+        .main-content {
+            flex: 1 0 auto;
+            padding-top: 80px;
+            padding-bottom: 20px;
         }
 
         .profile-card {
             width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
+            max-width: 800px;
+            margin: auto;
             background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(242, 107, 10, 0.2);
             border: 1px solid #F26B0A;
@@ -70,7 +71,6 @@
         }
 
         .profile-card:hover {
-            transform: translateY(-10px);
             box-shadow: 0 15px 40px rgba(242, 107, 10, 0.3);
         }
 
@@ -79,69 +79,89 @@
             z-index: 1;
             display: flex;
             flex-direction: column;
-            gap: 25px;
+            gap: 15px;
         }
 
         .profile-item {
             background: #fff;
-            padding: 20px;
-            border-radius: 15px;
-            border-left: 5px solid #F26B0A;
+            padding: 12px 18px;
+            border-radius: 10px;
+            border-left: 4px solid #F26B0A;
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 1.2rem;
-            transition: transform 0.3s ease;
+            gap: 12px;
+            font-size: 1.1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .profile-item:hover {
-            transform: translateX(10px);
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(242, 107, 10, 0.1);
         }
 
         .profile-item i {
             color: #F26B0A;
-            font-size: 1.7rem;
+            font-size: 1.4rem;
         }
 
         .profile-item span {
             color: #333;
+            font-weight: 500;
         }
 
         .edit-container {
             display: none;
             width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
+            max-width: 800px;
+            margin: 40px auto;
             background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
+            padding: 30px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(242, 107, 10, 0.2);
             border: 1px solid #F26B0A;
             position: relative;
             z-index: 1;
+            overflow: hidden;
+        }
+
+        .edit-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 94, 98, 0.1) 0%, rgba(242, 107, 10, 0.05) 70%);
+            animation: rotate 15s linear infinite;
+            z-index: 0;
+        }
+
+        .edit-container:hover {
+            box-shadow: 0 15px 40px rgba(242, 107, 10, 0.3);
         }
 
         .edit-container .form-group {
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .edit-container .form-group i {
             position: absolute;
-            left: 20px;
+            left: 15px;
             top: 50%;
             transform: translateY(-50%);
             color: #F26B0A;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
         }
 
         .edit-container input {
             width: 100%;
-            padding: 18px 20px 18px 60px;
+            padding: 15px 15px 15px 50px;
+            border: pointer;
             border: 2px solid #f0f0f0;
-            border-radius: 15px;
+            border-radius: 10px;
             background: #f9f9f9;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             transition: border-color 0.3s ease;
         }
 
@@ -153,9 +173,9 @@
 
         .action-buttons {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
-            margin-top: 40px;
+            margin-top: 30px;
             position: relative;
             z-index: 2;
         }
@@ -164,19 +184,19 @@
             background: linear-gradient(90deg, #F26B0A, #ff5e62);
             color: white;
             border: none;
-            padding: 18px 45px;
-            border-radius: 15px;
+            padding: 12px 35px;
+            border-radius: 10px;
             font-weight: 600;
-            font-size: 1.2rem;
+            font-size: 1rem;
             cursor: pointer;
-            transition: transform 0.4s ease;
+            transition: transform 0.4s ease, box-shadow 0.3s ease;
             z-index: 2;
             pointer-events: auto;
         }
 
         .btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 10px 20px rgba(242, 107, 10, 0.4);
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(242, 107, 10, 0.4);
         }
 
         .btn:disabled {
@@ -187,29 +207,167 @@
         .site-footer {
             flex-shrink: 0;
             width: 100%;
-            margin-top: auto;
+            margin-top: 0;
+        }
+
+        .profile-image-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+        }
+
+        .profile-avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #fff;
+            box-shadow: 0 5px 15px rgba(242, 107, 10, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: none;
+        }
+
+        .profile-avatar.active {
+            display: block;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.03);
+            box-shadow: 0 8px 20px rgba(242, 107, 10, 0.5);
+        }
+
+        #default-avatar {
+            font-size: 160px;
+            color: #F26B0A;
+            display: none;
+            transition: transform 0.3s ease;
+        }
+
+        #default-avatar.active {
+            display: block;
+        }
+
+        #default-avatar:hover {
+            transform: scale(1.03);
+        }
+
+        .image-actions {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .image-action-btn {
+            background: linear-gradient(90deg, #F26B0A, #ff5e62);
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .image-action-btn.remove {
+            background: linear-gradient(90deg, #ff5e62, #e04e52);
+        }
+
+        .image-action-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 10px rgba(242, 107, 10, 0.4);
+        }
+
+        .spinner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 160px;
+        }
+
+        .navbar-right .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-right .user-info span {
+            color: #F26B0A;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .navbar-right .user-info img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #F26B0A;
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5rem;
+            .main-content {
+                padding-top: 15px;
+                padding-bottom: 15px;
             }
 
             .profile-card,
             .edit-container {
-                padding: 30px;
+                padding: 20px;
+                margin: 15px auto;
             }
 
             .profile-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
-                padding: 15px;
+                gap: 8px;
+                padding: 10px;
+                font-size: 1rem;
             }
 
             .btn {
-                padding: 12px 30px;
-                font-size: 1rem;
+                padding: 10px 25px;
+                font-size: 0.9rem;
+            }
+
+            .profile-avatar,
+            #default-avatar {
+                width: 120px;
+                height: 120px;
+                font-size: 120px;
+            }
+
+            .image-action-btn {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+
+            .image-actions {
+                bottom: 8px;
+                right: 8px;
+            }
+
+            .profile-image-container {
+                margin-bottom: 15px;
+            }
+
+            .navbar-right .user-info img {
+                width: 25px;
+                height: 25px;
+            }
+
+            .navbar-right .user-info span {
+                font-size: 0.9rem;
             }
         }
     </style>
@@ -219,7 +377,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="navbar-container">
-            <!-- Logo (شمال) -->
+            <!-- Logo -->
             <a class="navbar-logo" href="index.html">
                 <img src="images/out bye.png" alt="Out Bye Logo" class="logo-img">
             </a>
@@ -237,6 +395,7 @@
                     <a class="nav-link" href="index.html">Home</a>
                     <a class="nav-link" href="contact.html">Contact</a>
                     <a class="nav-link" href="about.html">About</a>
+
                     <a id="signupBtn" class="nav-link sign-up-link" href="signup.html">
                         <i class="fas fa-user-plus"></i> Sign Up
                     </a>
@@ -244,23 +403,30 @@
 
                 <!-- Right Section (يمين) -->
                 <div class="navbar-right ms-auto">
+                    <!-- Search -->
                     <div class="search-container">
                         <input type="text" id="searchQuery" placeholder="Search..." class="search-input" />
                         <button class="search-btn">Search</button>
                     </div>
-                    <span id="userName" class="nav-link"
-                        style="display: none; color: #F26B0A; font-weight: 600;"></span>
-
+                    <!-- User Info -->
+                    <span id="userName" style="display: none; color: #F26B0A; font-weight: 600;"></span>
+                    <!-- Dropdown -->
                     <div class="dropdown">
                         <a class="nav-icon dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown"
                             aria-expanded="false">
                             <i class="fas fa-user"></i>
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="pending-orders.html"><i class="fas fa-clock"></i> Pending
+                                    Orders</a></li>
                             <li><a class="dropdown-item" href="addresses.html"><i class="fas fa-map-marker-alt"></i>
                                     Addresses</a></li>
-                            <li><a class="dropdown-item" href="profile.html">Profile</a></li>
-                            <li><button id="logoutBtn" class="dropdown-item">Logout</button></li>
+                            <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user"></i> Profile</a>
+                            </li>
+                            <li><a class="dropdown-item" href="archive.html"><i class="fas fa-archive"></i> Archive</a>
+                            </li>
+                            <li><button id="logoutBtn" class="dropdown-item"><i class="fas fa-sign-out-alt"></i>
+                                    Logout</button></li>
                         </ul>
                     </div>
                     <a class="nav-icon" href="favorites.html"><i class="fa-solid fa-heart"></i></a>
@@ -276,97 +442,178 @@
         </div>
     </nav>
 
-    <!-- Profile View Section -->
-    <h1>Your Profile</h1>
-    <div class="profile-card" id="profile-container">
-        <div class="profile-content">
-            <div class="profile-item"><i class="fas fa-user"></i> <span id="view-name"></span></div>
-            <div class="profile-item"><i class="fas fa-envelope"></i> <span id="view-email"></span></div>
-            <div class="profile-item"><i class="fas fa-phone"></i> <span id="view-phone"></span></div>
-            <div class="profile-item"><i class="fas fa-calendar"></i> <span id="view-create"></span></div>
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Profile View Section -->
+        <div class="profile-card" id="profile-container">
+            <div class="profile-image-container">
+                <div id="profile-spinner" class="spinner-container"></div>
+                <img id="view-image" src="" alt="Profile Image" class="profile-avatar">
+                <i id="default-avatar" class="fas fa-user-circle"></i>
+                <div class="image-actions">
+                    <button class="image-action-btn upload-btn" onclick="document.getElementById('edit-image').click()">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                    <button id="remove-image-btn" class="image-action-btn remove" style="display: none;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <input type="file" id="edit-image" style="display: none;" accept=".jpg,.jpeg,.png,.gif">
+                </div>
+            </div>
+            <div class="profile-content">
+                <div class="profile-item"><i class="fas fa-user"></i> <span id="view-name"></span></div>
+                <div class="profile-item"><i class="fas fa-envelope"></i> <span id="view-email"></span></div>
+                <div class="profile-item"><i class="fas fa-phone"></i> <span id="view-phone"></span></div>
+                <div class="profile-item"><i class="fas fa-calendar"></i> <span id="view-create"></span></div>
+            </div>
+            <div class="action-buttons">
+                <button class="btn" id="editProfileBtn">Edit Profile</button>
+                <button class="btn" id="favoritesBtn">Favorites</button>
+                <button class="btn" id="cartBtn">Cart</button>
+            </div>
         </div>
-        <div class="action-buttons">
-            <button class="btn" id="editProfileBtn">Edit Profile</button>
-            <button class="btn" id="favoritesBtn">Favorites</button>
-            <button class="btn" id="cartBtn">Cart</button>
-        </div>
-    </div>
 
-    <!-- Edit Profile Form -->
-    <div class="edit-container" id="edit-container">
-        <form id="profileForm">
-            <div class="form-group">
-                <i class="fas fa-user"></i>
-                <input type="text" id="edit-name" name="new_name" placeholder="Name">
+        <!-- Edit Profile Form -->
+        <div class="edit-container" id="edit-container">
+            <form id="profileForm">
+                <div class="form-group">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="edit-name" name="new_name" placeholder="Name">
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="edit-email" name="new_email" placeholder="Email">
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" id="edit-phone" name="new_phone" placeholder="Phone">
+                </div>
+            </form>
+            <div class="action-buttons">
+                <button class="btn" id="saveChangesBtn">Save Changes</button>
+                <button class="btn" id="cancelEditBtn">Cancel</button>
             </div>
-            <div class="form-group">
-                <i class="fas fa-envelope"></i>
-                <input type="email" id="edit-email" name="new_email" placeholder="Email">
-            </div>
-            <div class="form-group">
-                <i class="fas fa-phone"></i>
-                <input type="text" id="edit-phone" name="new_phone" placeholder="Phone">
-            </div>
-        </form>
-        <div class="action-buttons">
-            <button class="btn" id="saveChangesBtn">Save Changes</button>
-            <button class="btn" id="cancelEditBtn">Cancel</button>
         </div>
     </div>
 
     <!-- Footer -->
     <footer class="site-footer bg-dark text-white py-5">
         <div class="container">
-            <div class="footer-bottom text-center">
-                <p>© 2025 All Rights Reserved.</p>
+            <div class="row">
+                <div class="col-lg-2 col-md-6">
+                    <div class="footer-logo">
+                        <img src="images/out bye.png" alt="Logo" class="footer-logo-img">
+                        <p>Your go-to place for restaurants, cafes,tourist-places and hotels.</p>
+                        <div class="footer-socials">
+                            <a href="#" class="social-icon me-3"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-icon me-3"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon me-3"><i class="fab fa-instagram"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5>Important Links</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="index.html" class="text-white">Home</a></li>
+                        <li><a href="about.html" class="text-white">About Us</a></li>
+                        <li><a href="contact.html" class="text-white">Contact Us</a></li>
+                        <li><a href="#" class="text-white">FAQ</a></li>
+                        <li><a href="#" class="text-white">Privacy Policy</a></li>
+                        <li><a href="#" class="text-white">Terms & Conditions</a></li>
+                    </ul>
+                </div>
+    
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h4>Subscribe</h4>
+                    <p>Get the latest offers<br> and updates directly in your inbox!</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Enter your email" aria-label="Email" required>
+                        <button class="btn submit" type="submit">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4">
+                    <h5>Contact Information</h5>
+                    <p><strong>Phone:</strong> 01069504099</p>
+                    <p><strong>Email:</strong> outbyet@gmail.com</p>
+                    <p><strong>Address:</strong> Fayoum</p>
+                </div>
             </div>
         </div>
+        <div class="footer-bottom text-center">
+            <p>© 2024 All Rights Reserved. Designed and developed by our team.</p>
+        </div>
+        
     </footer>
+
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script src="js/navbar.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/signup.js"></script>
+    <script src="js/signin.js"></script>
     <script src="js/search.js"></script>
-
+    <script src="js/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
     <script>
         const API_BASE_URL = "https://abdulrahmanantar.com/outbye/";
         const ENDPOINTS = {
             VIEW: `${API_BASE_URL}profile/view.php`,
-            EDIT: `${API_BASE_URL}profile/edit_profile.php`
+            EDIT: `${API_BASE_URL}profile/edit_profile.php`,
+            REMOVE_IMAGE: `${API_BASE_URL}profile/remove.php`
         };
 
-        // دالة مساعدة لإضافة الـ token مع معالجة الأخطاء
         async function fetchWithToken(url, options = {}) {
+            const token = localStorage.getItem('token');
+            if (!token) return { status: "error", message: "No token found" };
+
+            options.headers = {
+                ...options.headers,
+                'Authorization': `Bearer ${token}`,
+            };
+
+            if (!(options.body instanceof FormData)) {
+                options.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+                if (typeof options.body === 'object' && !(options.body instanceof URLSearchParams)) {
+                    options.body = new URLSearchParams(options.body).toString();
+                }
+            }
+
+            const controller = new AbortController();
+            options.signal = controller.signal;
+            const timeoutId = setTimeout(() => {
+                controller.abort();
+                console.error("Fetch Timeout:", url, "Request aborted after 40 seconds");
+            }, 40000);
+
             try {
-                const token = localStorage.getItem('token');
-                if (!token) {
-                    throw new Error('No authentication token found. Please log in again.');
-                }
-
-                options.headers = {
-                    ...options.headers,
-                    'Authorization': `Bearer ${token}`,
-                };
-
                 const response = await fetch(url, options);
+                clearTimeout(timeoutId);
                 if (!response.ok) {
-                    if (response.status === 401 || response.status === 403) {
-                        throw new Error(`Unauthorized: ${response.statusText}. Please log in again.`);
-                    }
-                    throw new Error(`HTTP error! Status: ${response.status} - ${response.statusText}`);
+                    throw new Error(`HTTP error! status: ${response.status}`);
                 }
-
-                const data = await response.json();
+                const text = await response.text();
+                let data = { status: "success" };
+                try {
+                    const jsonMatch = text.match(/{.*}/s);
+                    if (jsonMatch) {
+                        data = JSON.parse(jsonMatch[0]);
+                    }
+                } catch (parseError) {
+                    console.warn("Response is not valid JSON, assuming success:", text);
+                }
+                console.log("API Response:", url, data);
                 return data;
             } catch (error) {
-                if (error.message.includes('Failed to fetch')) {
-                    throw new Error('Network error: Unable to connect to the server. This might be due to CORS or network issues.');
-                }
-                throw error;
+                console.error("Fetch Error:", url, error.message);
+                return { status: "error", message: error.message };
             }
         }
 
-        // دالة لعرض الرسائل باستخدام SweetAlert
         const showAlert = (icon, title, text, redirectUrl = null) => {
             return Swal.fire({
                 icon,
@@ -378,67 +625,122 @@
             });
         };
 
-        // دالة للتوجيه إلى صفحة أخرى
         const goTo = (page) => {
-            console.log("Navigating to:", page);
             window.location.href = page;
         };
 
-        // دالة لإغلاق نتائج البحث
         const closeSearchResults = () => {
             document.getElementById("searchResults").style.display = "none";
         };
 
-        // التحقق من تسجيل الدخول
         const isLoggedIn = () => {
-            const loggedIn = !!localStorage.getItem("userId");
-            console.log("Is logged in:", loggedIn);
-            return loggedIn;
+            return localStorage.getItem('isLoggedIn') === 'true';
         };
 
-        // جلب بيانات الملف الشخصي
+        const validateImage = (file) => {
+            const allowedFormats = ['jpg', 'jpeg', 'png', 'gif'];
+            const maxSize = 5 * 1024 * 1024;
+
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+            if (!allowedFormats.includes(fileExtension)) {
+                showAlert("error", "Error", `Invalid image format. Allowed formats: ${allowedFormats.join(', ')}.`);
+                return false;
+            }
+
+            if (file.size > maxSize) {
+                showAlert("error", "Error", "Image size too large. Max size is 5MB.");
+                return false;
+            }
+
+            return true;
+        };
+
+        const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
         const loadProfile = async () => {
-            const userId = localStorage.getItem("userId");
-            if (!userId) {
-                showAlert("warning", "⚠️ Error", "Please log in to view your profile", "signin.html");
+            if (!isLoggedIn()) {
+                showAlert("warning", "Error", "Please log in to view your profile", "signin.html");
                 return;
             }
-            console.log("Loading profile for userId:", userId);
+
+            const userId = localStorage.getItem("userId");
+            const spinnerContainer = document.getElementById("profile-spinner");
+            const imageElement = document.getElementById("view-image");
+            const defaultAvatar = document.getElementById("default-avatar");
+            const removeImageBtn = document.getElementById("remove-image-btn");
+
+            spinnerContainer.innerHTML = '<div class="spinner"></div>';
+            imageElement.classList.remove("active");
+            defaultAvatar.classList.remove("active");
+            removeImageBtn.style.display = "none";
+
+            const spinner = new Spinner({ color: '#F26B0A', lines: 12 }).spin(spinnerContainer.querySelector('.spinner'));
 
             try {
                 const data = await fetchWithToken(ENDPOINTS.VIEW, {
                     method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: new URLSearchParams({ users_id: userId }).toString()
+                    body: { users_id: userId }
                 });
 
-                console.log("Profile Data:", data);
-
                 if (data.status === "success") {
-                    document.getElementById("view-name").textContent = data.data.users_name || "Not provided";
-                    document.getElementById("view-email").textContent = data.data.users_email || "Not provided";
-                    document.getElementById("view-phone").textContent = data.data.users_phone || "Not provided";
-                    document.getElementById("view-create").textContent = data.data.users_create || "Not provided";
+                    const profileData = data.data || {};
+                    document.getElementById("view-name").textContent = profileData.users_name || "Not provided";
+                    document.getElementById("view-email").textContent = profileData.users_email || "Not provided";
+                    document.getElementById("view-phone").textContent = profileData.users_phone || "Not provided";
+                    document.getElementById("view-create").textContent = profileData.users_create || "Not provided";
 
-                    localStorage.setItem("profileData", JSON.stringify(data.data));
+                    if (profileData.users_image) {
+                        const imageUrl = `${profileData.users_image}?t=${Date.now()}`;
+                        console.log("Attempting to load image:", imageUrl);
+                        const img = new Image();
+                        img.src = imageUrl;
+                        img.onload = () => {
+                            console.log("Image loaded successfully:", imageUrl);
+                            imageElement.src = imageUrl;
+                            imageElement.classList.add("active");
+                            defaultAvatar.classList.remove("active");
+                            defaultAvatar.style.display = "none";
+                            removeImageBtn.style.display = "block";
+                            spinner.stop();
+                            spinnerContainer.innerHTML = '';
+                        };
+                        img.onerror = () => {
+                            console.error("Failed to load image:", imageUrl);
+                            imageElement.classList.remove("active");
+                            imageElement.style.display = "none";
+                            defaultAvatar.classList.add("active");
+                            defaultAvatar.style.display = "block";
+                            removeImageBtn.style.display = "none";
+                            spinner.stop();
+                            spinnerContainer.innerHTML = '';
+                        };
+                    } else {
+                        console.log("No image provided in profile data");
+                        imageElement.classList.remove("active");
+                        imageElement.style.display = "none";
+                        defaultAvatar.classList.add("active");
+                        defaultAvatar.style.display = "block";
+                        removeImageBtn.style.display = "none";
+                        spinner.stop();
+                        spinnerContainer.innerHTML = '';
+                    }
+
+                    localStorage.setItem("profileData", JSON.stringify(profileData));
+                    await updateNavbar();
                 } else {
-                    showAlert("error", "❌ Error", data.message || "Failed to load profile");
+                    showAlert("error", "Error", "Failed to load profile: " + (data.message || "Unknown error"));
+                    spinner.stop();
+                    spinnerContainer.innerHTML = '';
                 }
             } catch (error) {
-                console.error("Error fetching profile:", error);
-                if (error.message.includes('Network error')) {
-                    showAlert("error", "❌ Connection Error", "Unable to connect to the server. This might be due to CORS or network issues.");
-                } else if (error.message.includes('Unauthorized')) {
-                    showAlert("error", "❌ Authentication Error", error.message, "signin.html");
-                } else {
-                    showAlert("error", "❌ Error", "Error fetching profile: " + error.message);
-                }
+                console.error("Load Profile Error:", error);
+                showAlert("error", "Error", "Failed to load profile: " + error.message);
+                spinner.stop();
+                spinnerContainer.innerHTML = '';
             }
         };
 
-        // إظهار نموذج التعديل
         const showEditForm = () => {
-            console.log("Show Edit Form clicked");
             const profileData = JSON.parse(localStorage.getItem("profileData") || "{}");
             document.getElementById("edit-name").value = profileData.users_name || "";
             document.getElementById("edit-email").value = profileData.users_email || "";
@@ -448,36 +750,34 @@
             document.getElementById("edit-container").style.display = "block";
         };
 
-        // إلغاء التعديل
         const cancelEdit = () => {
-            console.log("Cancel Edit clicked");
             document.getElementById("edit-container").style.display = "none";
             document.getElementById("profile-container").style.display = "block";
         };
 
-        // تعديل الملف الشخصي
-        const editProfile = async () => {
-            console.log("Edit Profile clicked");
+        const uploadProfileImage = async () => {
+            const imageInput = document.getElementById("edit-image");
+            if (imageInput.files.length === 0) return;
+
+            const file = imageInput.files[0];
+            if (!validateImage(file)) return;
+
             const userId = localStorage.getItem("userId");
-            if (!userId) {
-                showAlert("error", "❌ Error", "User ID not found", "signin.html");
-                return;
-            }
-
-            const name = document.getElementById("edit-name").value;
-            const email = document.getElementById("edit-email").value;
-            const phone = document.getElementById("edit-phone").value;
-
-            if (!name || !email || !phone) {
-                showAlert("warning", "⚠️ Error", "Please fill all required fields");
-                return;
-            }
-
             const formData = new FormData();
             formData.append("users_id", userId);
-            formData.append("new_name", name);
-            formData.append("new_email", email);
-            formData.append("new_phone", phone);
+            formData.append("image", file);
+
+            const spinnerContainer = document.getElementById("profile-spinner");
+            const imageElement = document.getElementById("view-image");
+            const defaultAvatar = document.getElementById("default-avatar");
+            const removeImageBtn = document.getElementById("remove-image-btn");
+
+            spinnerContainer.innerHTML = '<div class="spinner"></div>';
+            imageElement.classList.remove("active");
+            defaultAvatar.classList.remove("active");
+            removeImageBtn.style.display = "none";
+
+            const spinner = new Spinner({ color: '#F26B0A', lines: 12 }).spin(spinnerContainer.querySelector('.spinner'));
 
             try {
                 const response = await fetchWithToken(ENDPOINTS.EDIT, {
@@ -485,79 +785,185 @@
                     body: formData
                 });
 
-                console.log("Edit Profile Response:", response);
-
                 if (response.status === "success") {
-                    const updatedData = response.data;
-                    localStorage.setItem("profileData", JSON.stringify(updatedData));
-                    document.getElementById("view-name").textContent = updatedData.users_name || "Not provided";
-                    document.getElementById("view-email").textContent = updatedData.users_email || "Not provided";
-                    document.getElementById("view-phone").textContent = updatedData.users_phone || "Not provided";
-                    document.getElementById("view-create").textContent = updatedData.users_create || "Not provided";
+                    await delay(500);
+                    const updatedProfile = await fetchWithToken(ENDPOINTS.VIEW, {
+                        method: "POST",
+                        body: { users_id: userId }
+                    });
 
-                    showAlert("success", "✅ Success", "Profile updated successfully");
-                    document.getElementById("edit-container").style.display = "none";
-                    document.getElementById("profile-container").style.display = "block";
+                    if (updatedProfile && updatedProfile.status === "success") {
+                        localStorage.setItem("profileData", JSON.stringify(updatedProfile.data));
+                        const imageUrl = updatedProfile.data.users_image ? `${updatedProfile.data.users_image}?t=${Date.now()}` : null;
+
+                        if (imageUrl) {
+                            const img = new Image();
+                            img.src = imageUrl;
+                            img.onload = () => {
+                                console.log("Image loaded successfully after upload:", imageUrl);
+                                spinner.stop();
+                                spinnerContainer.innerHTML = '';
+                                window.location.reload(); // Auto-refresh the page
+                            };
+                            img.onerror = () => {
+                                console.error("Failed to load image after upload:", imageUrl);
+                                spinner.stop();
+                                spinnerContainer.innerHTML = '';
+                                showAlert("error", "Error", "Failed to load the uploaded image. Please refresh the page.");
+                            };
+                        } else {
+                            spinner.stop();
+                            spinnerContainer.innerHTML = '';
+                            window.location.reload(); // Auto-refresh even if no image
+                        }
+                    } else {
+                        spinner.stop();
+                        spinnerContainer.innerHTML = '';
+                        showAlert("error", "Error", "Failed to fetch updated profile data");
+                    }
                 } else {
-                    showAlert("error", "❌ Error", response.message || "Failed to update profile");
+                    spinner.stop();
+                    spinnerContainer.innerHTML = '';
+                    showAlert("error", "Error", response.message || "Failed to update image");
                 }
             } catch (error) {
-                console.error("Error updating profile:", error);
-                if (error.message.includes('Network error')) {
-                    showAlert("error", "❌ Connection Error", "Unable to connect to the server. This might be due to CORS or network issues.");
-                } else if (error.message.includes('Unauthorized')) {
-                    showAlert("error", "❌ Authentication Error", error.message, "signin.html");
-                } else {
-                    showAlert("error", "❌ Error", "Error updating profile: " + error.message);
-                }
+                console.error("Upload Image Error:", error);
+                spinner.stop();
+                spinnerContainer.innerHTML = '';
+                showAlert("error", "Error", "Failed to update image: " + error.message);
             }
         };
 
-        // تهيئة الصفحة وربط الأحداث
-        document.addEventListener("DOMContentLoaded", () => {
-            console.log("DOM Loaded");
-
+        const removeProfileImage = async () => {
             if (!isLoggedIn()) {
-                showAlert("warning", "⚠️ Error", "Please log in to view your profile", "signin.html");
+                showAlert("error", "Error", "Please log in to remove your profile image");
                 return;
             }
 
-            // ربط الأحداث بالأزرار
+            const userId = localStorage.getItem("userId");
+            const removeImageBtn = document.getElementById("remove-image-btn");
+            removeImageBtn.disabled = true;
+
+            try {
+                const response = await fetchWithToken(ENDPOINTS.REMOVE_IMAGE, {
+                    method: "POST",
+                    body: { users_id: userId }
+                });
+
+                if (response.status === "success") {
+                    const profileData = JSON.parse(localStorage.getItem("profileData") || "{}");
+                    profileData.users_image = "";
+                    localStorage.setItem("profileData", JSON.stringify(profileData));
+
+                    const imageElement = document.getElementById("view-image");
+                    const defaultAvatar = document.getElementById("default-avatar");
+                    imageElement.classList.remove("active");
+                    imageElement.style.display = "none";
+                    defaultAvatar.classList.add("active");
+                    defaultAvatar.style.display = "block";
+
+                    document.getElementById("edit-image").value = "";
+                    removeImageBtn.style.display = "none";
+
+                    await delay(500);
+                    await updateNavbar();
+                    showAlert("success", "Success", "Profile image removed successfully");
+                    await loadProfile();
+                } else {
+                    showAlert("error", "Error", response.message || "Failed to remove image");
+                }
+            } catch (error) {
+                console.error("Remove Image Error:", error);
+                showAlert("error", "Error", "Failed to remove image: " + error.message);
+            } finally {
+                removeImageBtn.disabled = false;
+            }
+        };
+
+        const editProfile = async () => {
+            if (!isLoggedIn()) {
+                showAlert("error", "Error", "Please log in to edit your profile", "signin.html");
+                return;
+            }
+
+            const userId = localStorage.getItem("userId");
+            const name = document.getElementById("edit-name").value.trim();
+            const email = document.getElementById("edit-email").value.trim();
+            const phone = document.getElementById("edit-phone").value.trim();
+            const saveChangesBtn = document.getElementById("saveChangesBtn");
+
+            const formData = new FormData();
+            formData.append("users_id", userId);
+
+            const currentProfileData = JSON.parse(localStorage.getItem("profileData") || "{}");
+
+            if (name && name !== currentProfileData.users_name) {
+                formData.append("new_name", name);
+            }
+            if (email && email !== currentProfileData.users_email) {
+                formData.append("new_email", email);
+            }
+            if (phone && phone !== currentProfileData.users_phone) {
+                formData.append("new_phone", phone);
+            }
+
+            const entries = [...formData.entries()];
+            if (entries.length <= 1) {
+                showAlert("info", "Info", "No changes to save");
+                document.getElementById("edit-container").style.display = "none";
+                document.getElementById("profile-container").style.display = "block";
+                return;
+            }
+
+            saveChangesBtn.disabled = true;
+            saveChangesBtn.textContent = "Saving...";
+
+            try {
+                const response = await fetchWithToken(ENDPOINTS.EDIT, {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.status === "success") {
+                    await delay(500);
+                    await loadProfile();
+                    await updateNavbar();
+                    showAlert("success", "Success", "Profile updated successfully");
+                    document.getElementById("edit-container").style.display = "none";
+                    document.getElementById("profile-container").style.display = "block";
+                } else {
+                    showAlert("error", "Error", response.message || "Failed to update profile");
+                }
+            } catch (error) {
+                console.error("Edit Profile Error:", error);
+                showAlert("error", "Error", "Failed to update profile: " + error.message);
+            } finally {
+                saveChangesBtn.disabled = false;
+                saveChangesBtn.textContent = "Save Changes";
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (!isLoggedIn()) {
+                showAlert("warning", "Error", "Please log in to view your profile", "signin.html");
+                return;
+            }
+
             const editProfileBtn = document.getElementById("editProfileBtn");
             const favoritesBtn = document.getElementById("favoritesBtn");
             const cartBtn = document.getElementById("cartBtn");
             const saveChangesBtn = document.getElementById("saveChangesBtn");
             const cancelEditBtn = document.getElementById("cancelEditBtn");
+            const removeImageBtn = document.getElementById("remove-image-btn");
+            const imageInput = document.getElementById("edit-image");
 
-            if (editProfileBtn) {
-                editProfileBtn.addEventListener("click", showEditForm);
-            } else {
-                console.error("Edit Profile button not found");
-            }
-
-            if (favoritesBtn) {
-                favoritesBtn.addEventListener("click", () => goTo("favorites.html"));
-            } else {
-                console.error("Favorites button not found");
-            }
-
-            if (cartBtn) {
-                cartBtn.addEventListener("click", () => goTo("cart.html"));
-            } else {
-                console.error("Cart button not found");
-            }
-
-            if (saveChangesBtn) {
-                saveChangesBtn.addEventListener("click", editProfile);
-            } else {
-                console.error("Save Changes button not found");
-            }
-
-            if (cancelEditBtn) {
-                cancelEditBtn.addEventListener("click", cancelEdit);
-            } else {
-                console.error("Cancel Edit button not found");
-            }
+            if (editProfileBtn) editProfileBtn.addEventListener("click", showEditForm);
+            if (favoritesBtn) favoritesBtn.addEventListener("click", () => goTo("favorites.html"));
+            if (cartBtn) cartBtn.addEventListener("click", () => goTo("cart.html"));
+            if (saveChangesBtn) saveChangesBtn.addEventListener("click", editProfile);
+            if (cancelEditBtn) cancelEditBtn.addEventListener("click", cancelEdit);
+            if (removeImageBtn) removeImageBtn.addEventListener("click", removeProfileImage);
+            if (imageInput) imageInput.addEventListener("change", uploadProfileImage);
 
             loadProfile();
         });

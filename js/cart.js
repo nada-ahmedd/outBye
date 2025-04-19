@@ -6,9 +6,9 @@ const ENDPOINTS = {
   COUPON: `${API_BASE_URL}coupon/checkcoupon.php`
 };
 const MESSAGES = {
-  ACCESS_DENIED: "يجب تسجيل الدخول أولاً لعرض السلة أو إضافة منتجات!",
-  CART_EMPTY: "🛒 السلة فارغة حالياً.",
-  ERROR_FETCH: "⚠️ خطأ في جلب البيانات."
+  ACCESS_DENIED: "Please log in first to view or add items to the cart!",
+  CART_EMPTY: "🛒 Cart is empty.",
+  ERROR_FETCH: "⚠️ Error fetching data."
 };
 
 let appliedCouponDiscount = 0;
@@ -17,7 +17,6 @@ function isLoggedIn() {
   return !!localStorage.getItem("userId");
 }
 
-// دالة مساعدة لإضافة الـ token
 function fetchWithToken(url, options = {}) {
   const token = localStorage.getItem('token');
   options.headers = {
@@ -32,9 +31,9 @@ function showAlert({ icon, title, text, confirmText, cancelText, onConfirm }) {
     icon,
     title,
     text,
-    confirmButtonText: confirmText || "موافق",
+    confirmButtonText: confirmText || "OK",
     showCancelButton: !!cancelText,
-    cancelButtonText: cancelText || "إلغاء"
+    cancelButtonText: cancelText || "Cancel"
   }).then((result) => {
     if (result.isConfirmed && onConfirm) onConfirm();
   });
@@ -48,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const cartItems = document.getElementById("cart-items");
     const cartCount = document.getElementById("cart-count");
     const totalPrice = document.getElementById("total-price");
-    if (cartItems) cartItems.innerHTML = `<tr><td colspan='5'>🚫 يجب تسجيل الدخول لعرض السلة.</td></tr>`;
+    if (cartItems) cartItems.innerHTML = `<tr><td colspan='5'>🚫 Please log in to view the cart.</td></tr>`;
     if (cartCount) cartCount.textContent = "0";
     if (totalPrice) totalPrice.textContent = "0 EGP";
   }
@@ -60,10 +59,10 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!isLoggedIn()) {
         showAlert({
           icon: "warning",
-          title: "غير مسجل الدخول",
+          title: "Not Logged In",
           text: MESSAGES.ACCESS_DENIED,
-          confirmText: "تسجيل الدخول",
-          cancelText: "إلغاء",
+          confirmText: "Log In",
+          cancelText: "Cancel",
           onConfirm: () => window.location.href = "signin.html"
         });
       } else {
@@ -77,17 +76,16 @@ document.addEventListener("DOMContentLoaded", () => {
     applyCouponBtn.addEventListener("click", applyCoupon);
   }
 
-  // إضافة حدث لزر الـ Checkout
   const checkoutBtn = document.getElementById("checkout-btn");
   if (checkoutBtn) {
     checkoutBtn.addEventListener("click", () => {
       if (!isLoggedIn()) {
         showAlert({
           icon: "warning",
-          title: "غير مسجل الدخول",
+          title: "Not Logged In",
           text: MESSAGES.ACCESS_DENIED,
-          confirmText: "تسجيل الدخول",
-          cancelText: "إلغاء",
+          confirmText: "Log In",
+          cancelText: "Cancel",
           onConfirm: () => window.location.href = "signin.html"
         });
         return;
@@ -100,13 +98,12 @@ document.addEventListener("DOMContentLoaded", () => {
       if (parseInt(cartCount) === 0) {
         showAlert({
           icon: "warning",
-          title: "السلة فارغة",
-          text: "يرجى إضافة منتجات إلى السلة أولاً!"
+          title: "Cart is Empty",
+          text: "Please add items to the cart first!"
         });
         return;
       }
 
-      // تمرير الداتا لصفحة الـ Checkout عبر الـ URL
       window.location.href = `checkout.html?totalPrice=${totalPrice}&coupon=${couponInput}&discount=${appliedCouponDiscount}`;
     });
   }
@@ -157,9 +154,11 @@ function updateCartUI(data) {
   }
 
   let cartHTML = "";
+  let hasItems = false;
 
   // قسم Restaurants & Cafes
   if (data.rest_cafe.datacart.length > 0) {
+    hasItems = true;
     cartHTML += `
       <tr class="section-divider">
         <td colspan="5" class="section-title">Restaurants & Cafes</td>
@@ -197,19 +196,11 @@ function updateCartUI(data) {
         `;
       }).join("")}
     `;
-  } else {
-    cartHTML += `
-      <tr class="section-divider">
-        <td colspan="5" class="section-title">Restaurants & Cafes</td>
-      </tr>
-      <tr>
-        <td colspan="5" class="empty-section">No items in this section.</td>
-      </tr>
-    `;
   }
 
   // قسم Hotels & Tourist Places
   if (data.hotel_tourist.datacart.length > 0) {
+    hasItems = true;
     cartHTML += `
       <tr class="section-divider">
         <td colspan="5" class="section-title">Hotels & Tourist Places</td>
@@ -247,20 +238,73 @@ function updateCartUI(data) {
         `;
       }).join("")}
     `;
-  } else {
-    cartHTML += `
-      <tr class="section-divider">
-        <td colspan="5" class="section-title">Hotels & Tourist Places</td>
-      </tr>
-      <tr>
-        <td colspan="5" class="empty-section">No items in this section.</td>
-      </tr>
-    `;
+  }
+
+  // قسم Other Categories (Object بدل Array)
+  if (data.other_categories && Object.keys(data.other_categories).length > 0) {
+    Object.values(data.other_categories).forEach(category => {
+      if (category.datacart && category.datacart.length > 0) {
+        hasItems = true;
+        cartHTML += `
+          <tr class="section-divider">
+            <td colspan="5" class="section-title">${category.cat_name || 'Other Categories'}</td>
+          </tr>
+          ${category.datacart.map(item => {
+            const originalPrice = parseFloat(item.items_price) || 0;
+            const discount = parseFloat(item.items_discount) || 0;
+            const discountedPrice = discount > 0 ? (originalPrice - (originalPrice * discount / 100)) : originalPrice;
+            const quantity = parseInt(item.cart_quantity) || 0;
+            const totalPriceAfterDiscount = discountedPrice * quantity;
+
+            return `
+              <tr id="cart-item-${item.cart_itemsid}" data-price="${originalPrice}" data-discount="${discount}">
+                <td><img src="${item.items_image}" alt="${item.items_name}" style="width: 50px; height: 50px; object-fit: cover;"></td>
+                <td>${item.items_name}</td>
+                <td>
+                  ${discount > 0 ? `
+                    <span class="original-price text-muted text-decoration-line-through me-2">${originalPrice} EGP</span>
+                    <span class="discounted-price text-success">${discountedPrice.toFixed(2)} EGP</span>
+                  ` : `
+                    <span>${originalPrice} EGP</span>
+                  `}
+                </td>
+                <td class="d-flex align-items-center gap-2">
+                  <button class="btn btn-danger btn-sm decrease-item-btn" data-itemid="${item.cart_itemsid}">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <span id="quantity-${item.cart_itemsid}" class="fs-5 fw-bold">${item.cart_quantity || '0'}</span>
+                  <button class="btn btn-success btn-sm increase-item-btn" data-itemid="${item.cart_itemsid}">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </td>
+                <td id="total-${item.cart_itemsid}">${totalPriceAfterDiscount.toFixed(2)} EGP</td>
+              </tr>
+            `;
+          }).join("")}
+        `;
+      }
+    });
+  }
+
+  // لو مفيش أي عناصر في أي قسم، نعرض رسالة "Cart is empty"
+  if (!hasItems) {
+    cartHTML = `<tr><td colspan="5" class="empty-section">${MESSAGES.CART_EMPTY}</td></tr>`;
   }
 
   cartItems.innerHTML = cartHTML;
 
-  cartCount.textContent = (parseInt(data.rest_cafe.countprice.totalcount) || 0) + (parseInt(data.hotel_tourist.countprice.totalcount) || 0);
+  // تحديث عدد العناصر الكلي
+  const restCafeCount = parseInt(data.rest_cafe.countprice.totalcount) || 0;
+  const hotelTouristCount = parseInt(data.hotel_tourist.countprice.totalcount) || 0;
+  let otherCategoriesCount = 0;
+
+  if (data.other_categories && Object.keys(data.other_categories).length > 0) {
+    otherCategoriesCount = Object.values(data.other_categories).reduce((sum, category) => {
+      return sum + (category.datacart ? category.datacart.reduce((acc, item) => acc + (parseInt(item.cart_quantity) || 0), 0) : 0);
+    }, 0);
+  }
+
+  cartCount.textContent = restCafeCount + hotelTouristCount + otherCategoriesCount;
 }
 
 function showEmptyCartMessage() {
@@ -269,20 +313,7 @@ function showEmptyCartMessage() {
   const totalPrice = document.getElementById("total-price");
 
   if (cartItems) {
-    cartItems.innerHTML = `
-      <tr class="section-divider">
-        <td colspan="5" class="section-title">Restaurants & Cafes</td>
-      </tr>
-      <tr>
-        <td colspan="5" class="empty-section">${MESSAGES.CART_EMPTY}</td>
-      </tr>
-      <tr class="section-divider">
-        <td colspan="5" class="section-title">Hotels & Tourist Places</td>
-      </tr>
-      <tr>
-        <td colspan="5" class="empty-section">${MESSAGES.CART_EMPTY}</td>
-      </tr>
-    `;
+    cartItems.innerHTML = `<tr><td colspan="5" class="empty-section">${MESSAGES.CART_EMPTY}</td></tr>`;
   }
   if (cartCount) cartCount.textContent = "0";
   if (totalPrice) totalPrice.textContent = "0 EGP";
@@ -321,7 +352,7 @@ async function decreaseItemQuantity(userId, itemId) {
     if (data.success) {
       updateCartItemLocally(itemId, "decrease");
     } else {
-      showAlert({ icon: "error", title: "خطأ", text: data.message || "لم يتمكن النظام من تقليل الكمية!" });
+      showAlert({ icon: "error", title: "Error", text: data.message || "Unable to decrease quantity!" });
       await loadCart();
     }
   } catch (error) {
@@ -341,7 +372,7 @@ async function increaseItemQuantity(userId, itemId) {
     if (data.success) {
       updateCartItemLocally(itemId, "increase");
     } else {
-      showAlert({ icon: "error", title: "خطأ", text: data.message || "لم يتمكن النظام من زيادة الكمية!" });
+      showAlert({ icon: "error", title: "Error", text: data.message || "Unable to increase quantity!" });
       await loadCart();
     }
   } catch (error) {
@@ -414,13 +445,13 @@ function updateCartTotals(data) {
 async function applyCoupon() {
   const couponInput = document.getElementById("coupon-input").value.trim();
   if (!couponInput) {
-    showAlert({ icon: "warning", title: "خطأ", text: "يرجى إدخال كود الخصم!" });
+    showAlert({ icon: "warning", title: "Error", text: "Please enter a coupon code!" });
     return;
   }
 
   const userId = localStorage.getItem("userId");
   if (!userId) {
-    showAlert({ icon: "error", title: "خطأ", text: "يجب تسجيل الدخول أولاً!" });
+    showAlert({ icon: "error", title: "Error", text: "Please log in first!" });
     return;
   }
 
@@ -440,29 +471,29 @@ async function applyCoupon() {
       const remainingCount = parseInt(data.data.coupon_count) || 0;
 
       if (expireDate < now) {
-        showAlert({ icon: "error", title: "خطأ", text: "كود الخصم منتهي الصلاحية!" });
+        showAlert({ icon: "error", title: "Error", text: "Coupon code has expired!" });
         appliedCouponDiscount = 0;
       } else if (remainingCount <= 0) {
-        showAlert({ icon: "error", title: "خطأ", text: "كود الخصم مستخدم بالكامل!" });
+        showAlert({ icon: "error", title: "Error", text: "Coupon code has been fully used!" });
         appliedCouponDiscount = 0;
       } else {
         appliedCouponDiscount = discountPercentage;
         showAlert({
           icon: "success",
-          title: "نجاح",
-          text: `تم تطبيق الخصم بنجاح! ${discountPercentage}% خصم`
+          title: "Success",
+          text: `Coupon applied successfully! ${discountPercentage}% discount`
         });
       }
     } else {
       appliedCouponDiscount = 0;
-      showAlert({ icon: "error", title: "كود غير صالح", text: data.message || "الكوبون غير متاح أو منتهي!" });
+      showAlert({ icon: "error", title: "Invalid Coupon", text: data.message || "Coupon is not available or has expired!" });
     }
 
     updateCartTotals();
   } catch (error) {
     console.error("Fetch Error:", error);
     appliedCouponDiscount = 0;
-    showAlert({ icon: "error", title: "خطأ", text: "حدث خطأ أثناء فحص كود الخصم!" });
+    showAlert({ icon: "error", title: "Error", text: "An error occurred while checking the coupon!" });
     updateCartTotals();
   }
 }
@@ -471,8 +502,8 @@ function logout() {
   localStorage.clear();
   showAlert({
     icon: "success",
-    title: "تم تسجيل الخروج",
-    text: "تم تسجيل خروجك بنجاح.",
+    title: "Logged Out",
+    text: "You have been logged out successfully.",
     onConfirm: () => {
       window.location.href = "login.html";
     }
